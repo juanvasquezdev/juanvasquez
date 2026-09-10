@@ -18,23 +18,23 @@ El sitio está pensado como las fases de un salto de altura:
 **Código de color con significado:** gris = universal, azul = mundo técnico, coral = mundo atlético.
 Cualquier elemento nuevo respeta ese código.
 
-**Estado real hoy (2026-09-10):** el `index.html` actual solo cubre el lado atlético (Inicio, Sobre mí, Progresión/"La Barra", Galería, Logros, Formación, Técnica del salto, Metas, Contacto). No existen todavía las secciones "Stack" ni "Proyectos" (mundo técnico/dev), ni el color coral aparece en el CSS. Esto es una brecha conocida entre la visión completa y el código — no la cierres por tu cuenta, pregúntale a Juan si ya toca construir esas secciones o si van en otra fase.
+**Estado real hoy (2026-09-10, tras migrar a Next.js):** la app (`app/page.tsx` + `components/`) solo cubre el lado atlético (Inicio, Sobre mí, Progresión/"La Barra", Galería, Logros, Formación, Técnica del salto, Metas, Contacto), portado 1:1 desde el `index.html` que existía antes de la migración. No existen todavía las secciones "Stack" ni "Proyectos" (mundo técnico/dev), ni el color coral aparece en Tailwind/CSS. Esto sigue siendo una brecha conocida entre la visión completa y el código — no la cierres por tu cuenta, pregúntale a Juan si ya toca construir esas secciones o si van en otra fase (esa fase de rediseño es la que reutilizará las ~19MB de fotos sin usar que migraron intactas a `public/images/`, ver Deuda técnica ítem 8).
 
 ## Stack tecnológico
 
-**Hoy:** HTML / CSS / JS estático, sin build step, sin framework. Sistema de diseño con variables CSS en `:root` (`css/style.css`).
+**Hoy (migrado 2026-09-10):** Next.js (App Router) + TypeScript + Tailwind, desplegado en Vercel (sin `output: 'export'`, a propósito — así `next/image` optimiza imágenes bajo demanda). Ya no es HTML/CSS/JS estático; sí sigue sin backend/base de datos, es un sitio de contenido estático servido por Next.
 
-**Decisiones ya tomadas para cuando se migre (respétalas si tocas algo relacionado, no las implementes todas de golpe sin que se pida):**
-- Next.js (export estático o ISR)
-- Tailwind con tokens propios — nunca la paleta default de Tailwind
-- Transiciones con **View Transitions API nativa** — nada de librerías de animación pesadas
-- Imágenes optimizadas: WebP/AVIF + lazy load (hoy son JPEG sin comprimir, algunas de hasta 4-5MB)
-- Fuentes autoalojadas (hoy se cargan desde `fonts.googleapis.com`, pendiente migrar)
+- **Tokens:** siguen viviendo como variables CSS en `:root` (`app/globals.css`), pero ahora también están registrados como tokens propios en `tailwind.config.ts` (`theme.extend.colors/spacing/boxShadow/backgroundImage/fontFamily`), referenciando esas mismas custom properties — nunca la paleta default de Tailwind. Los dos archivos deben mantenerse en sincronía manualmente si cambia un valor base (no hay generación automática todavía).
+- **Componentes/hooks vivos como CSS clásico + DOM queries, no 100% "React idiomático":** por velocidad en la migración, las secciones (`components/*.tsx`) reusan las mismas clases CSS del sitio viejo (`.card`, `.nav-link`, etc.) en vez de reescribirse como utilities de Tailwind, y la interactividad (`hooks/*.ts`) sigue el mismo patrón de `getElementById`/`querySelectorAll` + `IntersectionObserver` que tenía `script.js`, ahora dentro de hooks de React con cleanup. Es deliberado para minimizar riesgo de regresión visual/funcional en una migración rápida — se puede ir atomizando a Tailwind puro más adelante, sección por sección, sin que sea obligatorio hacerlo todo de una.
+- **Fuentes:** autoalojadas vía `next/font/local` (`app/fonts.ts`), ya no se cargan desde `fonts.googleapis.com`.
+- **Imágenes:** `next/image` en todos lados (`fill` + clases CSS existentes para el object-fit) — comprime y sirve WebP/AVIF bajo demanda, ya no hace falta generar `.webp` a mano ni usar `<picture><source>`.
+- **Transiciones:** siguen siendo CSS transitions/animations nativas, portadas tal cual desde `css/style.css`. La **View Transitions API** seguía en el roadmap pero no se implementó en esta migración (no estaba en el alcance pedido) — sigue pendiente como decisión futura, no se asuma que ya está.
+- **CSP:** vía `headers()` en `next.config.ts` (no vía `middleware`/`proxy` con nonce — se probó ese patrón primero y se descartó porque esta página es estática y el nonce por request nunca llega a inyectarse en el HTML cacheado en build time; ver Deuda técnica ítem 9 para el detalle).
 
 ## Reglas no negociables
 
 1. **Design tokens:** todo color, spacing o valor reutilizable vive en variables CSS (`:root`), nunca hardcodeado. Si necesitas un color nuevo, créalo como variable primero, no lo escribas en hex directo en una regla.
-2. **Cero librerías de animación pesadas.** Nada de Framer Motion, GSAP, AOS, ni similares como dependencia del proyecto. Las animaciones se implementan nativamente: CSS transitions/animations, Web Animations API, o View Transitions API cuando aplique (ver sección siguiente sobre cómo usar sitios de referencia).
+2. **Cero librerías de animación pesadas.** Nada de Framer Motion, GSAP, AOS, ni similares como dependencia del proyecto. Las animaciones se implementan nativamente: CSS transitions/animations, Web Animations API, o View Transitions API cuando aplique (ver sección siguiente sobre cómo usar sitios de referencia). *Nota (2026-09-10, post-migración a Next.js): ahora que existe build step, esta regla se puede revisar más adelante si Juan lo pide — no se decidió nada todavía, sigue vigente tal cual hasta entonces.*
 3. **DRY:** si un patrón visual (gradiente, sombra, layout, easing) se repite 2 o más veces, se centraliza en una variable o clase utilitaria — no se copia y pega la declaración.
 4. **No reescribas secciones completas** que no se te pidieron. Señala el problema, explica por qué está mal, propone el fix — deja que Juan decida si lo aplicas.
 5. **No asumas estructura.** Si tienes dudas sobre dónde va algo o cómo encaja con la narrativa del salto, pregunta antes de mover cosas.
@@ -58,9 +58,10 @@ Cuando Juan pida traer ideas de headers, animaciones o tipografías desde sitios
 5. ~~**DRY / mantenibilidad: `onerror` inline**~~ — **RESUELTO.** Fallback de imágenes rotas centralizado en `js/script.js`; ya no hay handlers `on*=""` en el HTML, lo que además deja el camino libre para CSP estricto.
 6. ~~**SEO**~~ — **RESUELTO.** OG tags, Twitter Card, favicon + apple-touch-icon, `theme-color`, jerarquía de encabezados corregida. Pendiente solo `canonical` (bloqueado por definir dominio final) y `robots.txt`/`sitemap.xml`.
 7. **Performance — parcial.** `width`/`height` en todas las `<img>` (CLS resuelto) y fuentes autoalojadas (`assets/fonts/*.woff2`, sin Google Fonts CDN) — **RESUELTO**. Sigue pendiente: varios JPEG de respaldo (el que carga `<picture>` en navegadores sin soporte WebP) siguen sin comprimir — `pb2.04.jpeg` 4.5MB, `foto_nike.jpeg` 2.98MB, `foto_blanconegro.jpeg` 2.0MB, `podio-mayores.jpeg` 1.8MB — el `.webp` correspondiente sí está optimizado, pero el fallback no se tocó.
-8. **Nuevo — repo: ~19MB de imágenes sin usar.** `assets/images/` tiene 15 archivos (`foto_nike`, `fotogrupal1`, `posando1`, `salto1-3`, `vista_epica`, `epica_trasera`, `epica_trasera2`, `foto_salto1`, `foto_saltoperu1`, `grupal2`, `foto_secuencial`, `foto_blanconegro`, `foto_posando2`, jpeg+webp) que no se referencian en ningún `.html`/`.css`/`.js` — están trackeados en git, pesan el repo y no salen sobrantes en ningún build. Pendiente decidir con Juan si se usan en la sección Galería/Stack futura o se borran.
-9. **CSP** — **RESUELTO.** Meta CSP agregada (`default-src 'self'`, `script-src` estricto, `style-src` con `'unsafe-inline'` porque `.bar-chart` posiciona sus marcadores vía `style="--pos: X%"` inline y `script.js` muta `.style.*` en varios puntos).
-10. **JSON-LD `schema.org/Person`** — sigue sin implementar a propósito: depende de que existan las secciones Stack/Proyectos (ver brecha narrativa arriba), y no se quiso asumir esa estructura sin confirmar con Juan.
+8. **Repo: ~19MB de imágenes sin usar.** `public/images/` (antes `assets/images/`, migró tal cual con la app) tiene 15 archivos (`foto_nike`, `fotogrupal1`, `posando1`, `salto1-3`, `vista_epica`, `epica_trasera`, `epica_trasera2`, `foto_salto1`, `foto_saltoperu1`, `grupal2`, `foto_secuencial`, `foto_blanconegro`, `foto_posando2`, jpeg+webp) que no se referencian en ningún `.html`/`.css`/`.js` — están trackeados en git, pesan el repo y no salen sobrantes en ningún build. Pendiente decidir con Juan si se usan en la sección Galería/Stack futura o se borran.
+9. **CSP** — **RESUELTO, cambió de mecanismo con la migración a Next.js (2026-09-10).** Ya no es la `<meta http-equiv="CSP">` estática del HTML viejo: ahora vive en `next.config.ts` (`headers()`). Se probó primero un `proxy.ts` (ex-`middleware.ts`) generando un nonce por request, siguiendo el patrón recomendado por Next para CSP estricta — se descartó tras verificarlo con `next build && next start`: la página se prerenderiza como estática, así que el nonce nunca queda embebido en los `<script>` inline que el propio Next genera (streaming de RSC), y un navegador real los bloquea bajo `script-src 'nonce-X' 'strict-dynamic'`. Por eso `script-src` quedó con `'unsafe-inline'`, igual que `style-src` (que ya lo necesitaba desde antes por `.bar-marker` posicionando vía `style="--pos: X%"` inline y los hooks mutando `.style.*` — ver `hooks/useHeroCrossfade.ts`, `hooks/useBarChart.ts`, `hooks/useBackToTop.ts`). Si más adelante se quiere CSP con nonce de verdad, la página tendría que dejar de ser estática (`export const dynamic = 'force-dynamic'`), lo cual tiene su propio costo de performance — no se ha decidido hacer eso.
+10. **JSON-LD `schema.org/Person`** — sigue sin implementar a propósito: depende de que existan las secciones Stack/Proyectos (ver brecha narrativa arriba), y no se quiso asumir esa estructura sin confirmar con Juan. No cambió con la migración a Next.js.
+11. **Fallbacks JPEG sin comprimir — RESUELTO con la migración a Next.js.** `next/image` optimiza y sirve WebP/AVIF bajo demanda para cualquier imagen (se verificó: `pb2.04.jpeg` de 4.5MB baja a ~208KB servida a 1080px vía `/_next/image`), así que ya no hace falta comprimir manualmente ningún fallback ni mantener `.webp` a mano — por eso se borraron los `.webp` de las 5 fotos que sí se usan (quedaba duplicado con lo que ahora hace `next/image` solo). Las 15 fotos sin usar migraron intactas (ítem 8, decisión explícita de Juan de no tocarlas todavía).
 
 ## Commits
 
@@ -71,13 +72,22 @@ Formato: tipo (`fix`/`feat`/`chore`/`refactor`/`docs`) + descripción corta en i
 ## Estructura de archivos
 
 ```
-index.html
-css/style.css
-js/script.js
-assets/
-  images/
-  fonts/
-  icons/
+app/
+  layout.tsx        — shell raíz, metadata (OG/Twitter/theme-color), aplica next/font
+  page.tsx           — arma la home con todos los componentes de sección
+  globals.css         — tokens (:root) + CSS portado casi verbatim del sitio viejo
+  fonts.ts            — next/font/local (Archivo Black, Inter)
+  fonts/               — los .woff2 que consume fonts.ts
+  icon.svg, apple-icon.png  — favicon/apple-icon (convención de archivos especiales de Next)
+components/            — una sección = un componente (Nav, Hero, SobreMi, Progresion, Galeria,
+                          Logros, Formacion, Tecnica, Metas, Contacto, Footer, BackToTop) +
+                          Interactivity.tsx (engancha todos los hooks, sin salida visual)
+hooks/                 — un hook por comportamiento de script.js (useScrollReveal, useCounters,
+                          useHeroCrossfade, useBarChart, useActiveNavLink, useBackToTop,
+                          useNavbarScroll, useMobileMenu)
+public/images/          — todas las fotos (next/image las sirve optimizadas)
+next.config.ts          — sin output:'export' (Vercel), CSP vía headers()
+tailwind.config.ts        — tokens propios (ver Stack tecnológico)
 ```
 
-Sin build step todavía — todo es directo, sin bundler ni preprocesador.
+Con build step (Next.js/npm) desde la migración del 2026-09-10 — antes era `index.html` + `css/style.css` + `js/script.js` + `assets/` sin bundler, ese sitio estático ya no existe en el repo (se eliminó, reemplazado por esta app).
