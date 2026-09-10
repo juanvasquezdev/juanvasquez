@@ -43,12 +43,12 @@
   /* Negro (texto sobre superficies claras) */
   --ink: #0a0e16;
 
-  /* Gradientes de superficie repetidos (card, contact-item, galeria-placeholder, goal-primary) */
+  /* Gradientes de superficie reutilizados en varias tarjetas */
   --gradient-surface: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
   --gradient-surface-reverse: linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%);
   --gradient-surface-deep: linear-gradient(135deg, var(--surface) 0%, var(--surface-3) 100%);
 
-  /* Sombras: color base compartido + niveles usados 2+ veces */
+  /* Sombras: color base compartido y niveles reutilizables */
   --shadow-color-rgb: 0, 0, 0;
   --shadow-sm: 0 5px 15px rgba(var(--shadow-color-rgb), 0.25);
   --shadow-md: 0 5px 15px rgba(var(--shadow-color-rgb), 0.4);
@@ -103,7 +103,7 @@ a { color: inherit; }
   top: 0;
 }
 
-/* ===== SCROLL REVEAL (JS toggles .is-visible) ===== */
+/* ===== SCROLL REVEAL (JS activa .is-visible) ===== */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -241,7 +241,7 @@ a { color: inherit; }
 }
 
 .hero-img-layer.is-active {
-  /* opacity is set inline via JS on scroll, this class is just a hook */
+  /* la opacidad se controla desde JS al hacer scroll, esta clase solo es un hook */
 }
 
 .hero-overlay {
