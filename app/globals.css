@@ -338,6 +338,29 @@ h2 {
   margin: 50px 0 20px;
 }
 
+/* ===== SOBRE MÍ (foto + card) ===== */
+.sobre-mi-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.sobre-mi-photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.sobre-mi-photo img {
+  object-fit: cover;
+  filter: grayscale(15%) contrast(1.05);
+}
+@media (max-width: 700px) {
+  .sobre-mi-grid { grid-template-columns: 1fr; }
+  .sobre-mi-photo { max-width: 280px; margin: 0 auto; }
+}
+
 /* ===== CARD ===== */
 .card {
   background: var(--gradient-surface);
@@ -457,6 +480,29 @@ h2 {
   .marker-label { width: 100px; font-size: 0.7rem; }
   .marker-label strong { font-size: 0.85rem; }
   .bar-chart { padding-bottom: 130px; }
+}
+
+/* ===== MOMENTO ÉPICO (triptico blanco y negro) ===== */
+.epico-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-top: 30px;
+}
+.epico-item {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+.epico-item img {
+  object-fit: cover;
+  filter: grayscale(100%) contrast(1.1);
+  transition: transform 0.6s var(--ease);
+}
+.epico-item:hover img { transform: scale(1.05); }
+@media (max-width: 700px) {
+  .epico-strip { grid-template-columns: 1fr; gap: 8px; }
+  .epico-item { aspect-ratio: 4 / 3; }
 }
 
 /* ===== GALLERY ===== */

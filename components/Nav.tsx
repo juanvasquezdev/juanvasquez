@@ -17,7 +17,7 @@ const LINKS = [
   { label: "Sobre mí", ids: ["sobre-mi"] },
   { label: "Stack", ids: ["stack"] },
   { label: "Proyectos", ids: ["proyectos"] },
-  { label: "Deportivo", ids: ["progresion", "galeria", "logros", "formacion", "tecnica", "metas"] },
+  { label: "Deportivo", ids: ["progresion", "epico", "galeria", "logros", "formacion", "tecnica", "metas"] },
   { label: "Contacto", ids: ["contacto"] },
 ];
 

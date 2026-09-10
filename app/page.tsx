@@ -4,6 +4,7 @@ import SobreMi from "@/components/SobreMi";
 import Stack from "@/components/Stack";
 import Proyectos from "@/components/Proyectos";
 import Progresion from "@/components/Progresion";
+import MomentoEpico from "@/components/MomentoEpico";
 import Galeria from "@/components/Galeria";
 import Logros from "@/components/Logros";
 import Formacion from "@/components/Formacion";
@@ -32,6 +33,7 @@ export default function Home() {
         <Stack />
         <Proyectos />
         <Progresion />
+        <MomentoEpico />
         <Galeria />
         <Logros />
         <Formacion />

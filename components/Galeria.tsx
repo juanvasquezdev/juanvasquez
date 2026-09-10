@@ -10,6 +10,14 @@ const ITEMS = [
   { src: "/images/podio_u23.jpeg", alt: "Podio en categoría U23", icon: "🥇", label: "Podio U23" },
   { src: "/images/podio-mayores.jpeg", alt: "Podio categoría Mayores", icon: "🏅", label: "Podio Mayores" },
   { src: "/images/u18.jpeg", alt: "Competencia categoría U18", icon: "🏃", label: "Competencia U18" },
+  { src: "/images/salto2.jpeg", alt: "Salto de altura en competencia", icon: "🤸", label: "En el aire" },
+  {
+    src: "/images/foto_saltoperu1.jpeg",
+    alt: "Competencia internacional en Perú",
+    icon: "🌎",
+    label: "Legado Lima 2019",
+  },
+  { src: "/images/epica_trasera.jpeg", alt: "Celebración tras una marca", icon: "🙌", label: "Celebración" },
 ];
 
 function GaleriaItem({ src, alt, icon, label }: (typeof ITEMS)[number]) {
@@ -38,7 +46,7 @@ export default function Galeria() {
     <section className="section" id="galeria">
       <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
         <motion.p className="eyebrow" variants={reveal}>
-          05 — Momentos
+          06 — Momentos
         </motion.p>
         <motion.h2 variants={reveal}>Galería</motion.h2>
       </motion.div>
