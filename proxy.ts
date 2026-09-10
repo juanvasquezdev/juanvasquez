@@ -9,12 +9,22 @@ import { NextRequest, NextResponse } from "next/server";
  * bloqueaba. Con render dinámico sí se verificó (build + start + curl) que
  * el nonce queda embebido en esos scripts. El costo real: esta página ya no
  * se sirve desde la cache estática de Vercel, se renderiza en cada request.
+ *
+ * 'unsafe-eval' solo en dev: React usa eval() en next dev (no en producción)
+ * para reconstruir call stacks en el overlay de errores/debugging. Sin esto,
+ * `npm run dev` tira "eval() is not supported in this environment" en la
+ * consola del navegador en cada carga — no rompe la página, pero ensucia la
+ * consola. `next build && next start` (producción real) nunca lo necesita.
  */
 export function proxy(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+  const scriptSrc =
+    process.env.NODE_ENV === "production"
+      ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic';`
+      : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval';`;
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    ${scriptSrc}
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data:;
     font-src 'self';
