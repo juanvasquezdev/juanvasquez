@@ -3,6 +3,7 @@
 // ===============================
 
 document.addEventListener('DOMContentLoaded', () => {
+  initImageFallbacks();
   initNavbar();
   initMobileMenu();
   initHeroScroll();
@@ -12,6 +13,25 @@ document.addEventListener('DOMContentLoaded', () => {
   initActiveNavLink();
   initBackToTop();
 });
+
+/* ---- Fallback de imágenes rotas (capa hero: oculta; galería: placeholder) ---- */
+function initImageFallbacks() {
+  document.addEventListener('error', (e) => {
+    const img = e.target;
+    if (!(img instanceof HTMLImageElement)) return;
+
+    if (img.classList.contains('hero-img-layer')) {
+      img.style.visibility = 'hidden';
+      return;
+    }
+
+    if (img.closest('.galeria-item')) {
+      img.style.display = 'none';
+      const placeholder = img.nextElementSibling;
+      if (placeholder) placeholder.style.display = 'flex';
+    }
+  }, true);
+}
 
 /* ---- Navbar: fondo al hacer scroll ---- */
 function initNavbar() {
