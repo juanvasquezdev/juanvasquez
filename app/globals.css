@@ -403,6 +403,41 @@ h2 {
 .card p { line-height: 1.85; color: var(--silver); margin: 0; }
 .card-wide { margin-top: 20px; }
 
+/* ===== STACK (chips por bloque, sin barras de progreso genéricas) ===== */
+.stack-block { margin-top: 30px; }
+.stack-block:first-of-type { margin-top: 10px; }
+.stack-block-title {
+  font-size: 1.05rem;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  margin: 0 0 16px;
+}
+.stack-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.stack-chip {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  transition: transform 0.3s var(--ease), border-color 0.3s ease, background 0.3s ease;
+}
+.stack-chip-primary {
+  background: var(--accent-soft);
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
+  color: var(--white);
+  font-weight: 600;
+}
+.stack-chip-primary:hover { transform: translateY(-3px); border-color: var(--accent); }
+.stack-chip-secondary {
+  background: var(--surface);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  color: var(--text-muted);
+}
+.stack-chip-secondary:hover { transform: translateY(-3px); border-color: var(--accent-dim); color: var(--text); }
+
 /* ===== BAR CHART (signature) ===== */
 .bar-chart {
   margin-top: 60px;

@@ -31,7 +31,7 @@ export default function Tecnica() {
     <section className="section section-dark" id="tecnica">
       <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
         <motion.p className="eyebrow" variants={reveal}>
-          06 — Mentalidad
+          07 — Mentalidad
         </motion.p>
         <motion.h2 variants={reveal}>Técnica &amp; Ciencia del Salto</motion.h2>
         <motion.p className="section-intro" variants={reveal}>

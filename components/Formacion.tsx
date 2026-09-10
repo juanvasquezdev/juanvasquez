@@ -26,7 +26,7 @@ export default function Formacion() {
     <section className="section" id="formacion">
       <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
         <motion.p className="eyebrow" variants={reveal}>
-          05 — Formación
+          06 — Formación
         </motion.p>
         <motion.h2 variants={reveal}>Formación Académica</motion.h2>
       </motion.div>

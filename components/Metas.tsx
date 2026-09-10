@@ -54,7 +54,7 @@ export default function Metas() {
     <section className="section" id="metas">
       <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
         <motion.p className="eyebrow" variants={reveal}>
-          07 — Lo que viene
+          08 — Lo que viene
         </motion.p>
         <motion.h2 variants={reveal}>Próximos Proyectos</motion.h2>
       </motion.div>

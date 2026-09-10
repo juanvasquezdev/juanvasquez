@@ -1,6 +1,7 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import SobreMi from "@/components/SobreMi";
+import Stack from "@/components/Stack";
 import Progresion from "@/components/Progresion";
 import Galeria from "@/components/Galeria";
 import Logros from "@/components/Logros";
@@ -29,6 +30,7 @@ export default function Home() {
       <main>
         <Hero />
         <SobreMi />
+        <Stack />
         <Progresion />
         <Galeria />
         <Logros />

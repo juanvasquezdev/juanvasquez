@@ -26,7 +26,7 @@ export default function Progresion() {
         viewport={revealViewport}
       >
         <motion.p className="eyebrow" variants={reveal}>
-          02 — El objetivo
+          03 — El objetivo
         </motion.p>
         <motion.h2 variants={reveal}>La Barra</motion.h2>
         <motion.p className="section-intro" variants={reveal}>

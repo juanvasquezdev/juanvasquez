@@ -15,7 +15,7 @@ export default function Logros() {
     <section className="section section-dark" id="logros">
       <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
         <motion.p className="eyebrow" variants={reveal}>
-          04 — Trayectoria
+          05 — Trayectoria
         </motion.p>
         <motion.h2 variants={reveal}>Logros Destacados</motion.h2>
       </motion.div>
