@@ -8,8 +8,12 @@
 # production
 /build
 
+# vercel
+/.vercel
+
 # misc
 .DS_Store
+Thumbs.db
 *.pem
 
 # debug
@@ -17,8 +21,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
+# env files (secretos/config por entorno, nunca al repo)
+.env*
+
+# editor (config local, no compartida en equipo todavia)
+.vscode/
+
+# salidas de sesiones de Claude que no son parte del sitio (ej. borradores de posts)
+/Claude outputs/
 
 # typescript
 *.tsbuildinfo
