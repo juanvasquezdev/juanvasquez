@@ -32,7 +32,7 @@ export default function Contacto() {
     <section className="section section-dark" id="contacto">
       <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
         <motion.p className="eyebrow" variants={reveal}>
-          09 — Hablemos
+          10 — Hablemos
         </motion.p>
         <motion.h2 variants={reveal}>Contacto</motion.h2>
       </motion.div>

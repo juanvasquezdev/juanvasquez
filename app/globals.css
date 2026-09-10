@@ -622,6 +622,58 @@ h2 {
 .cert-icon { font-size: 1.6rem; }
 .cert-item p { margin: 0; color: var(--silver); font-size: 0.9rem; line-height: 1.6; }
 
+/* ===== PROYECTOS ===== */
+.proyecto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+  margin-top: 20px;
+}
+.proyecto-card {
+  background: var(--surface);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: 12px;
+  padding: 26px;
+  transition: transform 0.3s var(--ease), border-color 0.3s ease;
+}
+.proyecto-card:hover { transform: translateY(-6px); border-color: var(--accent-dim); }
+.proyecto-status {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+.proyecto-card h3 { margin: 0 0 14px; font-size: 1.15rem; color: var(--text); }
+.proyecto-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent-dim-text);
+  margin: 0 0 4px;
+}
+.proyecto-card p { margin: 0 0 16px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
+.proyecto-card p:last-of-type { margin-bottom: 0; }
+
+.proyecto-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  border: 2px dashed rgba(var(--accent-rgb), 0.2);
+  border-radius: 12px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 26px;
+}
+
 /* ===== TECH GRID (técnica y ciencia) ===== */
 .tech-grid {
   display: grid;

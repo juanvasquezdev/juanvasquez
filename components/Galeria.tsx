@@ -38,7 +38,7 @@ export default function Galeria() {
     <section className="section" id="galeria">
       <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
         <motion.p className="eyebrow" variants={reveal}>
-          04 — Momentos
+          05 — Momentos
         </motion.p>
         <motion.h2 variants={reveal}>Galería</motion.h2>
       </motion.div>
