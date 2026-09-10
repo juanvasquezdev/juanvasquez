@@ -14,6 +14,8 @@
   --accent-dim: #2f4d80;
   --accent-bright: #8ab2f8;
   --accent-soft: rgba(var(--accent-rgb), 0.12);
+  /* --accent-dim aclarado para texto: mismo hue, cumple 4.5:1 sobre --bg/--bg-alt (--accent-dim no cumple) */
+  --accent-dim-text: #6b81a6;
 
   /* Blanco */
   --white: #f7f9fd;
@@ -49,6 +51,24 @@ body {
 }
 
 a { color: inherit; }
+
+/* ===== SKIP LINK ===== */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 16px;
+  z-index: 2000;
+  background: var(--accent);
+  color: var(--ink);
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  transition: top 0.2s var(--ease);
+}
+.skip-link:focus {
+  top: 0;
+}
 
 /* ===== SCROLL REVEAL (JS toggles .is-visible) ===== */
 .reveal {
@@ -122,10 +142,12 @@ a { color: inherit; }
   transition: width 0.25s var(--ease);
 }
 .nav-link:hover,
+.nav-link:focus-visible,
 .nav-link.active {
   color: var(--accent);
 }
 .nav-link:hover::after,
+.nav-link:focus-visible::after,
 .nav-link.active::after {
   width: 100%;
 }
@@ -137,7 +159,7 @@ a { color: inherit; }
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px;
+  padding: 14px;
 }
 .nav-toggle span {
   width: 24px;
@@ -314,7 +336,7 @@ h2 {
 }
 
 .eyebrow {
-  color: var(--accent-dim);
+  color: var(--accent-dim-text);
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 3px;
@@ -514,7 +536,7 @@ h2 {
   box-shadow: 0 0 0 4px var(--bg);
 }
 .timeline-year {
-  color: var(--accent-dim);
+  color: var(--accent-dim-text);
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 1px;
@@ -633,7 +655,8 @@ h2 {
   display: block;
   transition: transform 0.3s var(--ease), box-shadow 0.3s ease, border-color 0.3s ease;
 }
-.contact-item:hover {
+.contact-item:hover,
+.contact-item:focus-visible {
   transform: translateY(-6px);
   border-color: var(--accent);
   box-shadow: 0 10px 25px rgba(var(--accent-rgb), 0.15);
@@ -724,4 +747,15 @@ footer p { margin: 0; font-size: 0.85rem; }
 @media (max-width: 480px) {
   h1 { font-size: 1.9rem; }
   .stats { grid-template-columns: 1fr; }
+}
+
+/* Viewports bajos (móvil en landscape): el contenido del hero no cabe en 100vh */
+@media (max-height: 500px) {
+  .hero-pin { overflow-y: auto; }
+  .hero-eyebrow { margin-bottom: 8px; }
+  h1 { font-size: 1.8rem; margin-bottom: 8px; }
+  h2 { font-size: 1rem; margin-bottom: 14px; }
+  .stats { margin-top: 14px; padding: 16px; gap: 10px; }
+  .quote { margin-top: 12px; }
+  .scroll-cue { margin-top: 16px; }
 }

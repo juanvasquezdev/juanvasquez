@@ -214,7 +214,9 @@ function initBackToTop() {
   if (!btn) return;
 
   window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > 600);
+    const isVisible = window.scrollY > 600;
+    btn.classList.toggle('visible', isVisible);
+    btn.tabIndex = isVisible ? 0 : -1;
   }, { passive: true });
 
   btn.addEventListener('click', () => {
