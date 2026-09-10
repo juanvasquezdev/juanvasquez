@@ -27,6 +27,12 @@ const config: Config = {
           bright: "var(--accent-bright)",
           soft: "var(--accent-soft)",
         },
+        /* Coral -- mundo atlético (Progresión, Logros, Metas, stats del Hero). El azul sigue siendo el default del proyecto. */
+        coral: {
+          DEFAULT: "rgb(var(--coral-rgb) / <alpha-value>)",
+          dim: "var(--coral-dim)",
+          soft: "var(--coral-soft)",
+        },
         white: "var(--white)",
         silver: {
           DEFAULT: "var(--silver)",

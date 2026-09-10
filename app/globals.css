@@ -25,6 +25,12 @@
   /* --accent-dim aclarado para texto: mismo hue, cumple 4.5:1 sobre --bg/--bg-alt (--accent-dim no cumple) */
   --accent-dim-text: #6b81a6;
 
+  /* Coral -- mundo atlético (Progresión, Logros, Metas, stats del Hero). Verificado: 7.26:1 sobre --bg, cumple AA sin necesitar una variante aclarada para texto como --accent-dim-text. */
+  --coral: #ff6b5e;
+  --coral-rgb: 255, 107, 94;
+  --coral-dim: #8c3b34;
+  --coral-soft: rgba(var(--coral-rgb), 0.18);
+
   /* Blanco */
   --white: #f7f9fd;
   --silver: #aab4c4;
@@ -293,11 +299,10 @@ h2 {
   margin-bottom: 8px;
 }
 
-.stat-value,
-.stat-value-static {
+.stat-value {
   font-family: var(--font-display);
   font-size: 1.8rem;
-  color: var(--accent);
+  color: var(--coral);
   font-weight: 400;
 }
 
@@ -415,7 +420,7 @@ h2 {
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 0%;
-  background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+  background: linear-gradient(90deg, var(--coral-dim), var(--coral));
   border-radius: 8px;
   /* sin transition acá: la anima Motion (Progresion.tsx), no CSS */
 }
@@ -428,13 +433,13 @@ h2 {
 .marker-dot {
   width: 16px; height: 16px;
   background: var(--bg);
-  border: 3px solid var(--accent-dim);
+  border: 3px solid var(--coral-dim);
   border-radius: 50%;
   margin: auto;
   transition: border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
 }
-.bar-chart.filled .marker-dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.6); }
-.marker-current .marker-dot { border-color: var(--accent); background: var(--accent); }
+.bar-chart.filled .marker-dot { border-color: var(--coral); background: var(--coral); box-shadow: 0 0 14px rgba(var(--coral-rgb), 0.6); }
+.marker-current .marker-dot { border-color: var(--coral); background: var(--coral); }
 
 .marker-label {
   position: absolute;
@@ -447,7 +452,7 @@ h2 {
 .marker-label strong {
   display: block;
   font-family: var(--font-display);
-  color: var(--accent);
+  color: var(--coral);
   font-size: 1.05rem;
   font-weight: 400;
 }
@@ -625,15 +630,15 @@ h2 {
 }
 .goal-card {
   background: var(--surface);
-  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border: 1px solid rgba(var(--coral-rgb), 0.15);
   border-radius: 12px;
   padding: 24px;
   transition: transform 0.3s var(--ease), border-color 0.3s ease;
 }
-.goal-card:hover { transform: translateY(-6px); border-color: var(--accent-dim); }
+.goal-card:hover { transform: translateY(-6px); border-color: var(--coral-dim); }
 .goal-primary {
   background: var(--gradient-surface-deep);
-  border-color: var(--accent-dim);
+  border-color: var(--coral-dim);
 }
 .goal-tag {
   display: inline-block;
@@ -641,15 +646,43 @@ h2 {
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--accent);
-  background: var(--accent-soft);
+  color: var(--coral);
+  background: var(--coral-soft);
   padding: 4px 10px;
   border-radius: 20px;
   margin-bottom: 14px;
 }
 .goal-card h4 { margin: 0 0 10px; font-size: 1.1rem; color: var(--text); }
 .goal-card p { margin: 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
-.goal-card p strong { color: var(--accent); }
+.goal-card p strong { color: var(--coral); }
+
+/* ===== ACENTO ATLÉTICO (coral) =====
+   Código de color del proyecto: gris = universal, azul = mundo técnico,
+   coral = mundo atlético (ver CLAUDE.md). Progresión, Logros y Metas son las
+   únicas secciones de este lado; todo lo demás se queda en azul/gris. Estas
+   reglas solo pisan el color de acento (eyebrow/h2/card) de esas tres
+   secciones puntuales — el resto de .eyebrow/.section h2/.card en el sitio
+   sigue en azul, sin tocar las reglas base de arriba. */
+#progresion .eyebrow,
+#logros .eyebrow,
+#metas .eyebrow {
+  color: var(--coral);
+}
+#progresion h2,
+#logros h2,
+#metas h2 {
+  color: var(--coral);
+  border-bottom-color: rgba(var(--coral-rgb), 0.25);
+}
+#metas .sub-heading {
+  color: var(--coral);
+}
+#logros .card {
+  border-left-color: var(--coral);
+}
+#logros .card:hover {
+  box-shadow: 0 8px 20px rgba(var(--coral-rgb), 0.15);
+}
 
 /* ===== CONTACT ===== */
 .contact-grid {
