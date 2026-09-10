@@ -10,7 +10,12 @@ import Metas from "@/components/Metas";
 import Contacto from "@/components/Contacto";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
-import Interactivity from "@/components/Interactivity";
+
+// Requerido por la CSP con nonce (ver proxy.ts): el nonce es por request, así
+// que esta página no puede quedar prerenderizada como estática — el costo es
+// perder la cache estática de Vercel para esta ruta. Ver CLAUDE.md, deuda
+// técnica ítem 9, para el detalle completo de esta decisión.
+export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
@@ -35,7 +40,6 @@ export default function Home() {
 
       <Footer />
       <BackToTop />
-      <Interactivity />
     </>
   );
 }

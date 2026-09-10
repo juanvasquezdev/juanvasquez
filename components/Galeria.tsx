@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { motion } from "motion/react";
+import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
 
 const ITEMS = [
   { src: "/images/pb2.04.jpeg", alt: "Salto de 2.04m en competencia", icon: "📸", label: "Salto 2.04 m" },
@@ -13,7 +15,7 @@ const ITEMS = [
 function GaleriaItem({ src, alt, icon, label }: (typeof ITEMS)[number]) {
   const [broken, setBroken] = useState(false);
   return (
-    <div className="galeria-item reveal">
+    <motion.div className="galeria-item" variants={reveal}>
       {!broken && (
         <Image
           src={src}
@@ -27,21 +29,31 @@ function GaleriaItem({ src, alt, icon, label }: (typeof ITEMS)[number]) {
         <div className="ph-icon">{icon}</div>
         <p>{label}</p>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 export default function Galeria() {
   return (
     <section className="section" id="galeria">
-      <p className="eyebrow reveal">03 — Momentos</p>
-      <h2 className="reveal">Galería</h2>
+      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
+        <motion.p className="eyebrow" variants={reveal}>
+          03 — Momentos
+        </motion.p>
+        <motion.h2 variants={reveal}>Galería</motion.h2>
+      </motion.div>
 
-      <div className="galeria">
+      <motion.div
+        className="galeria"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         {ITEMS.map((item) => (
           <GaleriaItem key={item.src} {...item} />
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

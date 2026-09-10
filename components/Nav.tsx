@@ -1,36 +1,65 @@
+"use client";
+
+import { useState } from "react";
+import { useMotionValueEvent, useScroll } from "motion/react";
+import { useLenis } from "lenis/react";
+import { useActiveSection } from "@/hooks/useActiveSection";
+
 const LINKS = [
-  { href: "#inicio", label: "Inicio" },
-  { href: "#sobre-mi", label: "Sobre mí" },
-  { href: "#progresion", label: "Progresión" },
-  { href: "#galeria", label: "Galería" },
-  { href: "#logros", label: "Logros" },
-  { href: "#formacion", label: "Formación" },
-  { href: "#tecnica", label: "Técnica" },
-  { href: "#metas", label: "Metas" },
-  { href: "#contacto", label: "Contacto" },
+  { id: "inicio", label: "Inicio" },
+  { id: "sobre-mi", label: "Sobre mí" },
+  { id: "progresion", label: "Progresión" },
+  { id: "galeria", label: "Galería" },
+  { id: "logros", label: "Logros" },
+  { id: "formacion", label: "Formación" },
+  { id: "tecnica", label: "Técnica" },
+  { id: "metas", label: "Metas" },
+  { id: "contacto", label: "Contacto" },
 ];
 
 export default function Nav() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const { scrollY } = useScroll();
+  const activeId = useActiveSection(LINKS.map((l) => l.id));
+  const lenis = useLenis();
+
+  useMotionValueEvent(scrollY, "change", (latest) => setScrolled(latest > 40));
+
+  const goTo = (id: string) => (e: React.MouseEvent) => {
+    // Sin Lenis (prefers-reduced-motion) se deja el <a href="#id"> nativo:
+    // salto instantáneo, sin animación — es lo correcto para ese caso.
+    if (lenis) {
+      e.preventDefault();
+      lenis.scrollTo(`#${id}`);
+    }
+    setOpen(false);
+  };
+
   return (
-    <nav className="navbar" id="navbar">
+    <nav className={`navbar${scrolled ? " scrolled" : ""}`} id="navbar">
       <div className="nav-inner">
-        <a href="#inicio" className="nav-logo">
+        <a href="#inicio" className="nav-logo" onClick={goTo("inicio")}>
           JV<span>.</span>
         </a>
         <button
-          className="nav-toggle"
-          id="navToggle"
+          className={`nav-toggle${open ? " open" : ""}`}
           aria-label="Abrir menú"
-          aria-expanded="false"
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
         >
           <span></span>
           <span></span>
           <span></span>
         </button>
-        <ul className="nav-links" id="navLinks">
+        <ul className={`nav-links${open ? " open" : ""}`}>
           {LINKS.map((link) => (
-            <li key={link.href}>
-              <a href={link.href} className="nav-link" data-nav>
+            <li key={link.id}>
+              <a
+                href={`#${link.id}`}
+                className={`nav-link${activeId === link.id ? " active" : ""}`}
+                onClick={goTo(link.id)}
+              >
                 {link.label}
               </a>
             </li>

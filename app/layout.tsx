@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { archivoBlack, inter } from "./fonts";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 // metadataBase: dominio final aún sin confirmar (ver AUDIT.md Fase 5) — usa
@@ -37,7 +38,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es" className={`${archivoBlack.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body>
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }

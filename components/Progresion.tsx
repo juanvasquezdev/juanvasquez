@@ -1,3 +1,9 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { motion, useInView } from "motion/react";
+import { reveal, staggerContainer, revealViewport, EASE } from "@/lib/motion";
+
 type Marker = { pos: number; value: string; label: string; variant?: "current" | "elite" };
 
 const MARKERS: Marker[] = [
@@ -8,17 +14,34 @@ const MARKERS: Marker[] = [
 ];
 
 export default function Progresion() {
+  const chartRef = useRef<HTMLDivElement>(null);
+  const filled = useInView(chartRef, { once: true, amount: 0.3 });
+
   return (
     <section className="section section-dark" id="progresion">
-      <p className="eyebrow reveal">02 — El objetivo</p>
-      <h2 className="reveal">La Barra</h2>
-      <p className="section-intro reveal">
-        Cada centímetro es una temporada de trabajo. Esta es mi hoja de ruta hacia la élite mundial.
-      </p>
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
+        <motion.p className="eyebrow" variants={reveal}>
+          02 — El objetivo
+        </motion.p>
+        <motion.h2 variants={reveal}>La Barra</motion.h2>
+        <motion.p className="section-intro" variants={reveal}>
+          Cada centímetro es una temporada de trabajo. Esta es mi hoja de ruta hacia la élite mundial.
+        </motion.p>
+      </motion.div>
 
-      <div className="bar-chart reveal" id="barChart">
+      <div className={`bar-chart${filled ? " filled" : ""}`} ref={chartRef}>
         <div className="bar-track">
-          <div className="bar-fill" id="barFill"></div>
+          <motion.div
+            className="bar-fill"
+            initial={{ width: "0%" }}
+            animate={{ width: filled ? "100%" : "0%" }}
+            transition={{ duration: 1.8, ease: EASE }}
+          />
 
           {MARKERS.map((marker) => (
             <div

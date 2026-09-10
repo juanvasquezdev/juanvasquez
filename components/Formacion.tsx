@@ -1,3 +1,8 @@
+"use client";
+
+import { motion } from "motion/react";
+import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+
 const TIMELINE = [
   {
     year: "2023",
@@ -19,30 +24,54 @@ const CERTS = [
 export default function Formacion() {
   return (
     <section className="section" id="formacion">
-      <p className="eyebrow reveal">05 — Formación</p>
-      <h2 className="reveal">Formación Académica</h2>
+      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
+        <motion.p className="eyebrow" variants={reveal}>
+          05 — Formación
+        </motion.p>
+        <motion.h2 variants={reveal}>Formación Académica</motion.h2>
+      </motion.div>
 
-      <div className="timeline">
+      <motion.div
+        className="timeline"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         {TIMELINE.map((item) => (
-          <div className="timeline-item reveal" key={item.title}>
+          <motion.div className="timeline-item" variants={reveal} key={item.title}>
             <div className="timeline-year">{item.year}</div>
             <div className="timeline-content">
               <h3>{item.title}</h3>
               <p>{item.place}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      <h3 className="sub-heading reveal">Certificaciones</h3>
-      <div className="cert-grid">
+      <motion.h3
+        className="sub-heading"
+        variants={reveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
+        Certificaciones
+      </motion.h3>
+      <motion.div
+        className="cert-grid"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         {CERTS.map((cert) => (
-          <div className="cert-item reveal" key={cert}>
+          <motion.div className="cert-item" variants={reveal} key={cert}>
             <div className="cert-icon">📜</div>
             <p>{cert}</p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -1,3 +1,8 @@
+"use client";
+
+import { motion } from "motion/react";
+import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+
 const CARDS = [
   {
     num: "01",
@@ -24,23 +29,33 @@ const CARDS = [
 export default function Tecnica() {
   return (
     <section className="section section-dark" id="tecnica">
-      <p className="eyebrow reveal">06 — Mentalidad</p>
-      <h2 className="reveal">Técnica &amp; Ciencia del Salto</h2>
-      <p className="section-intro reveal">
-        Para mí el salto alto no es solo talento — es física aplicada. Cada ajuste de carrera, cada grado
-        de despegue, cada milisegundo de tensión en el arco dorsal (Fosbury Flop) se puede medir, entender
-        y mejorar.
-      </p>
+      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
+        <motion.p className="eyebrow" variants={reveal}>
+          06 — Mentalidad
+        </motion.p>
+        <motion.h2 variants={reveal}>Técnica &amp; Ciencia del Salto</motion.h2>
+        <motion.p className="section-intro" variants={reveal}>
+          Para mí el salto alto no es solo talento — es física aplicada. Cada ajuste de carrera, cada grado
+          de despegue, cada milisegundo de tensión en el arco dorsal (Fosbury Flop) se puede medir, entender
+          y mejorar.
+        </motion.p>
+      </motion.div>
 
-      <div className="tech-grid">
+      <motion.div
+        className="tech-grid"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         {CARDS.map((card) => (
-          <div className="tech-card reveal" key={card.num}>
+          <motion.div className="tech-card" variants={reveal} key={card.num}>
             <div className="tech-num">{card.num}</div>
             <h3>{card.title}</h3>
             <p>{card.text}</p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

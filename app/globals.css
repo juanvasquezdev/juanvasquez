@@ -55,7 +55,9 @@
 .mt-sm { margin-top: var(--space-sm); }
 .mt-lg { margin-top: var(--space-lg); }
 
-html { scroll-behavior: smooth; }
+/* Sin scroll-behavior:smooth acá a propósito: el scroll suave ahora lo
+   maneja Lenis (ver components/SmoothScroll.tsx) — dejar los dos activos
+   a la vez hace que compitan por el control del scroll. */
 
 body {
   font-family: var(--font-body);
@@ -66,8 +68,10 @@ body {
   overflow-x: hidden;
 }
 
+/* Cubre las transiciones CSS que quedan (hover states, nav, etc.) — las
+   animaciones de Motion se resuelven aparte vía MotionConfig reducedMotion="user"
+   en components/SmoothScroll.tsx, y Lenis se desactiva del todo en ese caso. */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
@@ -89,17 +93,6 @@ a { color: inherit; }
 }
 .skip-link:focus {
   top: 0;
-}
-
-/* ===== SCROLL REVEAL (JS activa .is-visible) ===== */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* ===== NAVBAR ===== */
@@ -216,16 +209,19 @@ a { color: inherit; }
   z-index: 0;
 }
 
+/* .hero-img-layer: wrapper (Motion anima su opacity vía scroll, ver Hero.tsx);
+   el <img> real que mete next/image adentro toma object-fit/filter abajo. */
 .hero-img-layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  will-change: opacity;
+}
+.hero-img-layer img {
   object-fit: cover;
   object-position: center 20%;
-  opacity: 0;
   filter: grayscale(55%) contrast(1.08) brightness(0.6);
-  will-change: opacity;
 }
 
 .hero-overlay {
@@ -421,7 +417,7 @@ h2 {
   width: 0%;
   background: linear-gradient(90deg, var(--accent-dim), var(--accent));
   border-radius: 8px;
-  transition: width 1.8s var(--ease);
+  /* sin transition acá: la anima Motion (Progresion.tsx), no CSS */
 }
 .bar-marker {
   position: absolute;
@@ -752,7 +748,7 @@ footer p { margin: 0; font-size: 0.85rem; }
 
 @media (max-width: 768px) {
   .hero-scroll { height: 260vh; }
-  .hero-img-layer { object-position: center 15%; }
+  .hero-img-layer img { object-position: center 15%; }
   h1 { font-size: 2.3rem; }
   h2 { font-size: 1.2rem; }
   .stats { grid-template-columns: repeat(2, 1fr); }

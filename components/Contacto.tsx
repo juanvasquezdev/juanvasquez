@@ -1,3 +1,8 @@
+"use client";
+
+import { motion } from "motion/react";
+import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+
 const CONTACTS = [
   {
     href: "mailto:juanjosevasquez1313@gmail.com",
@@ -25,23 +30,34 @@ const CONTACTS = [
 export default function Contacto() {
   return (
     <section className="section section-dark" id="contacto">
-      <p className="eyebrow reveal">08 — Hablemos</p>
-      <h2 className="reveal">Contacto</h2>
+      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
+        <motion.p className="eyebrow" variants={reveal}>
+          08 — Hablemos
+        </motion.p>
+        <motion.h2 variants={reveal}>Contacto</motion.h2>
+      </motion.div>
 
-      <div className="contact-grid">
+      <motion.div
+        className="contact-grid"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         {CONTACTS.map((contact) => (
-          <a
+          <motion.a
             key={contact.href}
             href={contact.href}
             {...(contact.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className="contact-item reveal"
+            className="contact-item"
+            variants={reveal}
           >
             <div className="contact-icon">{contact.icon}</div>
             <div className="contact-label">{contact.label}</div>
             <span className="contact-value">{contact.value}</span>
-          </a>
+          </motion.a>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
