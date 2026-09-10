@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Juan José Vásquez Giraldo | Atleta de Salto Alto</title>
 <meta name="description" content="Juan José Vásquez Giraldo - Atleta colombiano de salto alto. PB 2.06m. Camino a la élite mundial.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -44,11 +41,20 @@
 
     <div class="hero-images" id="heroImages" aria-hidden="true">
       <!-- Capa 1: foto de galería ya existente -->
-      <img class="hero-img-layer" src="assets/images/podio_u23.jpeg" alt="">
+      <picture>
+        <source srcset="assets/images/podio_u23.webp" type="image/webp">
+        <img class="hero-img-layer" src="assets/images/podio_u23.jpeg" alt="" width="3024" height="4032" fetchpriority="high">
+      </picture>
       <!-- Capa 2: foto de galería ya existente -->
-      <img class="hero-img-layer" src="assets/images/u18.jpeg" alt="">
+      <picture>
+        <source srcset="assets/images/u18.webp" type="image/webp">
+        <img class="hero-img-layer" src="assets/images/u18.jpeg" alt="" width="1537" height="2048" fetchpriority="low">
+      </picture>
       <!-- Capa 3: NUEVA — reemplaza este archivo por una foto tuya distinta -->
-      <img class="hero-img-layer" src="assets/images/hero-nueva.jpeg" alt="">
+      <picture>
+        <source srcset="assets/images/hero-nueva.webp" type="image/webp">
+        <img class="hero-img-layer" src="assets/images/hero-nueva.jpeg" alt="" width="2268" height="4032" fetchpriority="low">
+      </picture>
     </div>
 
     <div class="hero-overlay"></div>
@@ -151,28 +157,40 @@
 
   <div class="galeria">
     <div class="galeria-item reveal">
-      <img src="assets/images/pb2.04.jpeg" alt="Salto de 2.04m en competencia" loading="lazy">
+      <picture>
+        <source srcset="assets/images/pb2.04.webp" type="image/webp">
+        <img src="assets/images/pb2.04.jpeg" alt="Salto de 2.04m en competencia" loading="lazy" width="3024" height="4032">
+      </picture>
       <div class="galeria-placeholder">
         <div class="ph-icon">📸</div>
         <p>Salto 2.04 m</p>
       </div>
     </div>
     <div class="galeria-item reveal">
-      <img src="assets/images/podio_u23.jpeg" alt="Podio en categoría U23" loading="lazy">
+      <picture>
+        <source srcset="assets/images/podio_u23.webp" type="image/webp">
+        <img src="assets/images/podio_u23.jpeg" alt="Podio en categoría U23" loading="lazy" width="3024" height="4032">
+      </picture>
       <div class="galeria-placeholder">
         <div class="ph-icon">🥇</div>
         <p>Podio U23</p>
       </div>
     </div>
     <div class="galeria-item reveal">
-      <img src="assets/images/podio-mayores.jpeg" alt="Podio categoría Mayores" loading="lazy">
+      <picture>
+        <source srcset="assets/images/podio-mayores.webp" type="image/webp">
+        <img src="assets/images/podio-mayores.jpeg" alt="Podio categoría Mayores" loading="lazy" width="3024" height="4032">
+      </picture>
       <div class="galeria-placeholder">
         <div class="ph-icon">🏅</div>
         <p>Podio Mayores</p>
       </div>
     </div>
     <div class="galeria-item reveal">
-      <img src="assets/images/u18.jpeg" alt="Competencia categoría U18" loading="lazy">
+      <picture>
+        <source srcset="assets/images/u18.webp" type="image/webp">
+        <img src="assets/images/u18.jpeg" alt="Competencia categoría U18" loading="lazy" width="1537" height="2048">
+      </picture>
       <div class="galeria-placeholder">
         <div class="ph-icon">🏃</div>
         <p>Competencia U18</p>

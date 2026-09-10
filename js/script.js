@@ -27,7 +27,7 @@ function initImageFallbacks() {
 
     if (img.closest('.galeria-item')) {
       img.style.display = 'none';
-      const placeholder = img.nextElementSibling;
+      const placeholder = (img.closest('picture') || img).nextElementSibling;
       if (placeholder) placeholder.style.display = 'flex';
     }
   }, true);

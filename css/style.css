@@ -1,3 +1,19 @@
+/* ===== FUENTES (autoalojadas, solo subset latin) ===== */
+@font-face {
+  font-family: 'Archivo Black';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/archivo-black-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('../assets/fonts/inter-variable.woff2') format('woff2');
+}
+
 /* ===== VARIABLES ===== */
 :root {
   /* Base -- negro azulado, una sola escala */
