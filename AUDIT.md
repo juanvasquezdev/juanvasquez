@@ -1,6 +1,6 @@
 # Auditoría Técnica — Portafolio Personal
 
-Auditoría del estado real del código (verificado línea por línea, no contra lo que dice CLAUDE.md ni asumido desde los mensajes de commit). Organizada por **fases de prioridad de implementación**. Última actualización: 2026-09-10, tras la migración completa a Next.js (Fase 8) y el endurecimiento de CSP + refactor de interactividad a `motion`/`lenis` (Fase 9). Estado real hoy: **Fases 1-6 y 8-9 resueltas por completo** (Fase 4 con un trade-off de performance documentado en Fase 9, no un pendiente). Siguen abiertas, a propósito: Fase 7 (imágenes sin usar, esperando la fase de rediseño) y el JSON-LD de Fase 6/8 (depende de que existan las secciones Stack/Proyectos).
+Auditoría del estado real del código (verificado línea por línea, no contra lo que dice CLAUDE.md ni asumido desde los mensajes de commit). Organizada por **fases de prioridad de implementación**. Última actualización: 2026-09-10, tras el rediseño visual completo (Fase 10: coral, Stack, Proyectos, Hero/Nav, fotos reales) sobre la migración a Next.js (Fase 8) y el endurecimiento de CSP + refactor a `motion`/`lenis` (Fase 9). Estado real hoy: **Fases 1-6 y 8-10 resueltas por completo** (Fase 4 con un trade-off de performance documentado en Fase 9, no un pendiente; Fase 7 cerrada en la Fase 10). Sigue abierto, a propósito: el JSON-LD de Fase 6/8 (depende de que Stack/Proyectos tengan más contenido real antes de estructurarlo).
 
 ---
 
@@ -70,11 +70,9 @@ Auditoría del estado real del código (verificado línea por línea, no contra 
 
 ---
 
-## Fase 7 — Hallazgos nuevos (segunda pasada, 2026-09-10, sitio estático)
+## Fase 7 — Hallazgos nuevos (segunda pasada, 2026-09-10, sitio estático) — ✅ RESUELTA en la Fase 10
 
-- [ ] **`public/images/` (antes `assets/images/`)** — **~19MB en 15 imágenes sin usar** (`foto_nike`, `fotogrupal1`, `posando1`, `foto_saltoperu1`, `grupal2`, `salto1`, `salto2`, `salto3`, `vista_epica`, `epica_trasera`, `epica_trasera2`, `foto_salto1`, `foto_blanconegro`, `foto_posando2`, `foto_secuencial`, jpeg+webp cada una). No aparecen referenciadas en ningún componente y están trackeadas en git. — **Media**
-  Por qué importa: pesan el repo sin aportar nada hoy; `foto_nike.jpeg` sola son 2.98MB.
-  **Sigue abierto tras la migración a Next.js, a propósito:** Juan confirmó explícitamente que migran igual (no se borran) porque se van a usar en la fase de rediseño (Stack/Proyectos) ya aprobada por separado — no es un olvido, es la decisión tomada.
+- [x] **`public/images/` (antes `assets/images/`)** — **~19MB en 15 imágenes sin usar.** — **RESUELTO en la Fase 10:** 7 se usaron, 3 se borraron por redundantes/baja calidad, 5 se dejaron sin usar con motivo explícito cada una (no por descuido). Detalle completo en Fase 10 y en CLAUDE.md ítem 8.
 
 - [x] **Fallbacks JPEG sin comprimir** — `pb2.04.jpeg` (4.5MB), `foto_nike.jpeg` (2.98MB), `foto_blanconegro.jpeg` (2.0MB), `podio-mayores.jpeg` (1.8MB). — **RESUELTO con la migración a Next.js (Fase 8).**
   `next/image` comprime y sirve WebP/AVIF bajo demanda para cualquier imagen del proyecto, sin importar si tiene o no un `.webp` generado a mano — se verificó con `next build && next start`: `pb2.04.jpeg` (4.5MB) se sirve en ~208KB a 1080px vía `/_next/image`. Ya no depende de generar fallbacks manualmente.
@@ -116,7 +114,22 @@ Alcance completo: ver CLAUDE.md → Stack tecnológico para el detalle de decisi
 
 ---
 
+## Fase 10 — Rediseño visual: coral, Stack, Proyectos, Hero/Nav, fotos reales, 2026-09-10
+
+Referencia aprobada: mockup del Design canvas (concepto "Auton"). Cierra la brecha narrativa de CLAUDE.md (Stack/Proyectos ya existen) y la Fase 7 (fotos sin usar). Reusa `lib/motion.ts`/Motion/Lenis de la Fase 9 — cero `IntersectionObserver` manual nuevo, cero clases `.reveal` reintroducidas.
+
+- [x] **Coral activado.** Tokens `--coral`/`--coral-rgb`/`--coral-dim`/`--coral-soft` en `:root` y `tailwind.config.ts` (contraste verificado: 7.26:1 sobre `--bg`, cumple AA de la Fase 2 sin necesitar una variante "-text" aclarada como `--accent-dim-text`). Aplicado solo a Progresión, Logros, Metas y el acento de `.stat-value` del Hero — el resto del sitio (Sobre Mí, Stack, Proyectos, Contacto, Formación, Técnica) se queda en azul/gris, tal como pide el código de color. *(commit `e768717`)*
+- [x] **Sección Stack (`id="stack"`).** Chips por bloque, sin barras de progreso (regla explícita de CLAUDE.md). Categorización de "Con esto construyo hoy" vs. "Profundizando ahora" confirmada con Juan antes de escribirla (TypeScript y Next.js subieron a "construyo hoy" tras la migración; React se queda en "profundizando" — no se usa suelto en producción todavía). *(commit `1d728e0`)*
+- [x] **Sección Proyectos (`id="proyectos"`).** Fast Inventory, Athletics Hub, Portafolio Personal — formato problema → solución, sin pasos intermedios de arquitectura. Cuarta tarjeta placeholder ("+ siguiente proyecto", borde punteado) para que la grilla no necesite rehacerse cuando haya un cuarto proyecto real. *(commit `e15d445`)*
+- [x] **Hero rediseñado.** `h1` de `clamp(2.4rem, 6vw, 4rem)` a `clamp(3.2rem, 11vw, 7.5rem)` — nombre "gigante" sobre la foto, mismo crossfade de capas (`useScroll`/`useTransform`) sin tocar. Stats (`.stats`) pasaron de tarjeta de vidrio (blur, borde, fondo) a fila plana con `opacity: 0.82` — más sutil, ya no compite visualmente con el nombre.
+- [x] **Nav rediseñado: pill flotante abajo, sin navbar tradicional.** `background: rgba(var(--bg-rgb), 0.55)` + `backdrop-filter: blur(16px)` con el prefijo `-webkit-backdrop-filter` incluido desde el primer commit (el bug de Safari por olvidarlo ya pasó una vez, ver Fase 1 histórica). Se armó con 6 links "de alto nivel" en vez de uno por cada una de las 11 secciones reales — "Deportivo" agrupa Progresión/Momento Épico/Galería/Logros/Formación/Técnica/Metas y se enciende activo si cualquiera de esas está en pantalla (`useActiveSection` sigue siendo el único `IntersectionObserver` manual, sin cambios de fondo). Decisión no pedida literalmente pero necesaria: 11 links de texto no entraban en un pill sin verse denso. El menú hamburguesa (`useState` open/close, `nav-toggle`) se eliminó por completo — el pill es horizontalmente scrolleable en mobile en vez de desplegar un menú. `Nav` se movió al final del DOM (después de `<main>`/`Footer`/`BackToTop`) porque ahora es un nav fijo abajo, no uno arriba que hay que saltarse — el skip-link (Fase 2) se dejó intacto y sigue saltando a `#inicio` igual que antes. `.back-to-top` subió de `bottom: 24px` a `bottom: 88px` para no encimarse con el pill. *(commit `60ccceb`)*
+- [x] **Fotos reales usadas — Fase 7 cerrada.** Se revisaron visualmente las 15 fotos (con el visor de imágenes, no adivinando por nombre de archivo) antes de asignarlas. 7 usadas: `foto_posando2` (retrato en Sobre Mí, layout nuevo `.sobre-mi-grid` de dos columnas), `salto2`/`foto_saltoperu1`/`epica_trasera` (suman a la Galería, que pasó de 4 a 7 ítems), `vista_epica`/`foto_blanconegro`/`epica_trasera2` (triptico de la sección nueva Momento Épico, `id="epico"`, entre Progresión y Galería — todas forzadas a blanco y negro vía `filter: grayscale(100%)` para que `vista_epica`, que es a color, calce con las otras dos). 3 borradas por redundantes/baja calidad: `salto1`, `salto3` (casi duplicados de `salto2`), `foto_salto1` (screenshot de transmisión con gráficos superpuestos). 5 se dejaron sin usar a propósito, con motivo documentado en CLAUDE.md ítem 8 (no es el mismo "sin revisar" de la Fase 7): `posando1` (backup redundante), `fotogrupal1`/`grupal2` (fotos de grupo, caras de otros atletas en primer plano), `foto_secuencial` (no se pudo confirmar que sea Juan y no un compañero), `foto_nike` (genérica, sin sección clara hoy). También se borraron los `.webp` de `foto_blanconegro` y `foto_posando2` (quedaron redundantes con lo que hace `next/image` solo, mismo criterio que la Fase 8). *(commit `00b3f3a`)*
+
+*(commits `e768717`, `1d728e0`, `e15d445`, `60ccceb`, `00b3f3a`)*
+
+---
+
 ## Cómo verificar todo esto sin mí
 
-- `git log --oneline -20` — confirma qué commit cerró cada fase.
-- Los checkboxes marcados `[x]` se verificaron leyendo el código actual (y, para las Fases 8-9, corriendo `next build && next start` + `curl` contra el servidor real — incluyendo comparar el nonce del header CSP contra el de los `<script>` inline del HTML), no asumidos desde el título del commit.
+- `git log --oneline -25` — confirma qué commit cerró cada fase.
+- Los checkboxes marcados `[x]` se verificaron leyendo el código actual (y, para las Fases 8-10, corriendo `next build && next start` + `curl` contra el servidor real — incluyendo comparar el nonce del header CSP contra el de los `<script>` inline del HTML, y confirmar por HTML que las 12 secciones y las fotos nuevas están presentes), no asumidos desde el título del commit.
