@@ -26,8 +26,6 @@ export default function Home() {
         Saltar al contenido
       </a>
 
-      <Nav />
-
       <main>
         <Hero />
         <SobreMi />
@@ -44,6 +42,10 @@ export default function Home() {
 
       <Footer />
       <BackToTop />
+      {/* Al final del DOM a propósito: es un nav fijo abajo, no uno tradicional
+          arriba — así el tab order llega primero al contenido, y el skip-link
+          sigue funcionando igual para saltar directo a #inicio. */}
+      <Nav />
     </>
   );
 }
