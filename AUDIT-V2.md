@@ -1,7 +1,9 @@
 # Auditoría V2 — Portafolio como experiencia personal
 
 Estado auditado: `main` en `150fbeb` (2026-09-18). Verificado leyendo el código y corriendo `next build && next start` + inspección del HTML servido — no asumido desde commits ni desde CLAUDE.md.
-Nada de esto está implementado. Cada tarea `PORT-XXX` espera aprobación una por una.
+Cada tarea `PORT-XXX` espera aprobación una por una.
+
+**Avance:** PORT-002 resuelto (`d859b9c`, 2026-09-20). El resto sigue sin implementar.
 
 Leyenda de estado de proyectos/contenido usada en todo el documento: **COMPLETED · BUILDING · PLANNED** (y para proyectos además **MVP · ACTIVE**). Donde no tengo el dato real, lo marco como **❓ Pregunta para Juan** — no se inventa.
 
@@ -35,10 +37,10 @@ Ordenados por impacto. Todos verificados.
 
 | # | Problema | Dónde | Por qué importa |
 |---|---|---|---|
-| P1 | **El `<h1>` y 86 nodos más salen del servidor con `opacity:0`** | `lib/motion.ts` (`reveal.hidden`) + `initial="hidden"` en todas las secciones | El nombre (el LCP de la página) es invisible hasta que hidrata React y dispara `whileInView`. Sin JS o con JS lento: página en blanco. Penaliza LCP y lo que ven algunos crawlers/previews. |
-| P2 | **Las stats salen del servidor como `0.00`, `0.00`, `0`** | `components/AnimatedStat.tsx` | Sin JS, en previews, lectores de pantalla antes de animar y crawlers, tu PB aparece como 0.00 m. Es un dato falso visible. |
-| P3 | **"Inicio" nunca se marca activo en el nav** | `hooks/useActiveSection.ts` (`threshold: 0.4`) | El hero mide 320vh (260vh en mobile). Con `rootMargin -80px / -50%` la fracción visible máxima es ~0,13, nunca llega a 0,4. Mismo riesgo en secciones altas en mobile (Proyectos con 4 tarjetas apiladas). |
-| P4 | **Nav sin `aria-current`** | `components/Nav.tsx` | El estado activo solo es visual; un lector de pantalla no sabe en qué sección estás. |
+| ~~P1~~ | ~~**El `<h1>` y 86 nodos más salen del servidor con `opacity:0`**~~ — **RESUELTO** (PORT-002) | `components/Reveal.tsx` + `hooks/useBelowFold.ts` | Quedan 2 nodos con `opacity:0` y son las capas decorativas del crossfade del hero, donde corresponde. |
+| ~~P2~~ | ~~**Las stats salen del servidor como `0.00`, `0.00`, `0`**~~ — **RESUELTO** (PORT-002) | `components/AnimatedStat.tsx` | El SSR imprime 2.06 / 2.01 / 19. Costo asumido: las stats del hero ya no cuentan desde 0, porque están arriba del pliegue y reiniciarlas mostraría una marca falsa delante del usuario. |
+| ~~P3~~ | ~~**"Inicio" nunca se marca activo en el nav**~~ — **RESUELTO** (PORT-002) | `hooks/useActiveSection.ts` | Pasó de umbral por fracción a una banda fina en el medio de la pantalla; funciona con secciones de cualquier alto. |
+| ~~P4~~ | ~~**Nav sin `aria-current`**~~ — **RESUELTO** (PORT-002) | `components/Nav.tsx` | — |
 | P5 | **16 de 17 componentes son client components** | `components/*.tsx` | Todo el contenido estático (textos, listas) se envía como JS y se hidrata. Es gran parte de los ~237 KB gzip. |
 | P6 | **Tailwind instalado pero prácticamente sin uso** | `tailwind.config.ts`, componentes | Ninguna utilidad de Tailwind en los componentes; todo es CSS clásico en `globals.css`. Tokens duplicados a mano en dos lugares (`:root` y config) sin sincronización automática. Dos sistemas, uno muerto. |
 | P7 | **`globals.css` monolítico (869 líneas)** | `app/globals.css` | Escala mal para lo que pides (case studies, más secciones). Estilos de una sección y de otra mezclados; overrides por `#id` para el coral. |
@@ -285,13 +287,12 @@ Las preguntas ❓ 1–12 bloquean contenido (Fases B–D), no los cimientos. La 
 - **Riesgos:** bajo. Regresión de copy al mover textos (se compara HTML antes/después).
 - **Estimación:** 1 sesión.
 
-### PORT-002 — Contenido visible desde el servidor + fixes de scrollspy/a11y
+### PORT-002 — Contenido visible desde el servidor + fixes de scrollspy/a11y — ✅ RESUELTA (`d859b9c`)
 - **Objetivo:** arreglar P1–P4: nada crítico con `opacity:0` en el HTML inicial, stats con su valor real en SSR, "Inicio" activo en el nav, `aria-current`.
-- **Archivos:** `lib/motion.ts`, `components/AnimatedStat.tsx`, `hooks/useActiveSection.ts`, `components/Nav.tsx`, secciones con `initial="hidden"`.
-- **Resultado:** HTML servido legible sin JS; LCP no depende de la hidratación; nav correcto en todas las secciones.
-- **Dependencias:** ninguna (puede ir antes que 001).
-- **Riesgos:** cambiar el patrón de reveal puede producir "flash" de contenido; se valida con reduced-motion y throttling.
-- **Estimación:** 1 sesión.
+- **Cómo quedó:** `components/Reveal.tsx` reemplaza el trío `initial="hidden"` / `whileInView` / `variants` que estaba repetido en las 12 secciones. El primer render —servidor e hidratación— es siempre el estado final visible; solo después de hidratar se esconde lo que quedó debajo del pliegue, medido en `useLayoutEffect` (`hooks/useBelowFold.ts`) para que corra antes del primer paint. El hero pierde su fade de entrada a propósito: es lo que estaba retrasando el LCP.
+- **Verificado** con `next build && next start` sobre el HTML servido: 87 nodos con `opacity:0` → 2 (las capas del crossfade del hero); `<h1>` visible; stats en 2.06 / 2.01 / 19; nonce de la CSP sigue coincidiendo con los 11 `<script>` inline en el mismo request.
+- **Lo que no cambió:** el peso del JS sigue en ~235 KB gzip — bajarlo es PORT-003, no esta tarea.
+- **Decisión tomada acá:** la regla "lo que ya está en pantalla no se anima" vale para todo el sitio; por eso el contador del hero dejó de contar desde 0.
 
 ### PORT-003 — Server components + Motion ligero
 - **Objetivo:** secciones como server components; animación en wrappers client pequeños (`components/motion/`); `LazyMotion` + `m`.
