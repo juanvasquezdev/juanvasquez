@@ -2,29 +2,23 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 export default function SobreMi() {
   const [broken, setBroken] = useState(false);
 
   return (
-    <motion.section
-      className="section"
-      id="sobre-mi"
-      variants={staggerContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={revealViewport}
-    >
-      <motion.p className="eyebrow" variants={reveal}>
+    <section className="section" id="sobre-mi">
+      <Reveal as="p" className="eyebrow">
         01 — Quién soy
-      </motion.p>
-      <motion.h2 variants={reveal}>Sobre Mí</motion.h2>
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        Sobre Mí
+      </Reveal>
 
       <div className="sobre-mi-grid">
         {!broken && (
-          <motion.div className="sobre-mi-photo" variants={reveal}>
+          <Reveal className="sobre-mi-photo" index={2}>
             <Image
               src="/images/foto_posando2.jpeg"
               alt="Juan José Vásquez Giraldo"
@@ -32,10 +26,10 @@ export default function SobreMi() {
               sizes="(max-width: 700px) 280px, 300px"
               onError={() => setBroken(true)}
             />
-          </motion.div>
+          </Reveal>
         )}
 
-        <motion.div className="card card-wide" variants={reveal}>
+        <Reveal className="card card-wide" index={3}>
           <p>
             Soy Juan José Vásquez Giraldo, atleta colombiano especializado en salto alto. Con una marca
             personal de 2.06 metros, he demostrado ser un competidor de alto nivel a nivel nacional. He sido
@@ -43,8 +37,8 @@ export default function SobreMi() {
             Mi dedicación, disciplina y pasión por el deporte me impulsan a seguir mejorando y alcanzando
             nuevas metas en mi carrera atlética — con la mirada puesta en la élite mundial.
           </p>
-        </motion.div>
+        </Reveal>
       </div>
-    </motion.section>
+    </section>
   );
 }

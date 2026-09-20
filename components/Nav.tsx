@@ -38,16 +38,22 @@ export default function Nav() {
 
   return (
     <nav className="nav-pill" aria-label="Navegación principal">
-      {LINKS.map((link) => (
-        <a
-          key={link.label}
-          href={`#${link.ids[0]}`}
-          className={`nav-pill-link${activeId && link.ids.includes(activeId) ? " active" : ""}`}
-          onClick={goTo(link.ids[0])}
-        >
-          {link.label}
-        </a>
-      ))}
+      {LINKS.map((link) => {
+        const active = activeId !== null && link.ids.includes(activeId);
+        return (
+          <a
+            key={link.label}
+            href={`#${link.ids[0]}`}
+            className={`nav-pill-link${active ? " active" : ""}`}
+            // El estado activo era solo visual: quien navega con lector de
+            // pantalla no tenía forma de saber en qué sección está.
+            aria-current={active ? "true" : undefined}
+            onClick={goTo(link.ids[0])}
+          >
+            {link.label}
+          </a>
+        );
+      })}
     </nav>
   );
 }

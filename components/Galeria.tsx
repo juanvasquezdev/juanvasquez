@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 const ITEMS = [
   { src: "/images/pb2.04.jpeg", alt: "Salto de 2.04m en competencia", icon: "📸", label: "Salto 2.04 m" },
@@ -20,10 +19,10 @@ const ITEMS = [
   { src: "/images/epica_trasera.jpeg", alt: "Celebración tras una marca", icon: "🙌", label: "Celebración" },
 ];
 
-function GaleriaItem({ src, alt, icon, label }: (typeof ITEMS)[number]) {
+function GaleriaItem({ src, alt, icon, label, index }: (typeof ITEMS)[number] & { index: number }) {
   const [broken, setBroken] = useState(false);
   return (
-    <motion.div className="galeria-item" variants={reveal}>
+    <Reveal className="galeria-item" index={index}>
       {!broken && (
         <Image
           src={src}
@@ -37,31 +36,25 @@ function GaleriaItem({ src, alt, icon, label }: (typeof ITEMS)[number]) {
         <div className="ph-icon">{icon}</div>
         <p>{label}</p>
       </div>
-    </motion.div>
+    </Reveal>
   );
 }
 
 export default function Galeria() {
   return (
     <section className="section" id="galeria">
-      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
-        <motion.p className="eyebrow" variants={reveal}>
-          06 — Momentos
-        </motion.p>
-        <motion.h2 variants={reveal}>Galería</motion.h2>
-      </motion.div>
+      <Reveal as="p" className="eyebrow">
+        06 — Momentos
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        Galería
+      </Reveal>
 
-      <motion.div
-        className="galeria"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        {ITEMS.map((item) => (
-          <GaleriaItem key={item.src} {...item} />
+      <div className="galeria">
+        {ITEMS.map((item, i) => (
+          <GaleriaItem key={item.src} {...item} index={i} />
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

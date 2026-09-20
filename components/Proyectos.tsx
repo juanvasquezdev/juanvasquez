@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 const PROYECTOS = [
   {
@@ -33,34 +32,28 @@ const PROYECTOS = [
 export default function Proyectos() {
   return (
     <section className="section" id="proyectos">
-      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
-        <motion.p className="eyebrow" variants={reveal}>
-          03 — Casos
-        </motion.p>
-        <motion.h2 variants={reveal}>Proyectos</motion.h2>
-      </motion.div>
+      <Reveal as="p" className="eyebrow">
+        03 — Casos
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        Proyectos
+      </Reveal>
 
-      <motion.div
-        className="proyecto-grid"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        {PROYECTOS.map((p) => (
-          <motion.div className="proyecto-card" variants={reveal} key={p.title}>
+      <div className="proyecto-grid">
+        {PROYECTOS.map((p, i) => (
+          <Reveal className="proyecto-card" index={i} key={p.title}>
             <span className="proyecto-status">{p.status}</span>
             <h3>{p.title}</h3>
             <p className="proyecto-label">Problema</p>
             <p>{p.problema}</p>
             <p className="proyecto-label">Solución</p>
             <p>{p.solucion}</p>
-          </motion.div>
+          </Reveal>
         ))}
-        <motion.div className="proyecto-placeholder" variants={reveal}>
+        <Reveal className="proyecto-placeholder" index={PROYECTOS.length}>
           + siguiente proyecto
-        </motion.div>
-      </motion.div>
+        </Reveal>
+      </div>
     </section>
   );
 }

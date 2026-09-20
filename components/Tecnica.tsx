@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 const CARDS = [
   {
@@ -29,33 +28,27 @@ const CARDS = [
 export default function Tecnica() {
   return (
     <section className="section section-dark" id="tecnica">
-      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
-        <motion.p className="eyebrow" variants={reveal}>
-          09 — Mentalidad
-        </motion.p>
-        <motion.h2 variants={reveal}>Técnica &amp; Ciencia del Salto</motion.h2>
-        <motion.p className="section-intro" variants={reveal}>
-          Para mí el salto alto no es solo talento — es física aplicada. Cada ajuste de carrera, cada grado
-          de despegue, cada milisegundo de tensión en el arco dorsal (Fosbury Flop) se puede medir, entender
-          y mejorar.
-        </motion.p>
-      </motion.div>
+      <Reveal as="p" className="eyebrow">
+        09 — Mentalidad
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        Técnica &amp; Ciencia del Salto
+      </Reveal>
+      <Reveal as="p" className="section-intro" index={2}>
+        Para mí el salto alto no es solo talento — es física aplicada. Cada ajuste de carrera, cada grado de
+        despegue, cada milisegundo de tensión en el arco dorsal (Fosbury Flop) se puede medir, entender y
+        mejorar.
+      </Reveal>
 
-      <motion.div
-        className="tech-grid"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        {CARDS.map((card) => (
-          <motion.div className="tech-card" variants={reveal} key={card.num}>
+      <div className="tech-grid">
+        {CARDS.map((card, i) => (
+          <Reveal className="tech-card" index={i} key={card.num}>
             <div className="tech-num">{card.num}</div>
             <h3>{card.title}</h3>
             <p>{card.text}</p>
-          </motion.div>
+          </Reveal>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

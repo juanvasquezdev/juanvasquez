@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 const DEPORTIVAS = [
   {
@@ -52,66 +51,42 @@ const TECNOLOGICAS = [
 export default function Metas() {
   return (
     <section className="section" id="metas">
-      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
-        <motion.p className="eyebrow" variants={reveal}>
-          10 — Lo que viene
-        </motion.p>
-        <motion.h2 variants={reveal}>Próximos Proyectos</motion.h2>
-      </motion.div>
+      <Reveal as="p" className="eyebrow">
+        10 — Lo que viene
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        Próximos Proyectos
+      </Reveal>
 
-      <motion.h3
-        className="sub-heading"
-        variants={reveal}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
+      <Reveal as="h3" className="sub-heading">
         🏆 Deportivos
-      </motion.h3>
-      <motion.div
-        className="goal-grid"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        {DEPORTIVAS.map((goal) => (
-          <motion.div
+      </Reveal>
+      <div className="goal-grid">
+        {DEPORTIVAS.map((goal, i) => (
+          <Reveal
             className={`goal-card${goal.primary ? " goal-primary" : ""}`}
-            variants={reveal}
+            index={i}
             key={goal.title}
           >
             <span className="goal-tag">{goal.tag}</span>
             <h4>{goal.title}</h4>
             <p>{goal.text}</p>
-          </motion.div>
+          </Reveal>
         ))}
-      </motion.div>
+      </div>
 
-      <motion.h3
-        className="sub-heading"
-        variants={reveal}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
+      <Reveal as="h3" className="sub-heading">
         💻 Tecnológicos
-      </motion.h3>
-      <motion.div
-        className="goal-grid"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        {TECNOLOGICAS.map((goal) => (
-          <motion.div className="goal-card" variants={reveal} key={goal.title}>
+      </Reveal>
+      <div className="goal-grid">
+        {TECNOLOGICAS.map((goal, i) => (
+          <Reveal className="goal-card" index={i} key={goal.title}>
             <span className="goal-tag">{goal.tag}</span>
             <h4>{goal.title}</h4>
             <p>{goal.text}</p>
-          </motion.div>
+          </Reveal>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 const TIMELINE = [
   {
@@ -24,54 +23,36 @@ const CERTS = [
 export default function Formacion() {
   return (
     <section className="section" id="formacion">
-      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
-        <motion.p className="eyebrow" variants={reveal}>
-          08 — Formación
-        </motion.p>
-        <motion.h2 variants={reveal}>Formación Académica</motion.h2>
-      </motion.div>
+      <Reveal as="p" className="eyebrow">
+        08 — Formación
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        Formación Académica
+      </Reveal>
 
-      <motion.div
-        className="timeline"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        {TIMELINE.map((item) => (
-          <motion.div className="timeline-item" variants={reveal} key={item.title}>
+      <div className="timeline">
+        {TIMELINE.map((item, i) => (
+          <Reveal className="timeline-item" index={i} key={item.title}>
             <div className="timeline-year">{item.year}</div>
             <div className="timeline-content">
               <h3>{item.title}</h3>
               <p>{item.place}</p>
             </div>
-          </motion.div>
+          </Reveal>
         ))}
-      </motion.div>
+      </div>
 
-      <motion.h3
-        className="sub-heading"
-        variants={reveal}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
+      <Reveal as="h3" className="sub-heading">
         Certificaciones
-      </motion.h3>
-      <motion.div
-        className="cert-grid"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        {CERTS.map((cert) => (
-          <motion.div className="cert-item" variants={reveal} key={cert}>
+      </Reveal>
+      <div className="cert-grid">
+        {CERTS.map((cert, i) => (
+          <Reveal className="cert-item" index={i} key={cert}>
             <div className="cert-icon">📜</div>
             <p>{cert}</p>
-          </motion.div>
+          </Reveal>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 const ACHIEVEMENTS = [
   { emoji: "🥇", html: <>Campeón Nacional U18<br /><small>(2 veces)</small></> },
@@ -13,42 +12,30 @@ const ACHIEVEMENTS = [
 export default function Logros() {
   return (
     <section className="section section-dark" id="logros">
-      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
-        <motion.p className="eyebrow" variants={reveal}>
-          07 — Trayectoria
-        </motion.p>
-        <motion.h2 variants={reveal}>Logros Destacados</motion.h2>
-      </motion.div>
+      <Reveal as="p" className="eyebrow">
+        07 — Trayectoria
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        Logros Destacados
+      </Reveal>
 
-      <motion.div
-        className="achievements"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
+      <div className="achievements">
         {ACHIEVEMENTS.map((item, i) => (
-          <motion.div className="achievement-item" variants={reveal} key={i}>
+          <Reveal className="achievement-item" index={i} key={i}>
             <div className="achievement-emoji">{item.emoji}</div>
             <p>{item.html}</p>
-          </motion.div>
+          </Reveal>
         ))}
-      </motion.div>
+      </div>
 
-      <motion.div
-        className="card card-wide mt-lg"
-        variants={reveal}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
+      <Reveal className="card card-wide mt-lg">
         <p>
           <strong>👤 Entrenador:</strong> José Arturo Posada
         </p>
         <p className="mt-sm">
           <strong>🏃 Clubes:</strong> Todomed, The Jumpers Club
         </p>
-      </motion.div>
+      </Reveal>
     </section>
   );
 }

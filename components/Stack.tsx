@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 const CONSTRUYO_HOY = ["HTML", "CSS", "JavaScript", "Git & GitHub", "TypeScript", "Next.js"];
 const PROFUNDIZANDO = ["React", "Node.js", "NestJS", "PostgreSQL", "Prisma", "Docker"];
@@ -9,50 +8,38 @@ const PROFUNDIZANDO = ["React", "Node.js", "NestJS", "PostgreSQL", "Prisma", "Do
 export default function Stack() {
   return (
     <section className="section" id="stack">
-      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
-        <motion.p className="eyebrow" variants={reveal}>
-          02 — Herramientas
-        </motion.p>
-        <motion.h2 variants={reveal}>Stack</motion.h2>
-      </motion.div>
+      <Reveal as="p" className="eyebrow">
+        02 — Herramientas
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        Stack
+      </Reveal>
 
-      <motion.div
-        className="stack-block"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        <motion.h3 className="stack-block-title" variants={reveal}>
+      <div className="stack-block">
+        <Reveal as="h3" className="stack-block-title">
           Con esto construyo hoy
-        </motion.h3>
+        </Reveal>
         <div className="stack-chips">
-          {CONSTRUYO_HOY.map((item) => (
-            <motion.span className="stack-chip stack-chip-primary" variants={reveal} key={item}>
+          {CONSTRUYO_HOY.map((item, i) => (
+            <Reveal as="span" className="stack-chip stack-chip-primary" index={i + 1} key={item}>
               {item}
-            </motion.span>
+            </Reveal>
           ))}
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div
-        className="stack-block"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        <motion.h3 className="stack-block-title" variants={reveal}>
+      <div className="stack-block">
+        <Reveal as="h3" className="stack-block-title">
           Profundizando ahora
-        </motion.h3>
+        </Reveal>
         <div className="stack-chips">
-          {PROFUNDIZANDO.map((item) => (
-            <motion.span className="stack-chip stack-chip-secondary" variants={reveal} key={item}>
+          {PROFUNDIZANDO.map((item, i) => (
+            <Reveal as="span" className="stack-chip stack-chip-secondary" index={i + 1} key={item}>
               {item}
-            </motion.span>
+            </Reveal>
           ))}
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

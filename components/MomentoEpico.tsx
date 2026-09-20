@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 const FOTOS = [
   { src: "/images/vista_epica.jpeg", alt: "Aproximación al salto, vista desde la barra" },
@@ -24,29 +23,23 @@ function EpicoItem({ src, alt }: (typeof FOTOS)[number]) {
 export default function MomentoEpico() {
   return (
     <section className="section section-dark" id="epico">
-      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
-        <motion.p className="eyebrow" variants={reveal}>
-          05 — Momento épico
-        </motion.p>
-        <motion.h2 variants={reveal}>El instante antes de la barra</motion.h2>
-        <motion.p className="section-intro" variants={reveal}>
-          No siempre gana la marca — a veces gana el segundo exacto en que el cuerpo decide saltar.
-        </motion.p>
-      </motion.div>
+      <Reveal as="p" className="eyebrow">
+        05 — Momento épico
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        El instante antes de la barra
+      </Reveal>
+      <Reveal as="p" className="section-intro" index={2}>
+        No siempre gana la marca — a veces gana el segundo exacto en que el cuerpo decide saltar.
+      </Reveal>
 
-      <motion.div
-        className="epico-strip"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        {FOTOS.map((foto) => (
-          <motion.div variants={reveal} key={foto.src}>
+      <div className="epico-strip">
+        {FOTOS.map((foto, i) => (
+          <Reveal index={i} key={foto.src}>
             <EpicoItem {...foto} />
-          </motion.div>
+          </Reveal>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

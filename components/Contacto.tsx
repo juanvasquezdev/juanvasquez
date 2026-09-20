@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
+import Reveal from "./Reveal";
 
 const CONTACTS = [
   {
@@ -30,34 +29,29 @@ const CONTACTS = [
 export default function Contacto() {
   return (
     <section className="section section-dark" id="contacto">
-      <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={revealViewport}>
-        <motion.p className="eyebrow" variants={reveal}>
-          11 — Hablemos
-        </motion.p>
-        <motion.h2 variants={reveal}>Contacto</motion.h2>
-      </motion.div>
+      <Reveal as="p" className="eyebrow">
+        11 — Hablemos
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        Contacto
+      </Reveal>
 
-      <motion.div
-        className="contact-grid"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        {CONTACTS.map((contact) => (
-          <motion.a
+      <div className="contact-grid">
+        {CONTACTS.map((contact, i) => (
+          <Reveal
+            as="a"
             key={contact.href}
             href={contact.href}
             {...(contact.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             className="contact-item"
-            variants={reveal}
+            index={i}
           >
             <div className="contact-icon">{contact.icon}</div>
             <div className="contact-label">{contact.label}</div>
             <span className="contact-value">{contact.value}</span>
-          </motion.a>
+          </Reveal>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

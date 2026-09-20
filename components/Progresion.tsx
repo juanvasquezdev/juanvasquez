@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "motion/react";
-import { reveal, staggerContainer, revealViewport, EASE } from "@/lib/motion";
+import Reveal from "./Reveal";
+import { EASE } from "@/lib/motion";
 
 type Marker = { pos: number; value: string; label: string; variant?: "current" | "elite" };
 
@@ -10,7 +11,7 @@ const MARKERS: Marker[] = [
   { pos: 0, value: "2.06 m", label: "PB actual", variant: "current" },
   { pos: 30, value: "2.10 m", label: "Próxima meta · Nacional Mayores" },
   { pos: 78, value: "2.19 m", label: "Récord Nacional U20" },
-  { pos: 100, value: "2.20 – 2.25 m", label: "Élite mundial · Road to LA 2028", variant: "elite" },
+  { pos: 100, value: "2.20 – 2.25 m", label: "Élite mundial · Road to LA 2028" , variant: "elite" },
 ];
 
 export default function Progresion() {
@@ -19,20 +20,15 @@ export default function Progresion() {
 
   return (
     <section className="section section-dark" id="progresion">
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={revealViewport}
-      >
-        <motion.p className="eyebrow" variants={reveal}>
-          04 — El objetivo
-        </motion.p>
-        <motion.h2 variants={reveal}>La Barra</motion.h2>
-        <motion.p className="section-intro" variants={reveal}>
-          Cada centímetro es una temporada de trabajo. Esta es mi hoja de ruta hacia la élite mundial.
-        </motion.p>
-      </motion.div>
+      <Reveal as="p" className="eyebrow">
+        04 — El objetivo
+      </Reveal>
+      <Reveal as="h2" index={1}>
+        La Barra
+      </Reveal>
+      <Reveal as="p" className="section-intro" index={2}>
+        Cada centímetro es una temporada de trabajo. Esta es mi hoja de ruta hacia la élite mundial.
+      </Reveal>
 
       <div className={`bar-chart${filled ? " filled" : ""}`} ref={chartRef}>
         <div className="bar-track">

@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import AnimatedStat from "./AnimatedStat";
-import { reveal, staggerContainer, revealViewport } from "@/lib/motion";
 
 const LAYER_SRC = [
   "/images/podio_u23.jpeg",
@@ -62,20 +61,16 @@ export default function Hero() {
 
         <div className="hero-overlay"></div>
 
-        <motion.div
-          className="hero"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={revealViewport}
-        >
-          <motion.p className="hero-eyebrow" variants={reveal}>
-            🇨🇴 Salto Alto · Atletismo
-          </motion.p>
-          <motion.h1 variants={reveal}>Juan José Vásquez Giraldo</motion.h1>
-          <motion.h2 variants={reveal}>Aprendiendo a volar más alto</motion.h2>
+        {/* Sin reveal a propósito: esto es lo primero que se ve, y el <h1> es el
+            LCP de la página. Animarlo de opacity:0 significaba mandarlo
+            invisible desde el servidor y retrasar la métrica para ganar un
+            fade que nadie pidió. */}
+        <div className="hero">
+          <p className="hero-eyebrow">🇨🇴 Salto Alto · Atletismo</p>
+          <h1>Juan José Vásquez Giraldo</h1>
+          <h2>Aprendiendo a volar más alto</h2>
 
-          <motion.div className="stats" variants={reveal}>
+          <div className="stats">
             <div className="stat-item">
               <AnimatedStat target={2.06} decimals={2} />
               <div className="stat-label">Marca Personal (m)</div>
@@ -88,16 +83,14 @@ export default function Hero() {
               <AnimatedStat target={19} decimals={0} />
               <div className="stat-label">Años</div>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.p className="quote" variants={reveal}>
-            &quot;Aprendiendo a volar más alto&quot; ✈️
-          </motion.p>
+          <p className="quote">&quot;Aprendiendo a volar más alto&quot; ✈️</p>
 
-          <motion.div className="scroll-cue" variants={reveal} aria-hidden="true">
+          <div className="scroll-cue" aria-hidden="true">
             <span></span>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </header>
   );
