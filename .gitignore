@@ -30,6 +30,14 @@ yarn-error.log*
 # salidas de sesiones de Claude que no son parte del sitio (ej. borradores de posts)
 /Claude outputs/
 
+# herramental del agente: contexto, subagentes, bitacora y los documentos de
+# auditoria y plan de ejecucion (viven en .claude/docs/). Son andamiaje de como
+# construyo el sitio, no parte del sitio — el repo publico solo muestra el
+# codigo y el README. CLAUDE.md va aparte porque Claude Code lo carga desde la
+# raiz, no se puede mover adentro de .claude/.
+/.claude/
+/CLAUDE.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

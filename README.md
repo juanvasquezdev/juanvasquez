@@ -58,11 +58,8 @@ public/images/      las fotos
 
 En reconstrucción. El sitio funciona y está completo como contenido, pero no está desplegado todavía.
 
-El trabajo va por tareas numeradas, una por commit:
-
-- **[`PLAN-EJECUCION.md`](PLAN-EJECUCION.md)** — el orden de ejecución, las reglas y cómo se verifica cada tarea. Es el documento que manda.
-- **[`AUDIT-V2.md`](AUDIT-V2.md)** — la auditoría que explica el *qué* y el *porqué* de cada tarea.
-- **[`AUDIT.md`](AUDIT.md)** — la auditoría anterior, ya cerrada. Histórico.
-- **[`CLAUDE.md`](CLAUDE.md)** — contexto del proyecto. Desactualizado a propósito hasta el final del plan.
+El trabajo va por tareas numeradas, una por commit, siguiendo una auditoría y un plan de ejecución que llevo aparte del repo (son mis notas de trabajo, no documentación del producto).
 
 Lo que sigue pendiente, en orden: decidir la CSP frente al render estático, mover el contenido a una capa de datos tipada y bilingüe, y reorganizar las 12 secciones actuales en las 8 de la narrativa nueva.
+
+El historial de commits cuenta el resto.
