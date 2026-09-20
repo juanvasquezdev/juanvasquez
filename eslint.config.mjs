@@ -1,0 +1,16 @@
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypeScript from "eslint-config-next/typescript";
+
+/**
+ * Configuración por defecto de Next para un proyecto TypeScript — la misma que
+ * genera create-next-app. Sin reglas propias a propósito: lo que quiero por
+ * ahora es que algo revise el código antes de que llegue a desplegarse, no
+ * imponer un estilo.
+ */
+const config = [
+  { ignores: [".next/**", "out/**", "build/**", "next-env.d.ts"] },
+  ...nextCoreWebVitals,
+  ...nextTypeScript,
+];
+
+export default config;
