@@ -12,6 +12,21 @@ const LAYER_SRC = [
   "/images/hero-nueva.jpeg",
 ];
 
+/**
+ * La bandera va como SVG y no como emoji: 🇨🇴 es un par de "regional
+ * indicators" y en Windows no hay fuente que lo componga, así que se veía
+ * literalmente como el texto "co" justo encima de mi nombre.
+ */
+function BanderaColombia() {
+  return (
+    <svg viewBox="0 0 6 4" width="1.15em" height="0.77em" role="img" aria-label="Colombia">
+      <rect width="6" height="2" fill="var(--flag-co-amarillo)" />
+      <rect y="2" width="6" height="1" fill="var(--flag-co-azul)" />
+      <rect y="3" width="6" height="1" fill="var(--flag-co-rojo)" />
+    </svg>
+  );
+}
+
 function HeroLayer({
   src,
   priority,
@@ -31,6 +46,10 @@ function HeroLayer({
         fill
         sizes="100vw"
         priority={priority}
+        // priority ya hace el preload y la carga eager, pero no marca la
+        // prioridad de red: Next pasa fetchPriority tal cual se lo den, no lo
+        // deriva. Esta capa es el LCP real de la página, así que se lo pongo.
+        fetchPriority={priority ? "high" : undefined}
         onError={() => setBroken(true)}
       />
     </motion.div>
@@ -66,7 +85,9 @@ export default function Hero() {
             invisible desde el servidor y retrasar la métrica para ganar un
             fade que nadie pidió. */}
         <div className="hero">
-          <p className="hero-eyebrow">🇨🇴 Salto Alto · Atletismo</p>
+          <p className="hero-eyebrow">
+            <BanderaColombia /> Salto Alto · Atletismo
+          </p>
           <h1>Juan José Vásquez Giraldo</h1>
           <h2>Aprendiendo a volar más alto</h2>
 

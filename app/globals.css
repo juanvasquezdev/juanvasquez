@@ -41,6 +41,14 @@
   /* Negro (texto sobre superficies claras) */
   --ink: #0a0e16;
 
+  /* Emblema: los tres colores de la bandera de Colombia. NO son parte de la
+     paleta del sitio (gris / azul / coral) ni se usan para nada más — son un
+     hecho, no una decisión de diseño. Viven acá porque ningún color se escribe
+     suelto en una regla (regla #1). */
+  --flag-co-amarillo: #fcd116;
+  --flag-co-azul: #003893;
+  --flag-co-rojo: #ce1126;
+
   /* Gradientes de superficie reutilizados en varias tarjetas */
   --gradient-surface: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
   --gradient-surface-reverse: linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%);
@@ -211,6 +219,12 @@ a { color: inherit; }
   font-weight: 600;
   margin-bottom: 18px;
 }
+/* La bandera es un SVG, no un emoji: sin esto se apoya en la línea base y
+   queda medio renglón más abajo que el texto. */
+.hero-eyebrow svg {
+  vertical-align: -0.1em;
+  border-radius: 1px;
+}
 
 h1 {
   font-family: var(--font-display);
@@ -348,6 +362,13 @@ h2 {
 .sobre-mi-photo {
   position: relative;
   aspect-ratio: 3 / 4;
+  /* La foto va con next/image fill, o sea un <img> absoluto al 100% de alto:
+     si el contenedor se queda sin altura, la foto desaparece sin romper nada
+     más y no me entero. El aspect-ratio ya da la altura cuando resuelve; este
+     min-height es el piso para cuando no resuelve (el ancho de la columna es
+     minmax(220px, 300px), así que la altura real nunca baja de ~293px y este
+     valor no llega a aplicarse en el caso normal). */
+  min-height: 260px;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--shadow-md);

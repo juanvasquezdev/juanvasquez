@@ -3,28 +3,34 @@ import { archivoBlack, inter } from "./fonts";
 import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
-// metadataBase: dominio final aún sin confirmar (ver AUDIT.md Fase 5) — usa
-// NEXT_PUBLIC_SITE_URL cuando esté definida, si no cae a localhost para que
-// Next no arme URLs absolutas de OG/Twitter con un dominio inventado.
+// El título y la descripción son los mismos en la metadata base, en Open Graph
+// y en Twitter, así que viven en una constante cada uno en vez de repetirse tres
+// veces (si cambian, cambian en un solo lugar).
+const TITLE = "Juan José Vásquez Giraldo | Desarrollador de Software y Atleta de Salto Alto";
+const DESCRIPTION =
+  "Desarrollador de software y atleta colombiano de salto alto (PB 2.06 m). " +
+  "Construyo sistemas de gestión y plataformas web con Next.js, TypeScript y Node.";
+
+// metadataBase: todavía no hay dominio y el sitio no está desplegado, así que el
+// fallback a localhost es PROVISIONAL — se cae solo en cuanto exista
+// NEXT_PUBLIC_SITE_URL en el entorno. Sirve para que Next no arme las URLs
+// absolutas de OG/Twitter contra un dominio inventado mientras tanto.
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title: "Juan José Vásquez Giraldo | Atleta de Salto Alto",
-  description:
-    "Juan José Vásquez Giraldo - Atleta colombiano de salto alto. PB 2.06m. Camino a la élite mundial.",
+  title: TITLE,
+  description: DESCRIPTION,
   openGraph: {
     type: "profile",
-    title: "Juan José Vásquez Giraldo | Atleta de Salto Alto",
-    description:
-      "Juan José Vásquez Giraldo - Atleta colombiano de salto alto. PB 2.06m. Camino a la élite mundial.",
+    title: TITLE,
+    description: DESCRIPTION,
     images: ["/images/hero-nueva.jpeg"],
     // TODO: actualizar cuando el dominio esté confirmado
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Juan José Vásquez Giraldo | Atleta de Salto Alto",
-    description:
-      "Juan José Vásquez Giraldo - Atleta colombiano de salto alto. PB 2.06m. Camino a la élite mundial.",
+    title: TITLE,
+    description: DESCRIPTION,
     images: ["/images/hero-nueva.jpeg"],
   },
 };
