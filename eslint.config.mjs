@@ -8,7 +8,20 @@ import nextTypeScript from "eslint-config-next/typescript";
  * imponer un estilo.
  */
 const config = [
-  { ignores: [".next/**", "out/**", "build/**", "next-env.d.ts"] },
+  {
+    ignores: [
+      ".next/**",
+      "out/**",
+      "build/**",
+      "next-env.d.ts",
+      // Salida de `npx playwright test` — bundles minificados del trace
+      // viewer que no es código nuestro. Ya están en .gitignore, pero el
+      // flat config de ESLint no lee .gitignore, así que sin esto
+      // `npm run lint` se rompe apenas alguien corre la suite una vez.
+      "playwright-report/**",
+      "test-results/**",
+    ],
+  },
   ...nextCoreWebVitals,
   ...nextTypeScript,
 ];
