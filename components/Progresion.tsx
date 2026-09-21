@@ -5,13 +5,13 @@ import { motion, useInView } from "motion/react";
 import Reveal from "./Reveal";
 import { EASE } from "@/lib/motion";
 
-type Marker = { pos: number; value: string; label: string; variant?: "current" | "elite" };
+type Marker = { pos: number; value: string; label: string; variant?: "current" };
 
 const MARKERS: Marker[] = [
   { pos: 0, value: "2.06 m", label: "PB actual", variant: "current" },
   { pos: 30, value: "2.10 m", label: "Próxima meta · Nacional Mayores" },
   { pos: 78, value: "2.19 m", label: "Récord Nacional U20" },
-  { pos: 100, value: "2.20 – 2.25 m", label: "Élite mundial · Road to LA 2028" , variant: "elite" },
+  { pos: 100, value: "2.20 – 2.25 m", label: "Élite mundial · Road to LA 2028" },
 ];
 
 export default function Progresion() {
@@ -42,9 +42,7 @@ export default function Progresion() {
           {MARKERS.map((marker) => (
             <div
               key={marker.label}
-              className={`bar-marker${marker.variant === "current" ? " marker-current" : ""}${
-                marker.variant === "elite" ? " marker-elite" : ""
-              }`}
+              className={`bar-marker${marker.variant === "current" ? " marker-current" : ""}`}
               style={{ "--pos": `${marker.pos}%` } as React.CSSProperties}
             >
               <div className="marker-dot"></div>

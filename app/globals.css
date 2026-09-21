@@ -44,7 +44,11 @@
   /* Emblema: los tres colores de la bandera de Colombia. NO son parte de la
      paleta del sitio (gris / azul / coral) ni se usan para nada más — son un
      hecho, no una decisión de diseño. Viven acá porque ningún color se escribe
-     suelto en una regla (regla #1). */
+     suelto en una regla (regla #1).
+     Excepción aprobada a la regla de paleta, decidida a propósito: la bandera
+     se queda y se dibuja con sus colores reales. No es un hue suelto que se
+     coló ni algo que haya que "unificar" en una limpieza futura — si algún día
+     se saca, es una decisión mía, no de una pasada de estilos. */
   --flag-co-amarillo: #fcd116;
   --flag-co-azul: #003893;
   --flag-co-rojo: #ce1126;
@@ -361,14 +365,15 @@ h2 {
 }
 .sobre-mi-photo {
   position: relative;
+  /* La foto va con next/image fill: un <img> absoluto, sin ancho ni alto
+     propios. O sea que la caja tiene que traer SIEMPRE un ancho definido de
+     layout — el aspect-ratio saca el alto de ahí, nunca al revés. En desktop
+     el ancho lo da el stretch de la columna del grid; en móvil lo da el
+     width de la media query de abajo. La versión anterior ponía ahí un
+     margin:0 auto, que anula el stretch del grid item y dejaba el ancho en 0:
+     lo único que se veía era el alto del min-height convertido en ancho por
+     el aspect-ratio (195×260 en vez de 280×373). */
   aspect-ratio: 3 / 4;
-  /* La foto va con next/image fill, o sea un <img> absoluto al 100% de alto:
-     si el contenedor se queda sin altura, la foto desaparece sin romper nada
-     más y no me entero. El aspect-ratio ya da la altura cuando resuelve; este
-     min-height es el piso para cuando no resuelve (el ancho de la columna es
-     minmax(220px, 300px), así que la altura real nunca baja de ~293px y este
-     valor no llega a aplicarse en el caso normal). */
-  min-height: 260px;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--shadow-md);
@@ -379,7 +384,12 @@ h2 {
 }
 @media (max-width: 700px) {
   .sobre-mi-grid { grid-template-columns: 1fr; }
-  .sobre-mi-photo { max-width: 280px; margin: 0 auto; }
+  /* Centrada con justify-self, no con margin:auto — el margin auto le quita
+     el ancho definido a la caja (ver el comentario de .sobre-mi-photo). El
+     width explícito es lo que hace que el aspect-ratio tenga de dónde sacar
+     el alto. Si cambia este 280px, cambia también el sizes de
+     components/SobreMi.tsx. */
+  .sobre-mi-photo { width: min(280px, 100%); justify-self: center; }
 }
 
 /* ===== CARD ===== */
@@ -436,6 +446,20 @@ h2 {
 
 /* ===== BAR CHART (signature) ===== */
 .bar-chart {
+  /* Las tres medidas de los marcadores viven acá arriba porque las comparten
+     el punto y la etiqueta (el clamp de .marker-label usa dos de ellas).
+     --marker-label-overhang es cuánto se le permite a una etiqueta sobresalir
+     de la pista: el mínimo de aire que hay siempre entre la pista y el borde
+     de la página son los 20px de padding de .bar-chart más los 20px de
+     .section, así que 32px entra sin tocar el borde en ningún ancho. */
+  --marker-label-w: 150px;
+  --marker-label-overhang: 32px;
+  --marker-dot-size: 16px;
+  --marker-label-gap: 10px;
+  /* Escalón vertical de la etiqueta. En 0 van todas en el mismo renglón; la
+     media query de abajo lo usa para bajar una de cada dos en pantallas
+     angostas, donde cuatro etiquetas no entran de a una. */
+  --marker-label-row: 0px;
   margin-top: 60px;
   padding: 20px 20px 100px;
 }
@@ -455,18 +479,22 @@ h2 {
   border-radius: 8px;
   /* sin transition acá: la anima Motion (Progresion.tsx), no CSS */
 }
-.bar-marker {
+/* El marcador ya no es una caja posicionada: solo le pasa su --pos al punto y
+   a la etiqueta, que se posicionan los dos contra .bar-track. Antes la
+   etiqueta se medía contra el marcador (16px de ancho, el punto) y por eso no
+   tenía forma de saber a qué distancia estaba del borde de la barra — se
+   centraba a ciegas y las de 0% y 100% se salían de la página por los dos
+   lados (a 360px, de left:-3 a right:403). */
+.bar-marker { --pos: 0%; }
+.marker-dot {
   position: absolute;
   top: 50%;
   left: var(--pos);
   transform: translate(-50%, -50%);
-}
-.marker-dot {
-  width: 16px; height: 16px;
+  width: var(--marker-dot-size); height: var(--marker-dot-size);
   background: var(--bg);
   border: 3px solid var(--coral-dim);
   border-radius: 50%;
-  margin: auto;
   transition: border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
 }
 .bar-chart.filled .marker-dot { border-color: var(--coral); background: var(--coral); box-shadow: 0 0 14px rgba(var(--coral-rgb), 0.6); }
@@ -474,11 +502,21 @@ h2 {
 
 .marker-label {
   position: absolute;
-  top: 26px;
-  left: 50%;
-  transform: translateX(-50%);
+  /* Cuelga por debajo del punto, que está centrado en la pista. */
+  top: calc(
+    50% + var(--marker-dot-size) / 2 + var(--marker-label-gap) + var(--marker-label-row)
+  );
+  /* Centrada bajo su punto mientras haya lugar; cerca de los extremos se
+     desliza hacia adentro hasta el máximo que permite el overhang, en vez de
+     salirse de la página. Los que se salían son justo el primero y el último,
+     que son los que más importan (la marca de hoy y la meta). */
+  left: clamp(
+    calc(-1 * var(--marker-label-overhang)),
+    calc(var(--pos) - var(--marker-label-w) / 2),
+    calc(100% - var(--marker-label-w) + var(--marker-label-overhang))
+  );
+  width: var(--marker-label-w);
   text-align: center;
-  width: 150px;
 }
 .marker-label strong {
   display: block;
@@ -494,13 +532,22 @@ h2 {
   margin-top: 4px;
   line-height: 1.3;
 }
-.marker-elite .marker-label { width: 180px; }
 
 @media (max-width: 768px) {
   .bar-track { max-width: 92%; }
-  .marker-label { width: 100px; font-size: 0.7rem; }
+  .marker-label { font-size: 0.7rem; }
   .marker-label strong { font-size: 0.85rem; }
-  .bar-chart { padding-bottom: 130px; }
+  /* Con la barra a 267px (360 de viewport) no hay ancho de etiqueta que deje
+     las cuatro en un renglón sin encimarse: hoy "Récord Nacional U20" y
+     "Élite mundial" se escriben una arriba de la otra. Una de cada dos baja un
+     escalón, así que ninguna pisa a su vecina y las cuatro se leen enteras.
+     Es alternancia por posición en el DOM, no por índice de dato: da lo mismo
+     cuál caiga arriba, lo que importa es que se turnen. */
+  .bar-chart {
+    --marker-label-w: 100px;
+    padding-bottom: 200px;
+  }
+  .bar-marker:nth-child(odd) { --marker-label-row: 80px; }
 }
 
 /* ===== MOMENTO ÉPICO (triptico blanco y negro) ===== */

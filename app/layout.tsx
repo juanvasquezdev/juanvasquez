@@ -6,9 +6,9 @@ import "./globals.css";
 // El título y la descripción son los mismos en la metadata base, en Open Graph
 // y en Twitter, así que viven en una constante cada uno en vez de repetirse tres
 // veces (si cambian, cambian en un solo lugar).
-const TITLE = "Juan José Vásquez Giraldo | Desarrollador de Software y Atleta de Salto Alto";
+const TITLE = "Juan José Vásquez | Desarrollador y Atleta de Salto Alto";
 const DESCRIPTION =
-  "Desarrollador de software y atleta colombiano de salto alto (PB 2.06 m). " +
+  "Desarrollador y atleta colombiano de salto alto, marca personal de 2.06 m. " +
   "Construyo sistemas de gestión y plataformas web con Next.js, TypeScript y Node.";
 
 // metadataBase: todavía no hay dominio y el sitio no está desplegado, así que el

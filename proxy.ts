@@ -10,6 +10,22 @@ import { NextRequest, NextResponse } from "next/server";
  * el nonce queda embebido en esos scripts. El costo real: esta página ya no
  * se sirve desde la cache estática de Vercel, se renderiza en cada request.
  *
+ * upgrade-insecure-requests va solo cuando la página YA viaja por HTTPS.
+ * Sobre HTTP plano la directiva no protege nada (la página misma llegó en
+ * claro) y en cambio rompe todo: el navegador pide cada subrecurso por
+ * https://localhost:3000, que no tiene TLS, y no carga NADA — ni CSS, ni JS,
+ * ni imágenes. WebKit la cumple al pie de la letra; Chromium exceptúa a
+ * localhost y por eso ahí nunca se notó. Con eso, las pruebas de WebKit —el
+ * único motor que aproxima a Safari, que es el riesgo #1 declarado del
+ * proyecto— no estaban midiendo nada.
+ *
+ * Ojo, la condición NO puede ser NODE_ENV: `next start` también corre con
+ * NODE_ENV=production (verificado: su header no lleva 'unsafe-eval'), así que
+ * mirar NODE_ENV dejaría la directiva puesta exactamente en el caso que la
+ * rompe. Lo que distingue los dos mundos es el esquema del request, no el
+ * modo de build. En Vercel el proxy pone x-forwarded-proto: https y siempre
+ * fuerza HTTPS, así que en producción la CSP sale idéntica a la de antes.
+ *
  * 'unsafe-eval' solo en dev: React usa eval() en next dev (no en producción)
  * para reconstruir call stacks en el overlay de errores/debugging. Sin esto,
  * `npm run dev` tira "eval() is not supported in this environment" en la
@@ -22,6 +38,17 @@ export function proxy(request: NextRequest) {
     process.env.NODE_ENV === "production"
       ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic';`
       : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval';`;
+  // .toLowerCase() no es cosmético: el esquema es case-insensitive por spec, así
+  // que un proxy puede mandar "HTTPS" perfectamente válido. Sin normalizar, la
+  // comparación de abajo daría false y la CSP de producción saldría sin
+  // upgrade-insecure-requests, en silencio y sin ningún error que lo delate.
+  const protocolo = (
+    request.headers.get("x-forwarded-proto")?.split(",")[0] ??
+    request.nextUrl.protocol.replace(":", "")
+  )
+    .trim()
+    .toLowerCase();
+  const upgradeInsecure = protocolo === "https" ? "upgrade-insecure-requests;" : "";
   const cspHeader = `
     default-src 'self';
     ${scriptSrc}
@@ -32,7 +59,7 @@ export function proxy(request: NextRequest) {
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
-    upgrade-insecure-requests;
+    ${upgradeInsecure}
   `;
   const contentSecurityPolicyHeaderValue = cspHeader.replace(/\s{2,}/g, " ").trim();
 
