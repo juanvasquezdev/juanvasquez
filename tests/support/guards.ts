@@ -47,6 +47,21 @@ export async function assertPageIsFunctional(page: Page) {
 
   // El hidratado tarda un poco (useActiveSection dispara su IntersectionObserver
   // después del mount), así que esto se reintenta en vez de medir una sola vez.
+  //
+  // El timeout de 5000ms medía contención de workers, no el sitio: en
+  // webkit, aislado (`--project=webkit --workers=1`), aria-current aparece
+  // entre 1s y 2s tras el load. Pero corriendo la suite completa en paralelo
+  // (16 cores, workers por defecto de Playwright ≈ 8, y forzado a 16 para
+  // reproducir a propósito) medí tests completos tardando 14-19s bajo esa
+  // carga — la CPU compartida entre navegadores retrasa la hidratación real,
+  // no un cuelgue. Con timeout 5000ms eso da flaky: 3 corridas seguidas sin
+  // forzar workers dieron 55/1 estable, pero forzando --workers=16 reproduje
+  // fallas de ESTE guard (timeout 5000ms exceeded) en b-images y
+  // c-no-horizontal-scroll de webkit, no solo en f-aria-current — confirma
+  // que es contención de recursos, no un caso puntual. Subido a 20000ms:
+  // generoso frente a los ~19s medidos bajo contención forzada, y no cuesta
+  // nada en el caso feliz porque expect.poll devuelve apenas la condición es
+  // true, no espera el timeout completo.
   await expect
     .poll(
       async () =>
@@ -54,7 +69,7 @@ export async function assertPageIsFunctional(page: Page) {
       {
         message:
           "Ningún .nav-pill-link tiene aria-current — React no hidrató (o useActiveSection nunca corrió). Ver tests/support/guards.ts.",
-        timeout: 5000,
+        timeout: 20000,
       }
     )
     .toBe(true);

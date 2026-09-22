@@ -39,10 +39,18 @@ export default function Progresion() {
             transition={{ duration: 1.8, ease: EASE }}
           />
 
-          {MARKERS.map((marker) => (
+          {MARKERS.map((marker, i) => (
             <div
               key={marker.label}
-              className={`bar-marker${marker.variant === "current" ? " marker-current" : ""}`}
+              // La alternancia de renglón la decide el índice del dato, no la
+              // posición en el DOM: si mañana entra otro nodo dentro de
+              // .bar-track (como ya está .bar-fill), un :nth-child corre la
+              // paridad y dos etiquetas vecinas caen en el mismo renglón sin
+              // que nada lo avise. Cuál de las dos filas baja da igual; lo que
+              // importa es que se turnen.
+              className={`bar-marker${marker.variant === "current" ? " marker-current" : ""}${
+                i % 2 === 1 ? " marker-row-low" : ""
+              }`}
               style={{ "--pos": `${marker.pos}%` } as React.CSSProperties}
             >
               <div className="marker-dot"></div>

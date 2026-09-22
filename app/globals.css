@@ -449,16 +449,26 @@ h2 {
   /* Las tres medidas de los marcadores viven acá arriba porque las comparten
      el punto y la etiqueta (el clamp de .marker-label usa dos de ellas).
      --marker-label-overhang es cuánto se le permite a una etiqueta sobresalir
-     de la pista: el mínimo de aire que hay siempre entre la pista y el borde
-     de la página son los 20px de padding de .bar-chart más los 20px de
-     .section, así que 32px entra sin tocar el borde en ningún ancho. */
+     de la pista. El ancho más ajustado no es el más angosto: es 769px, el
+     primero que ya NO tiene el `max-width: 92%` de la pista. Ahí la pista mide
+     viewport − 80 (20+20 de padding de .bar-chart y 20+20 de .section), así
+     que queda exactamente 40px de aire de cada lado y el overhang de 32 deja
+     8px de sobra — medido: a 769px la etiqueta de la izquierda arranca en
+     x=8. De 768 para abajo .section baja a 15px de padding, pero la pista pasa
+     a `max-width: 92%` y el aire crece en vez de achicarse (62.9px a 768,
+     medido). O sea: quien suba este valor tiene 8px de margen y ni uno más;
+     pasando 40 vuelve el overflow horizontal a 769px. */
   --marker-label-w: 150px;
   --marker-label-overhang: 32px;
   --marker-dot-size: 16px;
   --marker-label-gap: 10px;
   /* Escalón vertical de la etiqueta. En 0 van todas en el mismo renglón; la
-     media query de abajo lo usa para bajar una de cada dos en pantallas
-     angostas, donde cuatro etiquetas no entran de a una. */
+     media query de ≤979px lo usa para bajar una de cada dos, que es donde
+     cuatro etiquetas ya no entran en un renglón sin encimarse. Quién baja lo
+     decide Progresion.tsx con la clase .marker-row-low, por índice del dato:
+     antes era un :nth-child(odd) sobre los hermanos de .bar-track, que salía
+     bien de casualidad porque .bar-fill es el primer hijo y corría la paridad
+     justo para el lado que servía. */
   --marker-label-row: 0px;
   margin-top: 60px;
   padding: 20px 20px 100px;
@@ -533,21 +543,35 @@ h2 {
   line-height: 1.3;
 }
 
+/* El escalonado arranca acá, no a 768: a 769px las etiquetas volvían al mismo
+   renglón y "Récord Nacional U20" se escribía encima de "Élite mundial".
+   De dónde sale el 979. Con W = ancho de la pista, la etiqueta del marcador de
+   78% termina en 0.78·W + 75 y la del de 100% arranca en W − 118 (su clamp la
+   topea contra el overhang), así que se encabalgan mientras
+   1.5·150 − 32 − 0.22·W > 0, o sea con W < 877px. La pista mide viewport − 80
+   hasta que toca su tope de max-width:900px, y eso recién pasa a 980px de
+   viewport: 979 es el último ancho en el que la pista viene comprimida. De 980
+   para arriba la pista mide siempre 900 y el renglón único deja 5px de aire
+   entre esas dos etiquetas (medido) — es el layout de siempre, no se toca.
+   El padding-bottom sube de 100 a 190 porque el renglón de abajo cuelga 80px
+   más y necesita lugar. */
+@media (max-width: 979px) {
+  .bar-chart { padding-bottom: 190px; }
+  .bar-marker.marker-row-low { --marker-label-row: 80px; }
+}
+
 @media (max-width: 768px) {
   .bar-track { max-width: 92%; }
   .marker-label { font-size: 0.7rem; }
   .marker-label strong { font-size: 0.85rem; }
-  /* Con la barra a 267px (360 de viewport) no hay ancho de etiqueta que deje
-     las cuatro en un renglón sin encimarse: hoy "Récord Nacional U20" y
-     "Élite mundial" se escriben una arriba de la otra. Una de cada dos baja un
-     escalón, así que ninguna pisa a su vecina y las cuatro se leen enteras.
-     Es alternancia por posición en el DOM, no por índice de dato: da lo mismo
-     cuál caiga arriba, lo que importa es que se turnen. */
+  /* Con la barra a 267px (360 de viewport) ni escalonadas entran cuatro
+     etiquetas de 150px: acá además se angostan a 100px para que cada una se
+     lea entera, y eso las hace más altas (más renglones), de ahí el
+     padding-bottom más grande que el de la banda de arriba. */
   .bar-chart {
     --marker-label-w: 100px;
     padding-bottom: 200px;
   }
-  .bar-marker:nth-child(odd) { --marker-label-row: 80px; }
 }
 
 /* ===== MOMENTO ÉPICO (triptico blanco y negro) ===== */

@@ -38,16 +38,21 @@ export function proxy(request: NextRequest) {
     process.env.NODE_ENV === "production"
       ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic';`
       : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval';`;
-  // .toLowerCase() no es cosmético: el esquema es case-insensitive por spec, así
-  // que un proxy puede mandar "HTTPS" perfectamente válido. Sin normalizar, la
-  // comparación de abajo daría false y la CSP de producción saldría sin
-  // upgrade-insecure-requests, en silencio y sin ningún error que lo delate.
+  // Dos detalles que parecen cosméticos y no lo son, porque los dos terminan
+  // en el mismo modo de falla: producción sin upgrade-insecure-requests, en
+  // silencio y sin ningún error que lo delate.
+  // 1. .toLowerCase(): el esquema es case-insensitive por spec, así que un
+  //    proxy puede mandar "HTTPS" perfectamente válido. Sin normalizar, la
+  //    comparación de abajo daría false.
+  // 2. `||` y no `??`: el `?.` solo cae al fallback si el header está ausente.
+  //    Un x-forwarded-proto presente pero vacío devuelve "", y "" ?? fallback
+  //    sigue siendo "" — el fallback nunca se dispara y el esquema real del
+  //    request queda sin mirar. Con `||`, el string vacío se trata como
+  //    ausente, que es lo que es.
   const protocolo = (
-    request.headers.get("x-forwarded-proto")?.split(",")[0] ??
+    request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() ||
     request.nextUrl.protocol.replace(":", "")
-  )
-    .trim()
-    .toLowerCase();
+  ).toLowerCase();
   const upgradeInsecure = protocolo === "https" ? "upgrade-insecure-requests;" : "";
   const cspHeader = `
     default-src 'self';
