@@ -3,14 +3,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import Reveal from "./Reveal";
+import type { Athletics, Photo } from "@/content/types";
+import type { Localized } from "@/lib/i18n";
 
-const FOTOS = [
-  { src: "/images/vista_epica.jpeg", alt: "Aproximación al salto, vista desde la barra" },
-  { src: "/images/foto_blanconegro.jpeg", alt: "Salto de vallas en entrenamiento nocturno" },
-  { src: "/images/epica_trasera2.jpeg", alt: "Celebración de espaldas frente al horizonte" },
-];
-
-function EpicoItem({ src, alt }: (typeof FOTOS)[number]) {
+function EpicoItem({ src, alt }: Localized<Photo>) {
   const [broken, setBroken] = useState(false);
   if (broken) return null;
   return (
@@ -20,21 +16,21 @@ function EpicoItem({ src, alt }: (typeof FOTOS)[number]) {
   );
 }
 
-export default function MomentoEpico() {
+export default function MomentoEpico({ content }: { content: Localized<Athletics["epicMoment"]> }) {
   return (
     <section className="section section-dark" id="epico">
       <Reveal as="p" className="eyebrow">
-        05 — Momento épico
+        {content.eyebrow}
       </Reveal>
       <Reveal as="h2" index={1}>
-        El instante antes de la barra
+        {content.heading}
       </Reveal>
       <Reveal as="p" className="section-intro" index={2}>
-        No siempre gana la marca — a veces gana el segundo exacto en que el cuerpo decide saltar.
+        {content.intro}
       </Reveal>
 
       <div className="epico-strip">
-        {FOTOS.map((foto, i) => (
+        {content.photos.map((foto, i) => (
           <Reveal index={i} key={foto.src}>
             <EpicoItem {...foto} />
           </Reveal>

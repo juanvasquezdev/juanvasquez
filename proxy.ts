@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * CSP con nonce por request (reemplaza el `script-src 'unsafe-inline'` que
  * había en next.config.ts). Requiere que la página se renderice dinámicamente
- * (ver `export const dynamic = "force-dynamic"` en app/page.tsx) — se probó
+ * (ver `export const dynamic = "force-dynamic"` en app/[lang]/page.tsx) — se probó
  * primero dejando la página estática y el nonce nunca llegaba a los <script>
  * inline que genera Next (streaming de RSC), así que un navegador real los
  * bloqueaba. Con render dinámico sí se verificó (build + start + curl) que

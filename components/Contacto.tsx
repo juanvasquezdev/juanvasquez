@@ -1,7 +1,8 @@
 "use client";
 
 import Reveal from "./Reveal";
-import { GITHUB_URL, SHOW_GITHUB_PROFILE } from "@/content/profile";
+import type { Profile } from "@/content/types";
+import type { Localized } from "@/lib/i18n";
 
 /**
  * El logo de GitHub no existe como emoji, y justo acabo de comprobar que los
@@ -17,53 +18,30 @@ function GitHubMark() {
   );
 }
 
-const CONTACTS = [
-  {
-    href: "mailto:juanjosevasquez1313@gmail.com",
-    icon: "📧",
-    label: "Email",
-    value: "juanjosevasquez1313@gmail.com",
-    external: false,
-  },
-  ...(SHOW_GITHUB_PROFILE
-    ? [
-        {
-          href: GITHUB_URL,
-          icon: <GitHubMark />,
-          label: "GitHub",
-          value: "juanjosevasquez1313-ai",
-          external: true,
-        },
-      ]
-    : []),
-  {
-    href: "https://instagram.com/juanvasquezhj",
-    icon: "📱",
-    label: "Instagram",
-    value: "@juanvasquezhj",
-    external: true,
-  },
-  {
-    href: "https://www.linkedin.com/in/juan-jos%C3%A9-vasquez-giraldo-93b25b304/",
-    icon: "💼",
-    label: "LinkedIn",
-    value: "Juan José Vásquez Giraldo",
-    external: true,
-  },
-];
+/**
+ * Lo que Contacto lee de `content/profile.ts`, ya en el idioma de la ruta. El
+ * interruptor `SHOW_GITHUB_PROFILE` ya viene aplicado en `contacts`: si está
+ * apagado, GitHub no está en la lista.
+ */
+export type ContactoContent = Pick<Localized<Profile>, "contact" | "contacts">;
 
-export default function Contacto() {
+/** El dato no puede cargar JSX: `"github-mark"` es la clave del SVG de arriba. */
+function ContactIcon({ icon }: { icon: string }) {
+  return icon === "github-mark" ? <GitHubMark /> : icon;
+}
+
+export default function Contacto({ content }: { content: ContactoContent }) {
   return (
     <section className="section section-dark" id="contacto">
       <Reveal as="p" className="eyebrow">
-        11 — Hablemos
+        {content.contact.eyebrow}
       </Reveal>
       <Reveal as="h2" index={1}>
-        Contacto
+        {content.contact.heading}
       </Reveal>
 
       <div className="contact-grid">
-        {CONTACTS.map((contact, i) => (
+        {content.contacts.map((contact, i) => (
           <Reveal
             as="a"
             key={contact.href}
@@ -72,7 +50,9 @@ export default function Contacto() {
             className="contact-item"
             index={i}
           >
-            <div className="contact-icon">{contact.icon}</div>
+            <div className="contact-icon">
+              <ContactIcon icon={contact.icon} />
+            </div>
             <div className="contact-label">{contact.label}</div>
             <span className="contact-value">{contact.value}</span>
           </Reveal>

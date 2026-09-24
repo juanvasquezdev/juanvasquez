@@ -11,7 +11,8 @@
  * mía; la parte en primera persona (heroSubtitle, heroQuote, bio) va listada
  * en el reporte para que Juan la revise (R5).
  *
- * Todavía no lo consume ningún componente — eso es PORT-001b en adelante.
+ * Lo leen `app/[lang]/page.tsx`, que le pasa a cada sección su parte ya en el
+ * idioma de la ruta, y `components/Footer.tsx`, directo.
  */
 
 import type { Profile, SocialLink } from "./types";
@@ -31,11 +32,11 @@ export const GITHUB_URL = "https://github.com/juanjosevasquez1313-ai";
 export const SHOW_GITHUB_PROFILE = true;
 
 /**
- * Mismo orden y mismo contenido que `CONTACTS` en `components/Contacto.tsx`
- * hoy: Email siempre, GitHub solo si `SHOW_GITHUB_PROFILE`, después Instagram
- * y LinkedIn. El ícono de GitHub no tiene emoji real (por eso el componente
- * actual dibuja un SVG, `GitHubMark`) — acá queda como la clave `"github-mark"`
- * en vez de emoji, porque el dato no puede cargar el JSX del ícono.
+ * Los links de Contacto, en el orden en que salen en pantalla: Email siempre,
+ * GitHub solo si `SHOW_GITHUB_PROFILE`, después Instagram y LinkedIn. El ícono
+ * de GitHub no tiene emoji real, así que `components/Contacto.tsx` lo dibuja
+ * como SVG (`GitHubMark`); acá queda como la clave `"github-mark"`, porque el
+ * dato no puede cargar el JSX del ícono.
  */
 const CONTACTS: SocialLink[] = [
   {
@@ -99,6 +100,7 @@ export const PROFILE: Profile = {
   heroImages: [
     { src: "/images/podio_u23.jpeg" },
     { src: "/images/u18.jpeg" },
+    // NUEVA — pendiente reemplazar este archivo por otra foto mía
     { src: "/images/hero-nueva.jpeg" },
   ],
 

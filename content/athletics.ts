@@ -15,7 +15,8 @@
  * reporte (R5). Las unidades no se traducen: "2.06 m" es "2.06 m" en los dos
  * idiomas.
  *
- * Nada de esto lo consume todavía ningún componente — el cableado es PORT-001b.
+ * Lo lee `app/[lang]/page.tsx`, que le pasa a cada sección su parte ya en el
+ * idioma de la ruta.
  */
 
 import type { Athletics } from "./types";

@@ -4,13 +4,14 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import AnimatedStat from "./AnimatedStat";
+import type { Profile } from "@/content/types";
+import type { Localized } from "@/lib/i18n";
 
-const LAYER_SRC = [
-  "/images/podio_u23.jpeg",
-  "/images/u18.jpeg",
-  // NUEVA — pendiente reemplazar este archivo por otra foto mía
-  "/images/hero-nueva.jpeg",
-];
+/** Lo que el hero lee de `content/profile.ts`, ya en el idioma de la ruta. */
+export type HeroContent = Pick<
+  Localized<Profile>,
+  "name" | "eyebrow" | "heroSubtitle" | "heroQuote" | "heroImages" | "stats"
+>;
 
 /**
  * La bandera va como SVG y no como emoji: 🇨🇴 es un par de "regional
@@ -56,7 +57,7 @@ function HeroLayer({
   );
 }
 
-export default function Hero() {
+export default function Hero({ content }: { content: HeroContent }) {
   const scrollRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: scrollRef, offset: ["start start", "end end"] });
 
@@ -73,7 +74,7 @@ export default function Hero() {
     <header id="inicio" className="hero-scroll" ref={scrollRef}>
       <div className="hero-pin">
         <div className="hero-images" aria-hidden="true">
-          {LAYER_SRC.map((src, i) => (
+          {content.heroImages.map(({ src }, i) => (
             <HeroLayer key={src} src={src} priority={i === 0} opacity={opacities[i]} />
           ))}
         </div>
@@ -86,27 +87,24 @@ export default function Hero() {
             fade que nadie pidió. */}
         <div className="hero">
           <p className="hero-eyebrow">
-            <BanderaColombia /> Salto Alto · Atletismo
+            {/* Un solo nodo de texto con el espacio adentro: si el espacio va
+                aparte, React mete un <!-- --> entre los dos. */}
+            <BanderaColombia />
+            {` ${content.eyebrow}`}
           </p>
-          <h1>Juan José Vásquez Giraldo</h1>
-          <h2>Aprendiendo a volar más alto</h2>
+          <h1>{content.name}</h1>
+          <h2>{content.heroSubtitle}</h2>
 
           <div className="stats">
-            <div className="stat-item">
-              <AnimatedStat target={2.06} decimals={2} />
-              <div className="stat-label">Marca Personal (m)</div>
-            </div>
-            <div className="stat-item">
-              <AnimatedStat target={2.01} decimals={2} />
-              <div className="stat-label">Estatura (m)</div>
-            </div>
-            <div className="stat-item">
-              <AnimatedStat target={19} decimals={0} />
-              <div className="stat-label">Años</div>
-            </div>
+            {content.stats.map((stat) => (
+              <div className="stat-item" key={stat.label}>
+                <AnimatedStat target={stat.value} decimals={stat.decimals} />
+                <div className="stat-label">{stat.label}</div>
+              </div>
+            ))}
           </div>
 
-          <p className="quote">&quot;Aprendiendo a volar más alto&quot; ✈️</p>
+          <p className="quote">{content.heroQuote}</p>
 
           <div className="scroll-cue" aria-hidden="true">
             <span></span>

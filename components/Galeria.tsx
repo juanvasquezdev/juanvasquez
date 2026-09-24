@@ -3,23 +3,18 @@
 import { useState } from "react";
 import Image from "next/image";
 import Reveal from "./Reveal";
+import type { Athletics } from "@/content/types";
+import type { Localized } from "@/lib/i18n";
 
-const ITEMS = [
-  { src: "/images/pb2.04.jpeg", alt: "Salto de 2.04m en competencia", icon: "📸", label: "Salto 2.04 m" },
-  { src: "/images/podio_u23.jpeg", alt: "Podio en categoría U23", icon: "🥇", label: "Podio U23" },
-  { src: "/images/podio-mayores.jpeg", alt: "Podio categoría Mayores", icon: "🏅", label: "Podio Mayores" },
-  { src: "/images/u18.jpeg", alt: "Competencia categoría U18", icon: "🏃", label: "Competencia U18" },
-  { src: "/images/salto2.jpeg", alt: "Salto de altura en competencia", icon: "🤸", label: "En el aire" },
-  {
-    src: "/images/foto_saltoperu1.jpeg",
-    alt: "Competencia internacional en Perú",
-    icon: "🌎",
-    label: "Legado Lima 2019",
-  },
-  { src: "/images/epica_trasera.jpeg", alt: "Celebración tras una marca", icon: "🙌", label: "Celebración" },
-];
+type GaleriaPhoto = Localized<Athletics["gallery"]>["photos"][number];
 
-function GaleriaItem({ src, alt, icon, label, index }: (typeof ITEMS)[number] & { index: number }) {
+function GaleriaItem({
+  src,
+  alt,
+  fallbackIcon,
+  fallbackLabel,
+  index,
+}: GaleriaPhoto & { index: number }) {
   const [broken, setBroken] = useState(false);
   return (
     <Reveal className="galeria-item" index={index}>
@@ -33,25 +28,25 @@ function GaleriaItem({ src, alt, icon, label, index }: (typeof ITEMS)[number] & 
         />
       )}
       <div className="galeria-placeholder" style={broken ? { display: "flex" } : undefined}>
-        <div className="ph-icon">{icon}</div>
-        <p>{label}</p>
+        <div className="ph-icon">{fallbackIcon}</div>
+        <p>{fallbackLabel}</p>
       </div>
     </Reveal>
   );
 }
 
-export default function Galeria() {
+export default function Galeria({ content }: { content: Localized<Athletics["gallery"]> }) {
   return (
     <section className="section" id="galeria">
       <Reveal as="p" className="eyebrow">
-        06 — Momentos
+        {content.eyebrow}
       </Reveal>
       <Reveal as="h2" index={1}>
-        Galería
+        {content.heading}
       </Reveal>
 
       <div className="galeria">
-        {ITEMS.map((item, i) => (
+        {content.photos.map((item, i) => (
           <GaleriaItem key={item.src} {...item} index={i} />
         ))}
       </div>

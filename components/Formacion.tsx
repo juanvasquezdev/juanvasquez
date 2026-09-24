@@ -1,37 +1,21 @@
 "use client";
 
 import Reveal from "./Reveal";
+import type { Timeline } from "@/content/types";
+import type { Localized } from "@/lib/i18n";
 
-const TIMELINE = [
-  {
-    year: "2023",
-    title: "Técnico Laboral por Competencias en Asistente en Programación de Software",
-    place: "ITA Profesional – Universidad Pontificia Bolivariana (UPB)",
-  },
-  {
-    year: "2023",
-    title: "Bachiller Técnico, especialidad en Informática",
-    place: "Institución Educativa de Rozo",
-  },
-];
-
-const CERTS = [
-  "Certificado de Aptitud Laboral en Desarrollo de Software",
-  "Certificado de Aptitud Ocupacional – Técnico Laboral por Competencias en Asistente en Programación de Software",
-];
-
-export default function Formacion() {
+export default function Formacion({ content }: { content: Localized<Timeline> }) {
   return (
     <section className="section" id="formacion">
       <Reveal as="p" className="eyebrow">
-        08 — Formación
+        {content.eyebrow}
       </Reveal>
       <Reveal as="h2" index={1}>
-        Formación Académica
+        {content.heading}
       </Reveal>
 
       <div className="timeline">
-        {TIMELINE.map((item, i) => (
+        {content.entries.map((item, i) => (
           <Reveal className="timeline-item" index={i} key={item.title}>
             <div className="timeline-year">{item.year}</div>
             <div className="timeline-content">
@@ -43,10 +27,10 @@ export default function Formacion() {
       </div>
 
       <Reveal as="h3" className="sub-heading">
-        Certificaciones
+        {content.certsHeading}
       </Reveal>
       <div className="cert-grid">
-        {CERTS.map((cert, i) => (
+        {content.certs.map((cert, i) => (
           <Reveal className="cert-item" index={i} key={cert}>
             <div className="cert-icon">📜</div>
             <p>{cert}</p>

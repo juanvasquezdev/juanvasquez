@@ -1,39 +1,59 @@
 "use client";
 
 import Reveal from "./Reveal";
+import type { Athletics } from "@/content/types";
+import type { Localized } from "@/lib/i18n";
 
-const ACHIEVEMENTS = [
-  { emoji: "🥇", html: <>Campeón Nacional U18<br /><small>(2 veces)</small></> },
-  { emoji: "🥈", html: "Subcampeón Juegos Nacionales Juveniles" },
-  { emoji: "🥈", html: "Subcampeón Interclubes U20" },
-  { emoji: "📈", html: "Marca Personal: 2.06 m" },
-];
+/**
+ * Lo que Logros lee de `content/athletics.ts`, campo por campo. La liga y la
+ * federación (`governingBodies*`) están en el dato pero todavía no las muestro,
+ * así que ni siquiera viajan al cliente. Va como lista de lo que entra y no de
+ * lo que sale, para que un campo nuevo no llegue al navegador sin que yo lo pida.
+ */
+export type LogrosContent = Pick<
+  Localized<Athletics["achievements"]>,
+  "eyebrow" | "heading" | "items" | "clubsLabel" | "clubs"
+>;
 
-export default function Logros() {
+export default function Logros({ content }: { content: LogrosContent }) {
   return (
     <section className="section section-dark" id="logros">
       <Reveal as="p" className="eyebrow">
-        07 — Trayectoria
+        {content.eyebrow}
       </Reveal>
       <Reveal as="h2" index={1}>
-        Logros Destacados
+        {content.heading}
       </Reveal>
 
       <div className="achievements">
-        {ACHIEVEMENTS.map((item, i) => (
+        {content.items.map((item, i) => (
           <Reveal className="achievement-item" index={i} key={i}>
-            <div className="achievement-emoji">{item.emoji}</div>
-            <p>{item.html}</p>
+            <div className="achievement-emoji">{item.icon}</div>
+            <p>
+              {item.title}
+              {item.note && (
+                <>
+                  <br />
+                  <small>{item.note}</small>
+                </>
+              )}
+            </p>
           </Reveal>
         ))}
       </div>
 
       <Reveal className="card card-wide mt-lg">
+        {/* El entrenador sigue escrito a mano acá y no en content/: decidí no
+            publicarlo, así que el dato no tiene campo para él. Mientras siga en
+            pantalla, vive solo en este componente. */}
         <p>
           <strong>👤 Entrenador:</strong> José Arturo Posada
         </p>
+        {/* Espacio y nombres en un solo nodo de texto: si van separados, React
+            mete un <!-- --> entre los dos. */}
         <p className="mt-sm">
-          <strong>🏃 Clubes:</strong> Todomed, The Jumpers Club
+          <strong>{content.clubsLabel}</strong>
+          {` ${content.clubs.join(", ")}`}
         </p>
       </Reveal>
     </section>
