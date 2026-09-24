@@ -1,8 +1,11 @@
 /**
  * Datos de perfil: quién soy, el hero, y cómo contactarme.
  *
- * PORT-001a: esta es la muestra del GATE 1 — el archivo que prueba que la
- * forma de `content/types.ts` alcanza para el contenido real. El español es
+ * PORT-001a: esta fue la muestra del GATE 1 — el archivo que probó que la
+ * forma de `content/types.ts` alcanza para el contenido real. Con el gate
+ * aprobado (2026-09-23) lo único que se le sumó son las dos cabeceras de
+ * sección (`about`, `contact`), que eran los dos textos del sitio que se
+ * quedaban sin archivo. El español es
  * el texto que hoy está en `components/Hero.tsx`, `components/SobreMi.tsx` y
  * `components/Contacto.tsx`, copiado literal (R1). El inglés es traducción
  * mía; la parte en primera persona (heroSubtitle, heroQuote, bio) va listada
@@ -98,6 +101,20 @@ export const PROFILE: Profile = {
     { src: "/images/u18.jpeg" },
     { src: "/images/hero-nueva.jpeg" },
   ],
+
+  // Las cabeceras de las dos secciones que se alimentan de este archivo. Los
+  // números del eyebrow son los del sitio de hoy (Sobre Mí es la 01, Contacto
+  // la 11) — los copio tal cual aunque PORT-006 vaya a renumerar todo: hoy es
+  // el texto que está en pantalla y R1 manda sobre eso.
+  about: {
+    eyebrow: { es: "01 — Quién soy", en: "01 — Who I am" },
+    heading: { es: "Sobre Mí", en: "About Me" },
+  },
+
+  contact: {
+    eyebrow: { es: "11 — Hablemos", en: "11 — Let's talk" },
+    heading: { es: "Contacto", en: "Contact" },
+  },
 
   photo: {
     src: "/images/foto_posando2.jpeg",

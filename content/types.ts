@@ -2,8 +2,20 @@
  * Formas del contenido bilingüe. PORT-001a.
  *
  * Esto es lo que congela cómo se ven los datos para todo el proyecto — por
- * eso GATE 1 para acá: se puebla `profile.ts` como muestra y se espera el
- * visto bueno antes de tocar los otros cinco archivos.
+ * eso se paró en el GATE 1 con `profile.ts` como única muestra poblada.
+ *
+ * **GATE 1 aprobado el 2026-09-23.** De las cuatro preguntas de forma que se
+ * llevaron a revisión, tres quedaron como estaban (`ProgressionMarker` con
+ * `pos` y sin `date`, `Goal.text` plano sin el `<strong>`, y el cableado a los
+ * componentes recién en PORT-001b) y una cambió: los clubes se parten en dos
+ * campos, ver la nota en `Athletics["achievements"]`. Al poblar los otros
+ * cinco archivos aparecieron cuatro agregados más, todos por texto o
+ * estructura del sitio que no tenía dónde caer: `Profile.about` /
+ * `Profile.contact`, `UI.navLabel`, `Project.statusLabel` y el tipo nuevo
+ * `Projects` (la cabecera de la sección + la lista, porque el plan da la forma
+ * de un proyecto suelto pero no la del archivo), cada uno explicado en su
+ * lugar. Ningún campo que Juan aprobó cambió de nombre, de tipo ni de
+ * opcionalidad.
  *
  * El esqueleto (`LOCALES`, `Locale`, `DEFAULT_LOCALE`, `L<T>`, `ProjectStatus`,
  * `Project`) es el que trae el plan en la arquitectura objetivo (§4) — lo dejo
@@ -25,7 +37,7 @@ export const DEFAULT_LOCALE: Locale = "es";
 export type L<T = string> = Record<Locale, T>;
 
 // ---------------------------------------------------------------------------
-// Proyectos (P) — forma dada por el plan, sin tocar
+// Proyectos (P) — forma dada por el plan, con un campo agregado (`statusLabel`)
 // ---------------------------------------------------------------------------
 
 export type ProjectStatus = "planned" | "building" | "mvp" | "active" | "completed";
@@ -35,16 +47,50 @@ export type Project = {
   title: string; // nombre propio, no se traduce
   tagline: L;
   status: ProjectStatus;
+  /**
+   * La etiqueta que hoy imprime la tarjeta (`.proyecto-status` en
+   * `Proyectos.tsx`): "En consolidación", "En construcción", "Vivo".
+   *
+   * Va como campo aparte y no derivada de `status` porque **no se puede
+   * derivar sin perder texto**: hoy dos proyectos distintos caen en el mismo
+   * `status` ('active') y muestran palabras distintas ("En consolidación" y
+   * "Vivo"). Un mapa `ProjectStatus -> L` los imprimiría iguales, y eso rompe
+   * R1, que manda conservar el texto del sitio carácter por carácter. Cuando
+   * PORT-010 reconcilie los proyectos con las respuestas de ❓1–4, puede
+   * decidir si la etiqueta vuelve a salir del enum; hasta entonces el enum es
+   * para lógica (filtrar, ordenar) y este campo es lo que se lee en pantalla.
+   */
+  statusLabel: L;
   featured: boolean;
   problem: L;
   solution: L;
-  stack: string[]; // ids de content/stack.ts
+  /**
+   * Nombres de tecnologías tal como los escribe `content/stack.ts`. El plan
+   * dice "ids de content/stack.ts", pero `StackGroup` no tiene ids: sus
+   * `items` son los nombres. O sea que el id **es** el nombre escrito igual
+   * ("Next.js", no "nextjs"). Lo dejo dicho acá porque es justo el tipo de
+   * cosa que se hereda mal: si mañana alguien le agrega un `id` a
+   * `StackGroup`, este campo hay que migrarlo a mano.
+   */
+  stack: string[];
   architecture?: L;
   links: { demo?: string; repo?: string; caseStudy: boolean };
   repoVisibility: "private" | "public"; // D7
   evolution: { date: string; note: L; status: ProjectStatus }[];
   cover?: { src: string; alt: L };
   confidential?: boolean;
+};
+
+/**
+ * Lo que exporta `content/projects.ts`: la cabecera de la sección Proyectos
+ * ("03 — Casos" / "Proyectos") más la lista. El plan da la forma de un
+ * proyecto suelto pero no la del archivo, y la cabecera tiene que caer en
+ * algún lado para que la mudanza sea completa. La tarjeta placeholder
+ * ("+ siguiente proyecto") NO vive acá: no es un proyecto, es una etiqueta de
+ * interfaz, y por eso está en `UI["projects"].nextPlaceholder`.
+ */
+export type Projects = SectionHeader & {
+  items: Project[];
 };
 
 // ---------------------------------------------------------------------------
@@ -103,6 +149,19 @@ export type Profile = {
   heroSubtitle: L; // el <h2> del hero
   heroQuote: L; // la cita del hero — hoy repite heroSubtitle, ver nota en profile.ts
   heroImages: { src: string }[]; // capas del crossfade, decorativas (alt="")
+  /**
+   * Cabeceras de las dos secciones cuyo contenido cae en este archivo: Sobre
+   * Mí ("01 — Quién soy") y Contacto ("11 — Hablemos"). Las agregué al poblar
+   * los otros cinco archivos, cuando quedó claro que eran los dos únicos
+   * textos visibles del sitio que no tenían dónde caer: todas las demás
+   * secciones traen su `SectionHeader` dentro de `Athletics`, `Timeline`,
+   * `Stack` o `Projects`, y sin estos dos campos PORT-001b tendría que dejar
+   * cuatro strings escritos a mano dentro de los componentes — justo lo que
+   * esta capa existe para evitar. No cambié ningún campo de los que ya
+   * estaban; esto es puro agregado.
+   */
+  about: SectionHeader;
+  contact: SectionHeader;
   photo: { src: string; alt: string };
   bio: L; // el párrafo largo de Sobre Mí
   stats: HeroStat[];
@@ -180,11 +239,26 @@ export type Athletics = {
     // `Logros.tsx`). No dejo el campo listo para poblar en contra de una
     // decisión ya cerrada.
     clubsLabel: L;
-    // D10: son exactamente dos, Liga Vallecaucana de Atletismo y Federación
-    // Colombiana de Atletismo — no el par que hoy muestra `Logros.tsx`
-    // (Todomed, The Jumpers Club). Sigue siendo `string[]` y no una tupla de
+    // Los clubes propiamente dichos, los dos que el sitio muestra hoy:
+    // Todomed y The Jumpers Club. Sigue siendo `string[]` y no una tupla de
     // dos: no quiero endurecer esa forma hoy, alcanza con la nota.
     clubs: string[]; // nombres propios
+    /**
+     * Liga Vallecaucana de Atletismo y Federación Colombiana de Atletismo.
+     *
+     * **Van en un campo aparte, no dentro de `clubs`, y esto no se vuelve a
+     * fusionar.** D10 (2026-09-23) pedía "publicar esos dos"; al revisar la
+     * forma en el GATE 1 Juan cerró que **no reemplazan a los clubes: se
+     * suman**, porque una liga departamental y una federación nacional no son
+     * clubes y meterlas bajo la etiqueta "Clubes" sería inexacto. Las cuatro
+     * entidades se publican, en dos grupos con su propia etiqueta.
+     *
+     * Quedan poblados acá desde PORT-001a, pero el sitio todavía no los
+     * muestra: la presentación de estos dos entra con el resto de D10 en
+     * PORT-013a (#14 del plan).
+     */
+    governingBodiesLabel: L;
+    governingBodies: string[]; // nombres propios
   };
   technique: SectionHeader & { cards: TechniqueCard[] };
   goals: SectionHeader & {
@@ -241,6 +315,7 @@ export type NavLink = {
 export type UI = {
   skipLink: L;
   backToTopLabel: L; // aria-label del botón volver arriba
+  navLabel: L; // aria-label del <nav> ("Navegación principal")
   nav: NavLink[];
   projects: {
     problemLabel: L; // "Problema" — se repite por cada tarjeta de proyecto
