@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { DEFAULT_LOCALE, LOCALES, type L, type Locale } from "@/content/types";
 
 /**
@@ -20,22 +19,15 @@ export function isLocale(value: string): value is Locale {
 }
 
 /**
- * El idioma de la ruta, o una redirección si el primer segmento no es uno.
+ * El `[lang]` de la ruta, ya con su tipo.
  *
- * `[lang]` agarra cualquier primer segmento, así que /contacto o /xx llegan
- * acá con `lang = "contacto"`. No corto con notFound(): mi layout raíz vive
- * debajo de `[lang]`, y un 404 tirado durante el render ya no tiene ningún
- * layout arriba que lo dibuje — Next responde un <html> vacío que sin JS no
- * muestra nada. En cambio le antepongo el idioma por defecto (/contacto →
- * /es/contacto): si esa ruta existe, llega; si no, es una ruta que no coincide
- * con nada y la atiende `app/global-not-found.tsx`, con 404 y texto visible.
+ * Con `dynamicParams = false` en el layout solo se generan /es y /en, y
+ * cualquier otro primer segmento es 404 antes de llegar acá (lo dibuja
+ * `app/global-not-found.tsx`). Esto es solo para que TypeScript sepa que es
+ * un `Locale`; el fallback al idioma por defecto no debería pasar nunca.
  */
-export function localeOrRedirect(lang: string): Locale {
-  if (isLocale(lang)) return lang;
-  // Sin encodeURIComponent: el segmento ya llega codificado (/%3Cx%3E trae
-  // `lang = "%3Cx%3E"`), y codificarlo de nuevo lo dejaba en %253C. Tampoco
-  // puede traer una "/" suelta, así que el destino siempre empieza en /es/.
-  redirect(`/${DEFAULT_LOCALE}/${lang}`);
+export function toLocale(lang: string): Locale {
+  return isLocale(lang) ? lang : DEFAULT_LOCALE;
 }
 
 /**

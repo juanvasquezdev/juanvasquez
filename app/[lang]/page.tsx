@@ -19,18 +19,10 @@ import { ATHLETICS } from "@/content/athletics";
 import { TIMELINE } from "@/content/timeline";
 import { STACK } from "@/content/stack";
 import { UI_LABELS } from "@/content/ui";
-import { localeOrRedirect, localize } from "@/lib/i18n";
-
-// Requerido por la CSP con nonce (ver proxy.ts): el nonce es por request, así
-// que esta página no puede quedar prerenderizada como estática — el costo es
-// perder la cache estática de Vercel para esta ruta. Ver CLAUDE.md, deuda
-// técnica ítem 9, para el detalle completo de esta decisión. Por lo mismo, el
-// `generateStaticParams` del layout no prerenderiza nada: /es y /en se
-// renderizan en cada request.
-export const dynamic = "force-dynamic";
+import { toLocale, localize } from "@/lib/i18n";
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
-  const lang = localeOrRedirect((await params).lang);
+  const lang = toLocale((await params).lang);
 
   // Cada sección recibe solo su parte y solo en este idioma (el porqué está en
   // lib/i18n.ts). Lo resuelvo una vez acá y no en cada componente.

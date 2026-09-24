@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { archivoBlack, inter } from "../fonts";
 import SmoothScroll from "@/components/SmoothScroll";
 import { LOCALES, DEFAULT_LOCALE } from "@/content/types";
-import { localeOrRedirect } from "@/lib/i18n";
+import { toLocale } from "@/lib/i18n";
 import "../globals.css";
 
 // El título y la descripción son los mismos en la metadata base, en Open Graph
@@ -52,21 +52,20 @@ export const viewport: Viewport = {
   themeColor: "#04060a",
 };
 
-// Hoy no prerenderiza nada: la página va con `dynamic = "force-dynamic"` por la
-// CSP con nonce, así que /es y /en se renderizan en cada request. Lo dejo igual
-// porque declara qué idiomas existen, y el día que la página pueda volver a ser
-// estática ya está listo.
+// /es y /en se generan una vez en el build y se sirven estáticas. Con
+// dynamicParams = false no existe ningún otro idioma: /xx da 404 directo (lo
+// dibuja app/global-not-found.tsx) en vez de intentar renderizarse.
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
+
+export const dynamicParams = false;
 
 export default async function RootLayout({
   children,
   params,
 }: Readonly<{ children: React.ReactNode; params: Promise<{ lang: string }> }>) {
-  // Un primer segmento que no es idioma (/contacto) redirige en vez de tirar
-  // el 404 acá: ver localeOrRedirect en lib/i18n.ts.
-  const lang = localeOrRedirect((await params).lang);
+  const lang = toLocale((await params).lang);
 
   return (
     <html lang={lang} className={`${archivoBlack.variable} ${inter.variable}`}>
