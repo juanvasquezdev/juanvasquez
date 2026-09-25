@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "motion/react";
+import { motion, useInView, useReducedMotion } from "motion/react";
 import { useBelowFold } from "@/hooks/useBelowFold";
 import { reveal, revealViewport } from "@/lib/motion";
 
@@ -31,10 +31,16 @@ type RevealProps = PassThrough &
  * si useBelowFold dice que el bloque quedó debajo del pliegue se aplica
  * `hidden` (con duración 0, antes del primer paint) para animarlo cuando el
  * scroll lo alcance. Ver hooks/useBelowFold.ts para el porqué.
+ *
+ * Con prefers-reduced-motion no se esconde nada: MotionConfig reducedMotion="user"
+ * corta el desplazamiento pero deja el fundido de opacidad, así que el contenido
+ * igual aparecía de a poco. No cambia la hidratación: reduceMotion solo pesa
+ * cuando belowFold ya es true, y eso pasa después de hidratar.
  */
 export default function Reveal({ as = "div", index = 0, children, ...rest }: RevealProps) {
   const [ref, belowFold] = useBelowFold<HTMLElement>();
   const inView = useInView(ref, revealViewport);
+  const reduceMotion = useReducedMotion();
 
   const Tag = motion[as] as typeof motion.div;
 
@@ -42,7 +48,7 @@ export default function Reveal({ as = "div", index = 0, children, ...rest }: Rev
     <Tag
       ref={ref as React.Ref<HTMLDivElement>}
       initial={false}
-      animate={belowFold && !inView ? "hidden" : "visible"}
+      animate={belowFold && !inView && !reduceMotion ? "hidden" : "visible"}
       variants={reveal}
       custom={index}
       {...rest}
