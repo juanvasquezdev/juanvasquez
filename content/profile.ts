@@ -1,78 +1,36 @@
 /**
- * Datos de perfil: quién soy, el hero, y cómo contactarme.
+ * Quién soy: hero, sobre mí, habilidades y contacto. Textos del mockup v2
+ * (docs/mockup-v2.dc.html).
  *
- * PORT-001a: esta fue la muestra del GATE 1 — el archivo que probó que la
- * forma de `content/types.ts` alcanza para el contenido real. Con el gate
- * aprobado (2026-09-23) lo único que se le sumó son las dos cabeceras de
- * sección (`about`, `contact`), que eran los dos textos del sitio que se
- * quedaban sin archivo. El español es
- * el texto que hoy está en `components/Hero.tsx`, `components/SobreMi.tsx` y
- * `components/Contacto.tsx`, copiado literal (R1). El inglés es traducción
- * mía; la parte en primera persona (heroSubtitle, heroQuote, bio) va listada
- * en el reporte para que Juan la revise (R5).
- *
- * Lo leen `app/[lang]/page.tsx`, que le pasa a cada sección su parte ya en el
- * idioma de la ruta, y `components/Footer.tsx`, directo.
+ * Títulos y estudios no van en el sitio: viven en LinkedIn, y el dato "Perfil"
+ * enlaza allá.
  */
 
-import type { Profile, SocialLink } from "./types";
+import type { ContactLink, Profile } from "./types";
 
-/** Mi perfil de GitHub. */
-export const GITHUB_URL = "https://github.com/juanjosevasquez1313-ai";
+// Mis cuentas, en un solo lugar. Si cambia un usuario, cambia acá.
+export const GITHUB_USER = "juanvasquezdev";
+export const GITHUB_URL = `https://github.com/${GITHUB_USER}`;
+export const INSTAGRAM_USER = "juanvasquezhj";
+export const INSTAGRAM_URL = `https://instagram.com/${INSTAGRAM_USER}`;
+export const LINKEDIN_URL = "https://www.linkedin.com/in/juan-jos%C3%A9-vasquez-giraldo-93b25b304/";
+export const EMAIL = "juanjosevasquez1313@gmail.com";
 
-/**
- * Interruptor del link al perfil de GitHub en Contacto.
- *
- * Tengo todos los repos privados, y un perfil así se ve vacío a menos que esté
- * activo *Settings → Profile → "Include private contributions on my profile"*.
- * Si no lo activo, el link juega en contra: manda a alguien a un perfil sin
- * nada. Mientras lo decido, esto se apaga en un renglón y el link desaparece
- * de la sección sin tocar el componente.
- */
-export const SHOW_GITHUB_PROFILE = true;
-
-/**
- * Los links de Contacto, en el orden en que salen en pantalla: Email siempre,
- * GitHub solo si `SHOW_GITHUB_PROFILE`, después Instagram y LinkedIn. El ícono
- * de GitHub no tiene emoji real, así que `components/Contacto.tsx` lo dibuja
- * como SVG (`GitHubMark`); acá queda como la clave `"github-mark"`, porque el
- * dato no puede cargar el JSX del ícono.
- */
-const CONTACTS: SocialLink[] = [
+const CONTACT_LINKS: ContactLink[] = [
+  { id: "email", label: "Email", value: EMAIL, href: `mailto:${EMAIL}`, external: false },
+  { id: "github", label: "GitHub", value: GITHUB_USER, href: GITHUB_URL, external: true },
   {
-    id: "email",
-    href: "mailto:juanjosevasquez1313@gmail.com",
-    icon: "📧",
-    label: { es: "Email", en: "Email" },
-    value: "juanjosevasquez1313@gmail.com",
-    external: false,
-  },
-  ...(SHOW_GITHUB_PROFILE
-    ? [
-        {
-          id: "github",
-          href: GITHUB_URL,
-          icon: "github-mark",
-          label: { es: "GitHub", en: "GitHub" },
-          value: "juanjosevasquez1313-ai",
-          external: true,
-        } satisfies SocialLink,
-      ]
-    : []),
-  {
-    id: "instagram",
-    href: "https://instagram.com/juanvasquezhj",
-    icon: "📱",
-    label: { es: "Instagram", en: "Instagram" },
-    value: "@juanvasquezhj",
+    id: "linkedin",
+    label: "LinkedIn",
+    value: "Juan José Vásquez Giraldo",
+    href: LINKEDIN_URL,
     external: true,
   },
   {
-    id: "linkedin",
-    href: "https://www.linkedin.com/in/juan-jos%C3%A9-vasquez-giraldo-93b25b304/",
-    icon: "💼",
-    label: { es: "LinkedIn", en: "LinkedIn" },
-    value: "Juan José Vásquez Giraldo",
+    id: "instagram",
+    label: "Instagram",
+    value: `@${INSTAGRAM_USER}`,
+    href: INSTAGRAM_URL,
     external: true,
   },
 ];
@@ -80,76 +38,137 @@ const CONTACTS: SocialLink[] = [
 export const PROFILE: Profile = {
   name: "Juan José Vásquez Giraldo",
 
-  eyebrow: { es: "Salto Alto · Atletismo", en: "High Jump · Athletics" },
-
-  heroSubtitle: {
-    es: "Aprendiendo a volar más alto",
-    en: "Learning to fly higher",
+  hero: {
+    eyebrow: "Cali, Colombia · 2026",
+    nameLines: ["Juan José", "Vásquez"],
+    tags: [
+      { es: "Desarrollador Full Stack en formación", en: "Full Stack Developer in training" },
+      { es: "Atleta de alto rendimiento", en: "High-performance athlete" },
+    ],
+    scrollCue: { es: "Desliza", en: "Scroll" },
+    image: {
+      src: "/images/epica_trasera2.jpeg",
+      alt: {
+        es: "Juan José Vásquez de espaldas, mirando al horizonte",
+        en: "Juan José Vásquez from behind, looking out at the horizon",
+      },
+    },
   },
 
-  // Hoy repite heroSubtitle palabra por palabra (es el mismo texto en el <h2>
-  // y en la cita de abajo — ver N5 en el plan). Es una mudanza literal, no
-  // corrijo la duplicación acá; eso es PORT-007.
-  heroQuote: {
-    es: '"Aprendiendo a volar más alto" ✈️',
-    en: '"Learning to fly higher" ✈️',
-  },
-
-  // Las tres capas del crossfade del hero. Decorativas (alt="" en el
-  // componente actual, contenedor con aria-hidden), por eso acá no llevan alt.
-  heroImages: [
-    { src: "/images/podio_u23.jpeg" },
-    { src: "/images/u18.jpeg" },
-    // NUEVA — pendiente reemplazar este archivo por otra foto mía
-    { src: "/images/hero-nueva.jpeg" },
-  ],
-
-  // Las cabeceras de las dos secciones que se alimentan de este archivo. Los
-  // números del eyebrow son los del sitio de hoy (Sobre Mí es la 01, Contacto
-  // la 11) — los copio tal cual aunque PORT-006 vaya a renumerar todo: hoy es
-  // el texto que está en pantalla y R1 manda sobre eso.
   about: {
-    eyebrow: { es: "01 — Quién soy", en: "01 — Who I am" },
-    heading: { es: "Sobre Mí", en: "About Me" },
+    eyebrow: { es: "01 — Sobre mí", en: "01 — About" },
+    heading: { es: "Sobre mí", en: "About me" },
+    body: {
+      es: "Desarrollador full stack en formación y atleta de salto alto de la Selección Colombia. Diseño y construyo sistemas para problemas reales, como la gestión deportiva y la de negocios, cuidando el rendimiento, la seguridad y que el código se pueda mantener. Al software le llevo la misma disciplina del entrenamiento: medir, ajustar y repetir.",
+      en: "Full stack developer in training and high jumper for the Colombian national team. I design and build systems for real problems, such as sports and business management, with a focus on performance, security and maintainable code. I bring the same discipline from training into software: measure, adjust, repeat.",
+    },
+    facts: [
+      {
+        label: { es: "Base", en: "Based in" },
+        value: { es: "Cali, Colombia", en: "Cali, Colombia" },
+      },
+      {
+        label: { es: "Perfil", en: "Profile" },
+        value: {
+          es: "Full Stack Developer en formación",
+          en: "Full Stack Developer in training",
+        },
+        link: {
+          label: {
+            es: "Formación y certificados en LinkedIn",
+            en: "Education and certificates on LinkedIn",
+          },
+          href: LINKEDIN_URL,
+        },
+      },
+      {
+        label: { es: "Hoy", en: "Now" },
+        value: { es: "Abierto a oportunidades laborales", en: "Open to job opportunities" },
+      },
+    ],
+    portrait: {
+      src: "/images/foto_posando2.jpeg",
+      alt: {
+        es: "Retrato de Juan José con la camiseta de Colombia",
+        en: "Portrait of Juan José wearing the Colombia jersey",
+      },
+    },
+  },
+
+  skills: {
+    eyebrow: { es: "02 — Habilidades", en: "02 — Skills" },
+    heading: { es: "Cómo trabajo", en: "How I work" },
+    items: [
+      {
+        title: { es: "Pensamiento de sistemas", en: "Systems thinking" },
+        text: {
+          es: "Veo el producto completo antes del código: módulos, datos y cómo va a crecer, sin construir de más antes de tiempo.",
+          en: "I see the whole product before the code: modules, data and how it will grow, without overbuilding ahead of time.",
+        },
+      },
+      {
+        title: { es: "Resolver problemas reales", en: "Solving real problems" },
+        text: {
+          es: "Parto de una necesidad concreta, como una liga deportiva o una tienda que lleva todo en papel, y la convierto en un sistema usable.",
+          en: "I start from a concrete need, like a sports league or a shop that runs on paper, and turn it into a usable system.",
+        },
+      },
+      {
+        title: { es: "Desarrollo con IA, con criterio", en: "AI-assisted development, with judgment" },
+        text: {
+          es: "Uso la IA para ir más rápido, pero reviso, entiendo y decido cada cambio antes de integrarlo.",
+          en: "I use AI to move faster, but I review, understand and decide on every change before it goes in.",
+        },
+      },
+      {
+        title: { es: "Disciplina y constancia", en: "Discipline and consistency" },
+        text: {
+          es: "El alto rendimiento me enseñó a entrenar a diario, medir el progreso y competir bajo presión.",
+          en: "High-performance sport taught me to train daily, measure progress and compete under pressure.",
+        },
+      },
+      {
+        title: { es: "Aprendizaje autodirigido", en: "Self-directed learning" },
+        text: {
+          es: "Aprendo construyendo: investigo, pruebo, me equivoco, corrijo y lo documento.",
+          en: "I learn by building: research, try, fail, fix and document.",
+        },
+      },
+      {
+        title: { es: "Orden y documentación", en: "Order and documentation" },
+        text: {
+          es: "Git con ramas y commits claros, READMEs útiles y decisiones técnicas escritas.",
+          en: "Git with branches and clear commits, useful READMEs and written technical decisions.",
+        },
+      },
+    ],
+    languagesLabel: { es: "Idiomas", en: "Languages" },
+    languages: [
+      {
+        name: { es: "Español", en: "Spanish" },
+        level: { es: "Nativo", en: "Native" },
+        improving: false,
+      },
+      {
+        name: { es: "Inglés", en: "English" },
+        level: { es: "B1-B2 · en mejora", en: "B1-B2 · improving" },
+        improving: true,
+      },
+    ],
   },
 
   contact: {
-    eyebrow: { es: "11 — Hablemos", en: "11 — Let's talk" },
-    heading: { es: "Contacto", en: "Contact" },
+    eyebrow: { es: "07 — Contacto", en: "07 — Contact" },
+    heading: { es: "Hablemos.", en: "Let’s talk." },
+    intro: {
+      es: "Escríbeme por el canal que prefieras.",
+      en: "Reach out on whichever channel you prefer.",
+    },
+    links: CONTACT_LINKS,
   },
 
-  photo: {
-    src: "/images/foto_posando2.jpeg",
-    alt: "Juan José Vásquez Giraldo",
-  },
-
-  bio: {
-    es:
-      "Soy Juan José Vásquez Giraldo, atleta colombiano especializado en salto alto. Con una marca " +
-      "personal de 2.06 metros, he demostrado ser un competidor de alto nivel a nivel nacional. He sido " +
-      "campeón nacional U18 en dos ocasiones y tengo una trayectoria destacada en competencias de élite. " +
-      "Mi dedicación, disciplina y pasión por el deporte me impulsan a seguir mejorando y alcanzando " +
-      "nuevas metas en mi carrera atlética — con la mirada puesta en la élite mundial.",
-    en:
-      "I'm Juan José Vásquez Giraldo, a Colombian high jump athlete. With a personal best of 2.06 " +
-      "meters, I've shown myself to be a top-level competitor nationally. I've been national U18 champion " +
-      "twice and have a strong track record in elite competitions. My dedication, discipline, and passion " +
-      "for the sport drive me to keep improving and reaching new goals in my athletic career — with my " +
-      "sights set on the world elite.",
-  },
-
-  stats: [
-    { value: 2.06, decimals: 2, label: { es: "Marca Personal (m)", en: "Personal Best (m)" } },
-    { value: 2.01, decimals: 2, label: { es: "Estatura (m)", en: "Height (m)" } },
-    { value: 19, decimals: 0, label: { es: "Años", en: "Age" } },
-  ],
-
-  contacts: CONTACTS,
-
-  // El nombre en el footer sale de `name`, la bandera la sigue dibujando el
-  // componente (mismo SVG que el eyebrow del hero) — acá solo el año y el tag.
   footer: {
-    year: 2026,
-    roleTag: { es: "Atleta de Salto Alto", en: "High Jump Athlete" },
+    copyright: "© 2026 Juan José Vásquez Giraldo",
+    tagline: { es: "Cali, Colombia · Hecho con Next.js", en: "Cali, Colombia · Built with Next.js" },
   },
 };

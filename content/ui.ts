@@ -1,16 +1,6 @@
 /**
  * Etiquetas de interfaz: lo que no es contenido de una sección sino cómo se
  * navega el sitio.
- *
- * Mudanza literal (R1) de `app/page.tsx` (el skip-link), `components/Nav.tsx`
- * (los seis links y el `aria-label` del pill) y `components/BackToTop.tsx`
- * (el `aria-label` del botón). Las tres etiquetas de las tarjetas de proyecto
- * salen de `components/Proyectos.tsx`.
- *
- * Ojo con un detalle que parece un typo y no lo es: el link del nav dice
- * "Sobre mí" con m minúscula y el título de la sección dice "Sobre Mí" con
- * mayúscula. Está así en el sitio; lo copio como está y lo anoto, no lo
- * unifico (eso es PORT-007 en adelante).
  */
 
 import type { UI } from "./types";
@@ -18,11 +8,7 @@ import type { UI } from "./types";
 export const UI_LABELS: UI = {
   skipLink: { es: "Saltar al contenido", en: "Skip to content" },
 
-  // Esto es el `aria-label` del botón. La flecha visible (`↑` en
-  // `BackToTop.tsx`) NO está acá, a propósito: es glifo decorativo, idéntico en
-  // los dos idiomas, y quien lo usa con lector de pantalla oye esta etiqueta,
-  // no el carácter. Un campo aparte para el `↑` sería un dato muerto que nadie
-  // traduce. Mismo criterio que el `📜` de `timeline.ts`.
+  // El aria-label del botón; la flecha visible es decorativa y no se traduce.
   backToTopLabel: { es: "Volver arriba", en: "Back to top" },
 
   navLabel: { es: "Navegación principal", en: "Main navigation" },
@@ -42,13 +28,4 @@ export const UI_LABELS: UI = {
   langLabel: { es: "Idioma", en: "Language" },
   themeToLight: { es: "Cambiar a modo claro", en: "Switch to light mode" },
   themeToDark: { es: "Cambiar a modo oscuro", en: "Switch to dark mode" },
-
-  projects: {
-    problemLabel: { es: "Problema", en: "Problem" },
-    solutionLabel: { es: "Solución", en: "Solution" },
-    // La cuarta tarjeta del grid no es un proyecto: es un hueco a propósito
-    // para que el layout no haya que rehacerlo cuando entre un cuarto
-    // proyecto real. Por eso la etiqueta vive acá y no en `projects.ts`.
-    nextPlaceholder: { es: "+ siguiente proyecto", en: "+ next project" },
-  },
 };

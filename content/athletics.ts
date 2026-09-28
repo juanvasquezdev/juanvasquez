@@ -1,348 +1,384 @@
 /**
- * Todo lo deportivo: la progresión, el momento épico, la galería, los logros,
- * la técnica y las metas. Son las seis secciones que el nav agrupa bajo
- * "Deportivo" menos Formación, que por ser historial académico se fue a
- * `content/timeline.ts`.
+ * El lado atlético: marcas, trayectoria oficial, logros, galería y patrocinio.
+ * Textos del mockup v2.
  *
- * Mudanza literal (R1) de `Progresion.tsx`, `MomentoEpico.tsx`, `Galeria.tsx`,
- * `Logros.tsx`, `Tecnica.tsx` y `Metas.tsx`: cada texto está copiado carácter
- * por carácter del sitio de hoy, incluidos los emoji que hacen de ícono y los
- * números del eyebrow. Donde el componente partía una frase en varias líneas
- * de JSX, acá queda la frase como se lee en pantalla (JSX colapsa el salto de
- * línea y la sangría en un solo espacio).
- *
- * El inglés es traducción mía y la parte en primera persona va listada en el
- * reporte (R5). Las unidades no se traducen: "2.06 m" es "2.06 m" en los dos
- * idiomas.
- *
- * Lo lee `app/[lang]/page.tsx`, que le pasa a cada sección su parte ya en el
- * idioma de la ruta.
+ * Los resultados son los oficiales de mi perfil de World Athletics (ID
+ * 15111188), del más nuevo al más viejo. Las marcas van en metros como número;
+ * el "2,05 m" / "2.05 m" lo arma lib/format.ts según el idioma.
  */
 
-import type { Athletics } from "./types";
+import type { Athletics, Result } from "./types";
+
+export const WORLD_ATHLETICS_ID = "15111188";
+export const WORLD_ATHLETICS_URL = `https://worldathletics.org/athletes/colombia/juan-jose-basquez-${WORLD_ATHLETICS_ID}`;
+
+const RESULTS: Result[] = [
+  // 2026
+  {
+    date: "2026-07-05",
+    mark: 2.05,
+    place: 1,
+    competition: { es: "Campeonato Nacional U20", en: "Colombian U20 Championships" },
+    venue: "Pedro Grajales, Cali",
+  },
+  {
+    date: "2026-06-21",
+    mark: 2.04,
+    place: 3,
+    competition: { es: "Campeonato Iberoamericano U20", en: "Ibero-American U20 Championships" },
+    venue: "VIDENA, Lima (PER)",
+  },
+  {
+    date: "2026-05-09",
+    mark: 1.98,
+    place: 1,
+    competition: { es: "Campeonato Nacional U23", en: "Colombian U23 Championships" },
+    venue: "U. D. Centenario, Armenia",
+  },
+  {
+    date: "2026-04-26",
+    mark: 2.04,
+    place: 4,
+    competition: {
+      es: "Nacional Interclubes y Municipios",
+      en: "National Interclub & Municipal Championships",
+    },
+    venue: "El Salitre, Bogotá",
+  },
+  // 2025
+  {
+    date: "2025-09-28",
+    mark: 1.9,
+    place: 5,
+    competition: { es: "Campeonato Nacional U20", en: "Colombian U20 Championships" },
+    venue: "Rey Pelé, Villavicencio",
+  },
+  {
+    date: "2025-08-03",
+    mark: 2.04,
+    place: 3,
+    competition: { es: "Campeonato Nacional de Mayores", en: "Colombian Senior Championships" },
+    venue: "U. D. Centenario, Armenia",
+  },
+  {
+    date: "2025-04-05",
+    mark: 1.93,
+    place: 2,
+    competition: {
+      es: "Nacional de Velocidad y Saltos",
+      en: "National Sprints & Jumps Championships",
+    },
+    venue: "El Salitre, Bogotá",
+  },
+  {
+    date: "2025-03-15",
+    mark: 2.01,
+    place: 5,
+    competition: {
+      es: "Nacional de Clubes y Municipios Mayores",
+      en: "National Senior Club & Municipal Championships",
+    },
+    venue: "El Salitre, Bogotá",
+  },
+  {
+    date: "2025-03-08",
+    mark: 1.92,
+    place: 2,
+    competition: {
+      es: "Nacional de Pruebas Combinadas y Saltos (U20)",
+      en: "National Combined Events & Jumps (U20)",
+    },
+    venue: "Parque Deportivo, Ibagué",
+  },
+  // 2024
+  {
+    date: "2024-11-15",
+    mark: 2.0,
+    place: 2,
+    competition: { es: "Juegos Nacionales Juveniles", en: "National Youth Games" },
+    venue: "U. D. Centenario, Armenia",
+  },
+  {
+    date: "2024-09-21",
+    mark: 1.89,
+    place: 6,
+    competition: { es: "Campeonato Nacional U23", en: "Colombian U23 Championships" },
+    venue: "La Flora, Bucaramanga",
+  },
+  {
+    date: "2024-06-29",
+    mark: 1.93,
+    place: 4,
+    competition: { es: "Campeonato Nacional de Mayores", en: "Colombian Senior Championships" },
+    venue: "Pedro Grajales, Cali",
+  },
+  {
+    date: "2024-06-02",
+    mark: 1.9,
+    place: 4,
+    competition: { es: "Campeonato Nacional U20", en: "Colombian U20 Championships" },
+    venue: "U. D. Centenario, Armenia",
+  },
+  {
+    date: "2024-03-10",
+    mark: 1.96,
+    place: 1,
+    competition: {
+      es: "Nacional de Pruebas Combinadas y Saltos (U18)",
+      en: "National Combined Events & Jumps (U18)",
+    },
+    venue: "Parque Deportivo, Ibagué",
+  },
+  {
+    date: "2024-02-24",
+    mark: 1.89,
+    place: 2,
+    competition: {
+      es: "Nacional de Municipios y Clubes U20/U18",
+      en: "National Municipal & Club Championships U20/U18",
+    },
+    venue: "El Salitre, Bogotá",
+  },
+  // 2023
+  {
+    date: "2023-10-07",
+    mark: 1.89,
+    place: 3,
+    competition: { es: "Nacional de Clubes", en: "Colombian Club Championships" },
+    venue: "Francisco Rivera Escobar, Palmira",
+  },
+  {
+    date: "2023-09-15",
+    mark: 1.93,
+    place: 5,
+    competition: { es: "Campeonato Iberoamericano U18", en: "Ibero-American U18 Championships" },
+    venue: "VIDENA, Lima (PER)",
+  },
+  {
+    date: "2023-07-16",
+    mark: 1.93,
+    place: 1,
+    competition: { es: "Campeonato Nacional U18", en: "Colombian U18 Championships" },
+    venue: "Bogotá",
+  },
+];
+
+/** La marca personal oficial sale de los resultados, no se escribe aparte. */
+export const OFFICIAL_PB = Math.max(...RESULTS.map((r) => r.mark));
 
 export const ATHLETICS: Athletics = {
-  // -------------------------------------------------------------------------
-  // Progresión — "La Barra"
-  // -------------------------------------------------------------------------
-  // D9 saca esta sección del sitio y la reemplaza por el gráfico SVG de
-  // PORT-013b. Lo que sigue es el texto que hoy está en pantalla, con `pos`
-  // como posición sobre la barra (0–100) — NO es la forma del gráfico, ver la
-  // nota larga en `ProgressionMarker` en `types.ts`.
-  //
-  // ❓ PENDIENTE JUAN: el historial de marcas fechadas. D10 dice que sale del
-  // perfil de World Athletics, pero todavía falta confirmar cuál es el perfil
-  // y qué hacer con el hueco entre lo que ese perfil publica y el PB de
-  // 2.06 m que muestra el sitio. Sin esas fechas, PORT-013a no puede definir
-  // la forma del gráfico y estos cuatro marcadores son lo único que hay.
-  progression: {
-    eyebrow: { es: "04 — El objetivo", en: "04 — The goal" },
-    heading: { es: "La Barra", en: "The Bar" },
+  eyebrow: { es: "06 — Atleta", en: "06 — Athlete" },
+  heading: { es: "Salto alto", en: "High jump" },
+  intro: {
+    es: "Represento a la Selección Valle y a la Selección Colombia. Campeón nacional U20 y U23, y bronce en el Iberoamericano U20 de Lima 2026.",
+    en: "I represent the Valle del Cauca and Colombian national teams. National U20 and U23 champion, and bronze at the 2026 Ibero-American U20 Championships in Lima.",
+  },
+  image: {
+    src: "/images/salto2.jpeg",
+    alt: {
+      es: "Juan José pasando la barra en un salto de competencia",
+      en: "Juan José clearing the bar during a competition jump",
+    },
+  },
+
+  stats: [
+    {
+      mark: OFFICIAL_PB,
+      label: { es: "Marca personal", en: "Personal best" },
+      tag: { es: "Oficial · World Athletics", en: "Official · World Athletics" },
+      official: true,
+    },
+    {
+      mark: 2.06,
+      label: { es: "Mejor salto", en: "Best jump" },
+      tag: { es: "Extraoficial", en: "Unofficial" },
+      official: false,
+    },
+    {
+      mark: 2.1,
+      label: { es: "Próxima meta", en: "Next goal" },
+      tag: { es: "Temporada 2027", en: "2027 season" },
+      official: false,
+    },
+  ],
+
+  worldAthletics: {
+    label: {
+      es: "Ver mi perfil oficial en World Athletics",
+      en: "See my official World Athletics profile",
+    },
+    url: WORLD_ATHLETICS_URL,
+    id: WORLD_ATHLETICS_ID,
+  },
+
+  trackRecord: {
+    eyebrow: { es: "Resultados oficiales", en: "Official results" },
+    heading: { es: "Trayectoria", en: "Track record" },
+    source: {
+      es: "Fuente: World Athletics. Actualizado a septiembre de 2026.",
+      en: "Source: World Athletics. Updated September 2026.",
+    },
+    filters: {
+      all: { es: "Todos", en: "All" },
+      best: { es: "Mejor por temporada", en: "Season bests" },
+    },
+    columns: {
+      date: { es: "Fecha", en: "Date" },
+      competition: { es: "Competencia", en: "Competition" },
+      place: { es: "Puesto", en: "Place" },
+      mark: { es: "Marca", en: "Mark" },
+    },
+    results: RESULTS,
+  },
+
+  achievementsLabel: { es: "Logros", en: "Achievements" },
+  achievements: [
+    { title: { es: "Campeón Nacional U20", en: "Colombian U20 Champion" }, year: 2026, mark: 2.05 },
+    { title: { es: "Campeón Nacional U23", en: "Colombian U23 Champion" }, year: 2026 },
+    {
+      title: { es: "Bronce Iberoamericano U20, Lima", en: "Bronze, Ibero-American U20, Lima" },
+      year: 2026,
+      mark: 2.04,
+    },
+    {
+      title: {
+        es: "Bronce Campeonato Nacional de Mayores",
+        en: "Bronze, Colombian Senior Championships",
+      },
+      year: 2025,
+      mark: 2.04,
+    },
+    {
+      title: {
+        es: "Subcampeón Juegos Nacionales Juveniles",
+        en: "Runner-up, National Youth Games",
+      },
+      year: 2024,
+    },
+    { title: { es: "Campeón Nacional U18", en: "Colombian U18 Champion" }, year: 2023 },
+  ],
+
+  affiliationsLabel: { es: "Selecciones y clubes", en: "Teams and clubs" },
+  affiliations: [
+    {
+      name: { es: "Selección Colombia", en: "Colombian national team" },
+      note: { es: "Iberoamericanos U18 y U20", en: "Ibero-American U18 & U20" },
+    },
+    {
+      name: { es: "Selección Valle del Cauca", en: "Valle del Cauca team" },
+      note: { es: "Liga Vallecaucana", en: "Liga Vallecaucana" },
+    },
+    { name: { es: "Todomed", en: "Todomed" }, note: { es: "Club", en: "Club" } },
+    { name: { es: "The Jumpers Club", en: "The Jumpers Club" }, note: { es: "Club", en: "Club" } },
+  ],
+
+  galleryLabel: { es: "Momentos", en: "Moments" },
+  gallery: [
+    {
+      src: "/images/foto_secuencial.jpeg",
+      alt: {
+        es: "Secuencia de un salto completo, de la carrera a la barra",
+        en: "Sequence of a full jump, from run-up to bar",
+      },
+      caption: { es: "Un salto, cuadro por cuadro", en: "One jump, frame by frame" },
+    },
+    {
+      src: "/images/pb2.04.jpeg",
+      alt: { es: "Junto al tablero que marca 2,04 m", en: "Next to the board showing 2.04 m" },
+      caption: { es: "2,04 m en el tablero", en: "2.04 m on the board" },
+    },
+    {
+      src: "/images/podio_u23.jpeg",
+      alt: { es: "Podio en categoría U23", en: "Podium in the U23 category" },
+      caption: { es: "En el podio, categoría U23", en: "On the podium, U23" },
+    },
+    {
+      src: "/images/podio-mayores.jpeg",
+      alt: { es: "Podio en categoría Mayores", en: "Podium in the Senior category" },
+      caption: { es: "Podio con los mayores", en: "Podium among seniors" },
+    },
+    {
+      src: "/images/foto_saltoperu1.jpeg",
+      // El mockup decía "bajo techo", pero es un estadio abierto en Lima.
+      alt: {
+        es: "Pasando la barra en una competencia en Lima",
+        en: "Clearing the bar at a competition in Lima",
+      },
+      caption: { es: "Pasando la barra", en: "Clearing the bar" },
+    },
+    {
+      src: "/images/vista_epica.jpeg",
+      alt: {
+        es: "Aproximación al salto, vista desde la barra",
+        en: "Approach to the jump, seen from the bar",
+      },
+      caption: { es: "Concentración antes de la carrera", en: "Focus before the run-up" },
+    },
+    {
+      src: "/images/u18.jpeg",
+      alt: { es: "Carrera en competencia U18", en: "Running in a U18 competition" },
+      caption: { es: "La carrera de aproximación", en: "The run-up" },
+    },
+    {
+      src: "/images/foto_blanconegro.jpeg",
+      alt: {
+        es: "Entrenamiento nocturno de vallas en blanco y negro",
+        en: "Night hurdle training in black and white",
+      },
+      caption: { es: "Vallas, entrenamiento nocturno", en: "Hurdles, night training" },
+    },
+    {
+      src: "/images/epica_trasera.jpeg",
+      alt: {
+        es: "Celebración de espaldas con los brazos arriba",
+        en: "Celebrating with arms raised, back to the camera",
+      },
+      caption: { es: "Después del salto", en: "After the jump" },
+    },
+  ],
+  instagramMore: {
+    es: "Más momentos en Instagram · @juanvasquezhj",
+    en: "More moments on Instagram · @juanvasquezhj",
+  },
+
+  sponsorship: {
+    eyebrow: { es: "Patrocinio", en: "Sponsorship" },
+    heading: { es: "Mi camino hacia las grandes ligas", en: "My road to the big leagues" },
     intro: {
-      es: "Cada centímetro es una temporada de trabajo. Esta es mi hoja de ruta hacia la élite mundial.",
-      en: "Every centimeter is a season of work. This is my road map to the world elite.",
+      es: "Busco marcas que quieran acompañarme temporada a temporada: más competencias internacionales, mejor preparación y la meta de llegar a la élite mundial.",
+      en: "I am looking for brands that want to back me season after season: more international competitions, better preparation and the goal of reaching the world elite.",
     },
-    markers: [
+    points: [
       {
-        pos: 0,
-        value: "2.06 m",
-        label: { es: "PB actual", en: "Current PB" },
-        current: true,
+        es: "Atleta de Selección Colombia con resultados oficiales verificables en World Athletics.",
+        en: "Colombian national team athlete with official results verifiable on World Athletics.",
       },
       {
-        pos: 30,
-        value: "2.10 m",
-        label: {
-          es: "Próxima meta · Nacional Mayores",
-          en: "Next goal · National Senior Championship",
-        },
+        es: "Contenido propio de entrenamiento y competencia en Instagram (@juanvasquezhj).",
+        en: "Original training and competition content on Instagram (@juanvasquezhj).",
       },
       {
-        pos: 78,
-        value: "2.19 m",
-        label: { es: "Récord Nacional U20", en: "U20 National Record" },
-      },
-      {
-        pos: 100,
-        value: "2.20 – 2.25 m",
-        label: {
-          es: "Élite mundial · Road to LA 2028",
-          en: "World elite · Road to LA 2028",
-        },
+        es: "Perfil doble, deporte y tecnología: una historia distinta para contar con tu marca.",
+        en: "A dual profile, sport and tech: a different story to tell with your brand.",
       },
     ],
-  },
-
-  // -------------------------------------------------------------------------
-  // Momento épico — el tríptico en blanco y negro
-  // -------------------------------------------------------------------------
-  epicMoment: {
-    eyebrow: { es: "05 — Momento épico", en: "05 — Epic moment" },
-    heading: {
-      es: "El instante antes de la barra",
-      en: "The instant before the bar",
+    cta: { es: "Súmate a mi camino", en: "Join my journey" },
+    mailSubject: { es: "Patrocinio deportivo", en: "Sports sponsorship" },
+    instagram: {
+      bio: { es: "Salto alto · Selección Colombia", en: "High jump · Colombia national team" },
+      follow: { es: "Seguir", en: "Follow" },
+      ariaLabel: { es: "Ver mi perfil de Instagram", en: "View my Instagram profile" },
+      grid: [
+        "/images/salto2.jpeg",
+        "/images/foto_secuencial.jpeg",
+        "/images/epica_trasera.jpeg",
+        "/images/podio_u23.jpeg",
+        "/images/foto_saltoperu1.jpeg",
+        "/images/foto_blanconegro.jpeg",
+        "/images/vista_epica.jpeg",
+        "/images/podio-mayores.jpeg",
+        "/images/u18.jpeg",
+      ],
     },
-    intro: {
-      es: "No siempre gana la marca — a veces gana el segundo exacto en que el cuerpo decide saltar.",
-      en: "The mark does not always win — sometimes what wins is the exact second the body decides to jump.",
-    },
-    photos: [
-      {
-        src: "/images/vista_epica.jpeg",
-        alt: {
-          es: "Aproximación al salto, vista desde la barra",
-          en: "Approach to the jump, seen from the bar",
-        },
-      },
-      {
-        src: "/images/foto_blanconegro.jpeg",
-        alt: {
-          es: "Salto de vallas en entrenamiento nocturno",
-          en: "Hurdle jump during night training",
-        },
-      },
-      {
-        src: "/images/epica_trasera2.jpeg",
-        alt: {
-          es: "Celebración de espaldas frente al horizonte",
-          en: "Celebrating with my back turned, facing the horizon",
-        },
-      },
-    ],
-  },
-
-  // -------------------------------------------------------------------------
-  // Galería
-  // -------------------------------------------------------------------------
-  gallery: {
-    eyebrow: { es: "06 — Momentos", en: "06 — Moments" },
-    heading: { es: "Galería", en: "Gallery" },
-    photos: [
-      {
-        src: "/images/pb2.04.jpeg",
-        alt: { es: "Salto de 2.04m en competencia", en: "2.04m jump in competition" },
-        fallbackIcon: "📸",
-        fallbackLabel: { es: "Salto 2.04 m", en: "2.04 m jump" },
-      },
-      {
-        src: "/images/podio_u23.jpeg",
-        alt: { es: "Podio en categoría U23", en: "Podium in the U23 category" },
-        fallbackIcon: "🥇",
-        fallbackLabel: { es: "Podio U23", en: "U23 podium" },
-      },
-      {
-        src: "/images/podio-mayores.jpeg",
-        alt: { es: "Podio categoría Mayores", en: "Podium in the Senior category" },
-        fallbackIcon: "🏅",
-        fallbackLabel: { es: "Podio Mayores", en: "Senior podium" },
-      },
-      {
-        src: "/images/u18.jpeg",
-        alt: { es: "Competencia categoría U18", en: "U18 category competition" },
-        fallbackIcon: "🏃",
-        fallbackLabel: { es: "Competencia U18", en: "U18 competition" },
-      },
-      {
-        src: "/images/salto2.jpeg",
-        alt: { es: "Salto de altura en competencia", en: "High jump in competition" },
-        fallbackIcon: "🤸",
-        fallbackLabel: { es: "En el aire", en: "Mid-air" },
-      },
-      {
-        // ❓ PENDIENTE JUAN (❓7): de qué competencia es esta foto, de qué año y
-        // con qué resultado. El sitio hoy la rotula "Legado Lima 2019" y la
-        // describe como "Competencia internacional en Perú"; lo copio literal
-        // porque es el texto que está en pantalla (R1), pero ninguno de los dos
-        // datos está confirmado y el alt tampoco dice qué se ve. Si el rótulo
-        // está mal, se corrige acá y en el alt.
-        src: "/images/foto_saltoperu1.jpeg",
-        alt: {
-          es: "Competencia internacional en Perú",
-          en: "International competition in Peru",
-        },
-        fallbackIcon: "🌎",
-        fallbackLabel: { es: "Legado Lima 2019", en: "Lima 2019 Legacy" },
-      },
-      {
-        src: "/images/epica_trasera.jpeg",
-        alt: { es: "Celebración tras una marca", en: "Celebrating after a mark" },
-        fallbackIcon: "🙌",
-        fallbackLabel: { es: "Celebración", en: "Celebration" },
-      },
-    ],
-  },
-
-  // -------------------------------------------------------------------------
-  // Logros destacados
-  // -------------------------------------------------------------------------
-  // El sitio de hoy muestra además "👤 Entrenador: José Arturo Posada" y ese
-  // texto NO se muda: D10 cerró que el entrenador no se publica. Es la única
-  // excepción deliberada a R1 en este archivo, y la dejo escrita para que no se
-  // lea como un olvido. Quitarlo de la pantalla es de PORT-013a, no de acá.
-  achievements: {
-    eyebrow: { es: "07 — Trayectoria", en: "07 — Track record" },
-    heading: { es: "Logros Destacados", en: "Notable Achievements" },
-    items: [
-      {
-        icon: "🥇",
-        title: { es: "Campeón Nacional U18", en: "U18 National Champion" },
-        note: { es: "(2 veces)", en: "(2 times)" },
-      },
-      {
-        icon: "🥈",
-        title: {
-          es: "Subcampeón Juegos Nacionales Juveniles",
-          en: "Runner-up at the National Youth Games",
-        },
-      },
-      {
-        icon: "🥈",
-        title: {
-          es: "Subcampeón Interclubes U20",
-          en: "Runner-up at the U20 Interclub Championship",
-        },
-      },
-      {
-        icon: "📈",
-        title: { es: "Marca Personal: 2.06 m", en: "Personal Best: 2.06 m" },
-      },
-    ],
-    clubsLabel: { es: "🏃 Clubes:", en: "🏃 Clubs:" },
-    clubs: ["Todomed", "The Jumpers Club"],
-    // ❓ PENDIENTE JUAN: esta etiqueta la escribí yo — no es copy del sitio.
-    // Hoy estas dos entidades no se muestran en ninguna parte (aparecen en
-    // PORT-013a), así que no hay texto que mudar y lo de abajo es una
-    // propuesta mía, no algo decidido: aprobala o cambiala antes de que
-    // PORT-013a la imprima. La decisión concreta es el emoji. Su hermana
-    // `clubsLabel` dice "🏃 Clubes:" y esta va sin ícono a propósito, porque el
-    // precedente de la bandera que en Windows se leía como "co" (N4) me dejó
-    // sin ganas de sumar iconografía nueva en emoji — si la querés simétrica
-    // con los clubes, decime qué ícono va.
-    governingBodiesLabel: { es: "Liga y federación:", en: "League and federation:" },
-    governingBodies: ["Liga Vallecaucana de Atletismo", "Federación Colombiana de Atletismo"],
-  },
-
-  // -------------------------------------------------------------------------
-  // Técnica & Ciencia del Salto
-  // -------------------------------------------------------------------------
-  technique: {
-    eyebrow: { es: "09 — Mentalidad", en: "09 — Mindset" },
-    // En el componente está escrito "Técnica &amp; Ciencia del Salto", que en
-    // pantalla se lee con un "&" normal. Acá va el carácter, no la entidad: un
-    // dato no se escapa para HTML, eso lo hace React cuando lo imprime.
-    heading: {
-      es: "Técnica & Ciencia del Salto",
-      en: "Technique & Science of the Jump",
-    },
-    intro: {
-      es: "Para mí el salto alto no es solo talento — es física aplicada. Cada ajuste de carrera, cada grado de despegue, cada milisegundo de tensión en el arco dorsal (Fosbury Flop) se puede medir, entender y mejorar.",
-      en: "For me the high jump is not just talent — it is applied physics. Every adjustment to the run-up, every degree of takeoff, every millisecond of tension in the back arch (Fosbury Flop) can be measured, understood, and improved.",
-    },
-    cards: [
-      {
-        num: "01",
-        title: { es: "Ángulo de despegue", en: "Takeoff angle" },
-        text: {
-          es: "Trabajo el ángulo óptimo de aproximación (curva de 5-6 zancadas) para maximizar la conversión de velocidad horizontal en impulso vertical, sin perder velocidad de carrera.",
-          en: "I work on the optimal approach angle (a 5-6 stride curve) to maximize the conversion of horizontal speed into vertical drive, without losing run-up speed.",
-        },
-      },
-      {
-        num: "02",
-        title: { es: "Centro de masa", en: "Center of mass" },
-        text: {
-          es: 'El objetivo técnico del Fosbury Flop es que el centro de masa pase por debajo de la barra mientras el cuerpo pasa por encima — cuanto mejor el arco dorsal, menos altura "desperdiciada".',
-          en: 'The technical goal of the Fosbury Flop is for the center of mass to pass under the bar while the body passes over it — the better the back arch, the less height "wasted".',
-        },
-      },
-      {
-        num: "03",
-        title: { es: "Fuerza reactiva", en: "Reactive strength" },
-        text: {
-          es: "El despegue depende de la fuerza reactiva de la pierna de batida en apenas ~0.15 segundos de contacto — de ahí el trabajo pliométrico y de potencia en cada bloque de entrenamiento.",
-          en: "The takeoff depends on the reactive strength of the jumping leg in barely ~0.15 seconds of contact — hence the plyometric and power work in every training block.",
-        },
-      },
-      {
-        num: "04",
-        title: { es: "Mentalidad de competencia", en: "Competition mindset" },
-        text: {
-          es: "Cada intento es un experimento controlado: ajusto una sola variable a la vez (marca de carrera, timing de brazos, ritmo de los últimos pasos) y evalúo el resultado con datos, no solo sensaciones.",
-          en: "Every attempt is a controlled experiment: I adjust a single variable at a time (run-up mark, arm timing, rhythm of the last steps) and judge the result with data, not just feel.",
-        },
-      },
-    ],
-  },
-
-  // -------------------------------------------------------------------------
-  // Metas — "Próximos Proyectos"
-  // -------------------------------------------------------------------------
-  // Recordatorio del trade-off que ya está escrito en `Goal` (`types.ts`): el
-  // `<strong>` que hoy resalta la marca dentro de la frase se pierde. El texto
-  // completo sigue estando; el énfasis visual sobre el número, no.
-  goals: {
-    eyebrow: { es: "10 — Lo que viene", en: "10 — What comes next" },
-    heading: { es: "Próximos Proyectos", en: "Next Projects" },
-
-    sportsLabel: { es: "🏆 Deportivos", en: "🏆 Sports" },
-    sports: [
-      {
-        tag: { es: "Próxima competencia", en: "Next competition" },
-        title: {
-          es: "Campeonato Nacional Mayores",
-          en: "National Senior Championship",
-        },
-        text: {
-          es: "Meta: romper la barrera de los 2.10 m — mi próximo salto de nivel sobre mi PB actual de 2.06 m.",
-          en: "Goal: break the 2.10 m barrier — my next step up from my current PB of 2.06 m.",
-        },
-        primary: true,
-      },
-      {
-        tag: { es: "Meta mayor", en: "Bigger goal" },
-        title: { es: "Récord Nacional U20", en: "U20 National Record" },
-        text: {
-          es: "Superar los 2.19 m que hoy marcan el récord nacional en categoría U20.",
-          en: "Clear the 2.19 m that currently stand as the national record in the U20 category.",
-        },
-      },
-      {
-        tag: { es: "Meta máxima", en: "Ultimate goal" },
-        title: {
-          es: "Élite Mundial · Road to LA 2028",
-          en: "World Elite · Road to LA 2028",
-        },
-        text: {
-          es: "Alcanzar entre 2.20 m y 2.25 m de altura y competir al nivel de la élite mundial, con la mira puesta en Los Ángeles 2028.",
-          en: "Reach between 2.20 m and 2.25 m and compete at world-elite level, with my sights on Los Angeles 2028.",
-        },
-      },
-    ],
-
-    techLabel: { es: "💻 Tecnológicos", en: "💻 Technology" },
-    tech: [
-      {
-        tag: { es: "En desarrollo", en: "In development" },
-        title: {
-          es: "Plataforma de registro y monitoreo",
-          en: "Registration and monitoring platform",
-        },
-        text: {
-          es: "Una web + app para registrar competencias, marcas y perfiles de atletas, y hacer seguimiento del rendimiento a lo largo del tiempo.",
-          en: "A web app to register competitions, marks, and athlete profiles, and to track performance over time.",
-        },
-      },
-      {
-        tag: { es: "En desarrollo", en: "In development" },
-        title: {
-          es: "APIs y sistemas de optimización",
-          en: "APIs and optimization systems",
-        },
-        text: {
-          es: "Construcción de APIs y sistemas propios que mejoren y optimicen procesos del día a día, aplicando lo aprendido en programación de software.",
-          en: "Building my own APIs and systems that improve and optimize day-to-day processes, applying what I have learned in software programming.",
-        },
-      },
-    ],
   },
 };
