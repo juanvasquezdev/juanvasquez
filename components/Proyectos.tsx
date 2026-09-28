@@ -1,33 +1,97 @@
-"use client";
-
-import Reveal from "./Reveal";
 import type { Projects } from "@/content/types";
 import type { Localized } from "@/lib/i18n";
 
-/** TEMPORAL: contenido v2 con los estilos viejos; se reescribe en la Fase 3. */
+const ARROW = (
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M7 17L17 7M8 7h9v9" />
+  </svg>
+);
+
+/**
+ * A la izquierda, fija, el título con un índice que lleva a cada tarjeta; a la
+ * derecha, las tarjetas pasando. Al pasar el mouse por una, las demás bajan de
+ * opacidad (solo CSS).
+ *
+ * La tarjeta es un enlace solo si el repo es público. Con repo privado es un
+ * <article> y no lleva flecha: no promete un clic que no lleva a ningún lado.
+ */
 export default function Proyectos({ content }: { content: Localized<Projects> }) {
   return (
     <section className="section" id="proyectos">
-      <Reveal as="p" className="eyebrow">
-        {content.eyebrow}
-      </Reveal>
-      <Reveal as="h2" index={1}>
-        {content.heading}
-      </Reveal>
-      <Reveal as="p" className="section-intro" index={2}>
-        {content.intro}
-      </Reveal>
+      <div className="wrap projects">
+        <div className="proj-side">
+          <p className="mono eyebrow">{content.eyebrow}</p>
+          <h2 className="h2">{content.heading}</h2>
+          <p className="intro">{content.intro}</p>
+          <ol className="index mono">
+            {content.items.map((project, i) => (
+              <li key={project.slug}>
+                <a href={`#proyecto-${project.slug}`}>
+                  <span>{String(i + 1).padStart(2, "0")}</span>
+                  <span className="bar" aria-hidden="true" />
+                  <span>{project.title}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
 
-      <div className="proyecto-grid">
-        {content.items.map((p, i) => (
-          <Reveal className="proyecto-card" index={i} key={p.slug}>
-            <span className="proyecto-status">{p.statusLabel}</span>
-            <h3>{p.title}</h3>
-            <p>{p.problem}</p>
-            <p>{p.solution}</p>
-            <p className="proyecto-label">{p.stack.join(" · ")}</p>
-          </Reveal>
-        ))}
+        <div className="proj-list">
+          {content.items.map((project) => {
+            const body = (
+              <>
+                <div className="card-top mono">
+                  <span className="status">
+                    <span className={project.live ? "dot" : "dot b"} aria-hidden="true" />
+                    {project.statusLabel}
+                  </span>
+                  <span>{project.repoUrl ? "GitHub" : content.privateRepoLabel}</span>
+                </div>
+                <h3>
+                  {project.title}
+                  {project.repoUrl && ARROW}
+                </h3>
+                <p className="p">{project.problem}</p>
+                <p className="s">{project.solution}</p>
+                <ul className="chip-list chips">
+                  {project.stack.map((tech) => (
+                    <li className="chip sm" key={tech}>
+                      {tech}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            );
+
+            const id = `proyecto-${project.slug}`;
+            return project.repoUrl ? (
+              <a
+                className="card"
+                id={id}
+                key={project.slug}
+                href={project.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {body}
+              </a>
+            ) : (
+              <article className="card" id={id} key={project.slug}>
+                {body}
+              </article>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

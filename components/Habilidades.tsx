@@ -7,7 +7,7 @@ export default function Habilidades({ content }: { content: Localized<Profile["s
     <section className="section skills-section" id="habilidades">
       <div className="wrap">
         <p className="mono eyebrow">{content.eyebrow}</p>
-        <h2 className="h2">{content.heading}</h2>
+        <h2 className="h2 h2-sm">{content.heading}</h2>
 
         <ul className="skills">
           {content.items.map((skill, i) => (
@@ -21,9 +21,9 @@ export default function Habilidades({ content }: { content: Localized<Profile["s
           ))}
         </ul>
 
-        <div className="langs">
-          <p className="mono langs-label">{content.languagesLabel}</p>
-          <ul className="langs-list">
+        <div className="chip-row langs">
+          <p className="mono chip-row-label">{content.languagesLabel}</p>
+          <ul className="chip-list">
             {content.languages.map((lang) => (
               <li className="chip" key={lang.name}>
                 {lang.name}{" "}

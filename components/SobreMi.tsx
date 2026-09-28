@@ -41,7 +41,7 @@ export default function SobreMi({ content }: { content: Localized<Profile["about
             src={content.portrait.src}
             alt={content.portrait.alt}
             fill
-            sizes="(max-width: 860px) calc(100vw - 40px), (max-width: 1240px) 36vw, 456px"
+            sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 860px) 440px, (max-width: 1240px) 36vw, 456px"
           />
         </div>
       </div>

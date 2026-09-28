@@ -147,12 +147,52 @@ button {
   padding: 140px 0;
 }
 
+/* El título de las secciones que van pegadas a otra (Habilidades,
+   Herramientas): más chico y sin margen abajo. */
+.h2.h2-sm {
+  margin: 0;
+  font-size: clamp(36px, 4.4vw, 64px);
+}
+
+/* Párrafo de introducción debajo del título; el ancho lo pone cada sección. */
+.intro {
+  margin: 0;
+  color: var(--muted);
+}
+
 .chip {
   padding: 8px 14px;
   border: 1px solid var(--line);
   border-radius: 999px;
   font-size: 14px;
   color: var(--fg);
+}
+/* Chip chico en azul: el stack de cada proyecto. */
+.chip.sm {
+  padding: 4px 10px;
+  border-color: transparent;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+/* Una etiqueta y una lista de chips en el mismo renglón (Idiomas, Prácticas). */
+.chip-row,
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.chip-row-label {
+  margin: 0 8px 0 0;
+  color: var(--muted);
+}
+.chip-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 /* ===== SKIP LINK ===== */
@@ -463,10 +503,6 @@ button {
 .section.skills-section {
   padding: 40px 0 60px;
 }
-.skills-section .h2 {
-  margin: 0;
-  font-size: clamp(36px, 4.4vw, 64px);
-}
 
 /* El gap de 1px deja ver el fondo --line: así salen las líneas entre
    tarjetas sin bordes dobles. */
@@ -508,24 +544,8 @@ button {
   color: var(--muted);
 }
 
-.langs,
-.langs-list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-}
 .langs {
   margin-top: 28px;
-}
-.langs-label {
-  margin: 0 8px 0 0;
-  color: var(--muted);
-}
-.langs-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 .lvl {
   margin-left: 6px;
@@ -536,6 +556,299 @@ button {
 }
 .lvl.up {
   color: var(--accent);
+}
+
+/* ===== STACK ===== */
+
+.stack-intro {
+  max-width: 560px;
+}
+
+.stack-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-top: 56px;
+}
+
+.group-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* Punto de estado: lleno = lo que uso o está vivo; hueco = lo que viene;
+   coral (.b) = proyecto todavía en obra. */
+.dot {
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.dot.soft {
+  border: 1.5px solid var(--accent);
+  background: transparent;
+}
+.dot.b {
+  background: var(--coral);
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Al pasar el mouse el nombre se corre un poco y la línea de abajo se pinta
+   de azul de izquierda a derecha. */
+.row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.row::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-out);
+}
+.row:hover::after {
+  transform: scaleX(1);
+}
+.row-name {
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: transform 0.35s var(--ease-out);
+}
+.row:hover .row-name {
+  transform: translateX(8px);
+}
+.row .lvl {
+  margin: 0;
+  text-align: right;
+}
+
+.practices {
+  margin-top: 48px;
+}
+
+/* ===== PROYECTOS ===== */
+
+.projects {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 72px;
+  align-items: start;
+}
+
+/* La columna del título se queda quieta mientras pasan las tarjetas. */
+.proj-side {
+  position: sticky;
+  top: 120px;
+}
+.proj-side .intro {
+  max-width: 380px;
+  margin-bottom: 36px;
+}
+
+.index {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.index a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--muted);
+}
+.index .bar {
+  width: 32px;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s;
+}
+.index a:hover {
+  color: var(--fg);
+}
+.index a:hover .bar {
+  width: 64px;
+}
+
+.proj-list {
+  display: grid;
+  gap: 14px;
+}
+
+/* scroll-margin-top: al llegar desde el índice, la tarjeta no queda debajo
+   del nav. */
+.card {
+  display: block;
+  padding: 32px;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  scroll-margin-top: 100px;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s,
+    opacity 0.3s,
+    transform 0.4s var(--ease-out);
+}
+.proj-list:hover .card {
+  opacity: 0.45;
+}
+.proj-list .card:hover {
+  opacity: 1;
+  border-color: var(--line);
+  background: var(--bg2);
+  transform: translateY(-3px);
+}
+.card:hover {
+  color: inherit;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  color: var(--muted);
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-stretch: 85%;
+  font-weight: 700;
+  font-size: clamp(28px, 2.6vw, 38px);
+  letter-spacing: -0.01em;
+}
+.card h3 svg {
+  transition: transform 0.3s var(--ease-out);
+}
+.card:hover h3 {
+  color: var(--accent);
+}
+.card:hover h3 svg {
+  transform: translate(4px, -4px);
+}
+.card .p {
+  margin: 0 0 10px;
+}
+.card .s {
+  margin: 0 0 20px;
+  color: var(--muted);
+}
+.chips {
+  gap: 8px;
+}
+
+/* ===== HERRAMIENTAS ===== */
+
+.section.tools-section {
+  padding-top: 40px;
+}
+
+.tools-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+.tools-head .intro {
+  max-width: 440px;
+}
+
+.tools {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Borde punteado: la tarjeta todavía "espera" algo; al pasar el mouse se
+   vuelve sólida. */
+.tool {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  min-height: 200px;
+  padding: 24px;
+  border: 1px dashed var(--line);
+  border-radius: 16px;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s,
+    transform 0.35s var(--ease-out);
+}
+.tool:hover {
+  border-style: solid;
+  border-color: var(--accent);
+  background: var(--bg2);
+  color: inherit;
+  transform: translateY(-3px);
+}
+.tool-kind {
+  color: var(--muted);
+}
+.tool h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.tool p {
+  flex-grow: 1;
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+.gh {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+}
+
+/* Sin herramientas publicadas: una sola tarjeta a lo ancho, más baja. */
+.tools-empty {
+  justify-content: space-between;
+  min-height: 0;
+  margin-top: 48px;
+}
+.tools-empty p {
+  max-width: 560px;
+  font-size: 17px;
+  color: var(--fg);
 }
 
 /* ===== RESPONSIVE ===== */
@@ -571,6 +884,40 @@ button {
   }
   .skills {
     grid-template-columns: 1fr;
+  }
+  .stack-grid,
+  .projects {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  /* En una columna no hay nada al lado que pase: el título vuelve a su lugar
+     y el índice sobra. Sin hover en táctil, las tarjetas no se apagan. */
+  .proj-side {
+    position: static;
+  }
+  .index {
+    display: none;
+  }
+  .proj-side .intro {
+    margin-bottom: 0;
+  }
+  .card {
+    padding: 22px 4px;
+  }
+  .proj-list:hover .card {
+    opacity: 1;
+  }
+  .tools {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* En tablet el retrato a todo el ancho quedaba más alto que la pantalla. Con
+   el tope sigue alineado al texto (el stretch del grid respeta el max-width).
+   Si cambia, cambia también el sizes de components/SobreMi.tsx. */
+@media (min-width: 768px) and (max-width: 860px) {
+  .portrait {
+    max-width: 440px;
   }
 }
 

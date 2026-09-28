@@ -4,12 +4,13 @@ import SobreMi from "@/components/SobreMi";
 import Habilidades from "@/components/Habilidades";
 import Stack from "@/components/Stack";
 import Proyectos from "@/components/Proyectos";
+import Herramientas from "@/components/Herramientas";
 import Galeria from "@/components/Galeria";
 import Contacto from "@/components/Contacto";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
-import { PROFILE } from "@/content/profile";
-import { PROJECTS } from "@/content/projects";
+import { GITHUB_URL, PROFILE } from "@/content/profile";
+import { PROJECTS, TOOLS } from "@/content/projects";
 import { ATHLETICS } from "@/content/athletics";
 import { STACK } from "@/content/stack";
 import { UI_LABELS } from "@/content/ui";
@@ -24,8 +25,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const athletics = localize(ATHLETICS, lang);
   const ui = localize(UI_LABELS, lang);
 
-  // Herramientas, Atleta y Patrocinio entran en lo que queda de la Fase 3; su
-  // contenido ya está en content/.
+  // Atleta y Patrocinio entran en la 3c; su contenido ya está en content/.
   return (
     <>
       <a href="#contenido" className="skip-link">
@@ -49,13 +49,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           <SobreMi content={profile.about} />
         </Hero>
         <Habilidades content={profile.skills} />
+        <Stack content={localize(STACK, lang)} />
+        <Proyectos content={localize(PROJECTS, lang)} />
+        <Herramientas content={localize(TOOLS, lang)} githubUrl={GITHUB_URL} />
 
         {/* TEMPORAL: las secciones que todavía usan app/legacy.css. El
             envoltorio acota sus reglas genéricas (.section, .eyebrow) para que
             no pisen a las nuevas; cada sección sale de acá al reescribirse. */}
         <div className="legacy">
-          <Stack content={localize(STACK, lang)} />
-          <Proyectos content={localize(PROJECTS, lang)} />
           <Galeria label={athletics.galleryLabel} photos={athletics.gallery} />
           <Contacto content={profile.contact} />
         </div>
