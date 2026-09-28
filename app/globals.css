@@ -20,6 +20,11 @@
   --coral: #FF8061;
   --pill: rgba(20, 22, 25, 0.62);
 
+  /* Lo que va encima de una foto (hero, atleta) no cambia con el tema: la
+     foto es la misma en claro y en oscuro. */
+  --on-photo: #F4F3EF;
+  --photo-bg: #0B0B0B;
+
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   color-scheme: dark;
 }
@@ -140,6 +145,14 @@ button {
 
 .section {
   padding: 140px 0;
+}
+
+.chip {
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--fg);
 }
 
 /* ===== SKIP LINK ===== */
@@ -277,6 +290,254 @@ button {
   }
 }
 
+/* ===== HERO + SOBRE MÍ ===== */
+
+/* La foto queda fija mientras .over sube por encima. El sticky dura lo que
+   dura .stage, así que Sobre mí tiene que ir adentro. */
+.stage {
+  position: relative;
+}
+
+/* svh y no vh: en el celular 100vh cuenta la pantalla sin la barra del
+   navegador, y el nombre (que va abajo) quedaba tapado por ella. */
+.hero {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--photo-bg);
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-img {
+  object-fit: cover;
+  object-position: center 80%;
+  transform-origin: 50% 60%;
+}
+
+/* Solo oscurece la parte de abajo, donde va el texto; el resto de la foto
+   queda como es. */
+.hero-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.42) 100%);
+}
+
+.hero-copy {
+  position: absolute;
+  left: 48px;
+  right: 48px;
+  bottom: 56px;
+  color: var(--on-photo);
+}
+.hero-copy .eyebrow {
+  color: color-mix(in srgb, var(--on-photo) 80%, transparent);
+}
+
+.hero-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 72%;
+  font-size: clamp(56px, 10vw, 160px);
+  line-height: 0.84;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.hero-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-top: 22px;
+}
+
+.hero-tag {
+  max-width: 560px;
+  margin: 0;
+  font-size: clamp(16px, 1.6vw, 21px);
+  line-height: 1.4;
+}
+.hero-tag .sep {
+  padding: 0 8px;
+  opacity: 0.55;
+}
+
+.cue {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: color-mix(in srgb, var(--on-photo) 75%, transparent);
+}
+.cue-line {
+  width: 40px;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  animation: cue 2.2s ease-in-out infinite;
+}
+@keyframes cue {
+  0%,
+  100% {
+    transform: scaleX(0.3);
+  }
+  50% {
+    transform: scaleX(1);
+  }
+}
+
+.over {
+  position: relative;
+  z-index: 2;
+  margin-top: -28px;
+  border-radius: 28px 28px 0 0;
+  background: var(--bg);
+  transition: background-color 0.35s ease;
+}
+
+.about {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 72px;
+  align-items: center;
+}
+.about .body {
+  max-width: 620px;
+  margin: 0 0 36px;
+  font-size: clamp(18px, 1.5vw, 21px);
+}
+
+.facts {
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+.fact {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.fact dt {
+  color: var(--muted);
+}
+.fact dd {
+  margin: 0;
+}
+.fact-link {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+/* next/image fill: el <img> es absoluto, así que la caja necesita position y
+   un ancho de layout propio (el de la columna del grid). El alto sale del
+   aspect-ratio. */
+.portrait {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg2);
+}
+.portrait img {
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out);
+}
+.portrait:hover img {
+  transform: scale(1.04);
+}
+
+/* ===== HABILIDADES ===== */
+
+/* Pegada a Sobre mí, que ya trae su aire abajo. .section.skills-section para
+   ganarle también al padding de .section en móvil. */
+.section.skills-section {
+  padding: 40px 0 60px;
+}
+.skills-section .h2 {
+  margin: 0;
+  font-size: clamp(36px, 4.4vw, 64px);
+}
+
+/* El gap de 1px deja ver el fondo --line: así salen las líneas entre
+   tarjetas sin bordes dobles. */
+.skills {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--line);
+}
+.skill {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 28px;
+  background: var(--bg);
+  transition: background-color 0.3s;
+}
+.skill:hover {
+  background: var(--bg2);
+}
+.skill .n {
+  color: var(--accent);
+}
+.skill h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.skill p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.langs,
+.langs-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.langs {
+  margin-top: 28px;
+}
+.langs-label {
+  margin: 0 8px 0 0;
+  color: var(--muted);
+}
+.langs-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lvl {
+  margin-left: 6px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lvl.up {
+  color: var(--accent);
+}
+
 /* ===== RESPONSIVE ===== */
 
 @media (max-width: 860px) {
@@ -291,6 +552,25 @@ button {
   }
   .nav {
     padding-left: 14px;
+  }
+  .hero-copy {
+    left: 20px;
+    right: 20px;
+    bottom: 36px;
+  }
+  .hero-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .about {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .fact {
+    grid-template-columns: 110px 1fr;
+  }
+  .skills {
+    grid-template-columns: 1fr;
   }
 }
 

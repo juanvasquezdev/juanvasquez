@@ -1,52 +1,49 @@
-"use client";
-
 import Image from "next/image";
-import Reveal from "./Reveal";
 import type { Profile } from "@/content/types";
 import type { Localized } from "@/lib/i18n";
 
-/** TEMPORAL: contenido v2 con los estilos viejos; se reescribe en la Fase 3. */
+/** Texto y datos a la izquierda, retrato a la derecha. Va dentro del panel del Hero. */
 export default function SobreMi({ content }: { content: Localized<Profile["about"]> }) {
   return (
     <section className="section" id="sobre-mi">
-      <Reveal as="p" className="eyebrow">
-        {content.eyebrow}
-      </Reveal>
-      <Reveal as="h2" index={1}>
-        {content.heading}
-      </Reveal>
-
-      <div className="sobre-mi-grid">
-        <Reveal className="sobre-mi-photo" index={2}>
-          <Image
-            src={content.portrait.src}
-            alt={content.portrait.alt}
-            fill
-            sizes="(max-width: 700px) 280px, 300px"
-          />
-        </Reveal>
-
-        <Reveal className="card card-wide" index={3}>
-          <p>{content.body}</p>
-          <dl>
+      <div className="wrap about">
+        <div>
+          <p className="mono eyebrow">{content.eyebrow}</p>
+          <h2 className="h2">{content.heading}</h2>
+          <p className="body">{content.body}</p>
+          <dl className="facts">
             {content.facts.map((fact) => (
-              <div key={fact.label}>
-                <dt>{fact.label}</dt>
+              <div className="fact" key={fact.label}>
+                <dt className="mono">{fact.label}</dt>
                 <dd>
                   {fact.value}
                   {fact.link && (
-                    <>
-                      {" · "}
-                      <a href={fact.link.href} target="_blank" rel="noopener noreferrer">
-                        {fact.link.label}
-                      </a>
-                    </>
+                    <a
+                      className="fact-link"
+                      href={fact.link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {fact.link.label} <span aria-hidden="true">↗</span>
+                    </a>
                   )}
                 </dd>
               </div>
             ))}
           </dl>
-        </Reveal>
+        </div>
+
+        {/* El ancho lo da la columna del grid (sin margin auto, que lo anula) y
+            el alto sale del aspect-ratio. Si cambian las columnas de .about,
+            cambia también este sizes. */}
+        <div className="portrait">
+          <Image
+            src={content.portrait.src}
+            alt={content.portrait.alt}
+            fill
+            sizes="(max-width: 860px) calc(100vw - 40px), (max-width: 1240px) 36vw, 456px"
+          />
+        </div>
       </div>
     </section>
   );

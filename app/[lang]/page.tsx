@@ -1,6 +1,7 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import SobreMi from "@/components/SobreMi";
+import Habilidades from "@/components/Habilidades";
 import Stack from "@/components/Stack";
 import Proyectos from "@/components/Proyectos";
 import Galeria from "@/components/Galeria";
@@ -23,8 +24,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const athletics = localize(ATHLETICS, lang);
   const ui = localize(UI_LABELS, lang);
 
-  // Habilidades, Herramientas, Atleta y Patrocinio entran en la Fase 3 con el
-  // diseño nuevo; su contenido ya está en content/.
+  // Herramientas, Atleta y Patrocinio entran en lo que queda de la Fase 3; su
+  // contenido ya está en content/.
   return (
     <>
       <a href="#contenido" className="skip-link">
@@ -44,12 +45,20 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       />
 
       <main id="contenido">
-        <Hero content={profile.hero} />
-        <SobreMi content={profile.about} />
-        <Stack content={localize(STACK, lang)} />
-        <Proyectos content={localize(PROJECTS, lang)} />
-        <Galeria label={athletics.galleryLabel} photos={athletics.gallery} />
-        <Contacto content={profile.contact} />
+        <Hero content={profile.hero}>
+          <SobreMi content={profile.about} />
+        </Hero>
+        <Habilidades content={profile.skills} />
+
+        {/* TEMPORAL: las secciones que todavía usan app/legacy.css. El
+            envoltorio acota sus reglas genéricas (.section, .eyebrow) para que
+            no pisen a las nuevas; cada sección sale de acá al reescribirse. */}
+        <div className="legacy">
+          <Stack content={localize(STACK, lang)} />
+          <Proyectos content={localize(PROJECTS, lang)} />
+          <Galeria label={athletics.galleryLabel} photos={athletics.gallery} />
+          <Contacto content={profile.contact} />
+        </div>
       </main>
 
       <Footer lang={lang} />

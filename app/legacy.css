@@ -1,6 +1,10 @@
 /*
  * TEMPORAL — se borra en la Fase 3.
  *
+ * Las reglas genéricas (.section, .eyebrow) van acotadas a .legacy, el
+ * envoltorio de app/[lang]/page.tsx, para que no pisen a las de globals.css en
+ * las secciones ya reescritas.
+ *
  * Los estilos de las secciones de antes (hero con capas, progresión, técnica,
  * metas, etc.), mudados tal cual desde globals.css para que la página siga
  * armada mientras se reescriben las secciones con el diseño v2. Los tokens de
@@ -72,89 +76,6 @@
 .mt-sm { margin-top: var(--space-sm); }
 .mt-lg { margin-top: var(--space-lg); }
 
-/* ===== HERO (scroll a través de imágenes) ===== */
-.hero-scroll {
-  position: relative;
-  height: 320vh; /* 3 capas de imagen + colchón para el crossfade */
-  background: var(--bg);
-}
-
-.hero-pin {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid rgba(var(--accent-rgb), 0.2);
-}
-
-.hero-images {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-/* .hero-img-layer: wrapper (Motion anima su opacity vía scroll, ver Hero.tsx);
-   el <img> real que mete next/image adentro toma object-fit/filter abajo. */
-.hero-img-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  will-change: opacity;
-}
-.hero-img-layer img {
-  object-fit: cover;
-  object-position: center 20%;
-  filter: grayscale(55%) contrast(1.08) brightness(0.6);
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 50% 28%, rgba(var(--accent-rgb), 0.16) 0%, transparent 55%),
-    linear-gradient(180deg, rgba(var(--bg-rgb), 0.45) 0%, rgba(var(--bg-rgb), 0.55) 45%, rgba(var(--bg-rgb), 0.95) 100%);
-}
-
-.hero {
-  max-width: 900px;
-  margin: auto;
-  padding: 0 20px;
-  position: relative;
-  z-index: 2;
-  text-align: center;
-}
-
-.hero-eyebrow {
-  color: var(--accent);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 18px;
-}
-/* La bandera es un SVG, no un emoji: sin esto se apoya en la línea base y
-   queda medio renglón más abajo que el texto. */
-.hero-eyebrow svg {
-  vertical-align: -0.1em;
-  border-radius: 1px;
-}
-
-h1 {
-  font-family: var(--font-display);
-  font-size: clamp(3.2rem, 11vw, 7.5rem);
-  margin: 0 0 14px;
-  color: var(--accent);
-  text-shadow: 2px 2px 4px rgba(var(--shadow-color-rgb), 0.7);
-  line-height: 1.02;
-  letter-spacing: 0.5px;
-}
-
 h2 {
   font-size: 1.5rem;
   margin: 0 0 30px;
@@ -163,82 +84,23 @@ h2 {
   letter-spacing: 1px;
 }
 
-/* Sutiles a propósito: el nombre gigante es el protagonista del hero, las
-   stats son un dato al pie, no una tarjeta de vidrio compitiendo por atención. */
-.stats {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 36px;
-  margin-top: 44px;
-  opacity: 0.82;
-}
-
-.stat-item { text-align: center; }
-
-.stat-label {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-
-.stat-value {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  color: var(--coral);
-  font-weight: 400;
-}
-
-.quote {
-  margin-top: 26px;
-  font-style: italic;
-  font-size: 1.1rem;
-  color: var(--accent);
-}
-
-.scroll-cue {
-  display: inline-block;
-  margin-top: 50px;
-  width: 26px;
-  height: 42px;
-  border: 2px solid var(--accent-bright);
-  border-radius: 20px;
-  position: relative;
-}
-.scroll-cue span {
-  position: absolute;
-  top: 8px; left: 50%;
-  width: 4px; height: 8px;
-  margin-left: -2px;
-  background: var(--accent-bright);
-  border-radius: 2px;
-  animation: scroll-cue-move 1.6s ease infinite;
-}
-@keyframes scroll-cue-move {
-  0% { transform: translateY(0); opacity: 1; }
-  70% { transform: translateY(14px); opacity: 0; }
-  100% { opacity: 0; }
-}
-
 /* ===== SECTIONS ===== */
-.section {
+.legacy .section {
   padding: 90px 20px;
   max-width: 1100px;
   margin: auto;
 }
-.section-dark {
+.legacy .section-dark {
   max-width: 100%;
   background: var(--bg-alt);
 }
-.section-dark > * {
+.legacy .section-dark > * {
   max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.eyebrow {
+.legacy .eyebrow {
   color: var(--accent-dim-text);
   font-size: 0.8rem;
   font-weight: 700;
@@ -247,7 +109,7 @@ h2 {
   margin: 0 0 10px;
 }
 
-.section h2 {
+.legacy .section h2 {
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
   margin: 0 0 20px;
@@ -270,59 +132,6 @@ h2 {
   letter-spacing: 1px;
   margin: 50px 0 20px;
 }
-
-/* ===== SOBRE MÍ (foto + card) ===== */
-.sobre-mi-grid {
-  display: grid;
-  grid-template-columns: minmax(220px, 300px) 1fr;
-  gap: 40px;
-  align-items: center;
-}
-.sobre-mi-photo {
-  position: relative;
-  /* La foto va con next/image fill: un <img> absoluto, sin ancho ni alto
-     propios. O sea que la caja tiene que traer SIEMPRE un ancho definido de
-     layout — el aspect-ratio saca el alto de ahí, nunca al revés. En desktop
-     el ancho lo da el stretch de la columna del grid; en móvil lo da el
-     width de la media query de abajo. La versión anterior ponía ahí un
-     margin:0 auto, que anula el stretch del grid item y dejaba el ancho en 0:
-     lo único que se veía era el alto del min-height convertido en ancho por
-     el aspect-ratio (195×260 en vez de 280×373). */
-  aspect-ratio: 3 / 4;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-}
-.sobre-mi-photo img {
-  object-fit: cover;
-  filter: grayscale(15%) contrast(1.05);
-}
-@media (max-width: 700px) {
-  .sobre-mi-grid { grid-template-columns: 1fr; }
-  /* Centrada con justify-self, no con margin:auto — el margin auto le quita
-     el ancho definido a la caja (ver el comentario de .sobre-mi-photo). El
-     width explícito es lo que hace que el aspect-ratio tenga de dónde sacar
-     el alto. Si cambia este 280px, cambia también el sizes de
-     components/SobreMi.tsx. */
-  .sobre-mi-photo { width: min(280px, 100%); justify-self: center; }
-}
-
-/* ===== CARD ===== */
-.card {
-  background: var(--gradient-surface);
-  padding: 25px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border-left: 4px solid var(--accent);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 5px 15px rgba(var(--shadow-color-rgb), 0.3);
-}
-.card:hover {
-  transform: translateX(5px);
-  box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.15);
-}
-.card p { line-height: 1.85; color: var(--silver); margin: 0; }
-.card-wide { margin-top: 20px; }
 
 /* ===== STACK (chips por bloque, sin barras de progreso genéricas) ===== */
 .stack-block { margin-top: 30px; }
@@ -849,28 +658,7 @@ footer p { margin: 0; font-size: 0.85rem; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .hero-scroll { height: 260vh; }
-  .hero-img-layer img { object-position: center 15%; }
-  h1 { font-size: 3.4rem; }
-  h2 { font-size: 1.2rem; }
-  .stats { gap: 24px; margin-top: 32px; }
-  .section { padding: 60px 15px; }
+  .legacy .section { padding: 60px 15px; }
   .galeria { grid-template-columns: 1fr; }
   .achievements { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 480px) {
-  h1 { font-size: 2.6rem; }
-  .stats { gap: 18px; }
-}
-
-/* Viewports bajos (móvil en landscape): el contenido del hero no cabe en 100vh */
-@media (max-height: 500px) {
-  .hero-pin { overflow-y: auto; }
-  .hero-eyebrow { margin-bottom: 8px; }
-  h1 { font-size: 2.2rem; margin-bottom: 8px; }
-  h2 { font-size: 1rem; margin-bottom: 14px; }
-  .stats { margin-top: 14px; gap: 16px; }
-  .quote { margin-top: 12px; }
-  .scroll-cue { margin-top: 16px; }
 }
