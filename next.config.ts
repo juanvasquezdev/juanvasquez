@@ -9,6 +9,10 @@ import { DEFAULT_LOCALE } from "./content/types";
 // renderizarla en cada visita. 'unsafe-inline' en script-src hace falta porque
 // Next mete <script> inline en el HTML. 'unsafe-eval' solo en dev: React lo usa
 // para reconstruir los stacks de error, nunca en producción.
+// El script del tema (lib/theme.ts) también es inline y entra por ese mismo
+// permiso. No le pongo su hash: con un hash en script-src el navegador ignora
+// 'unsafe-inline' y bloquea los scripts de Next (lo medí: la página deja de
+// hidratar). Para usar hashes hay que hashear también los de Next.
 // Sin upgrade-insecure-requests: en WebKit rompía localhost (http), y en Vercel
 // el sitio ya va siempre por HTTPS.
 const isDev = process.env.NODE_ENV === "development";

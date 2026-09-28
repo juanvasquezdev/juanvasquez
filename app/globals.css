@@ -1,961 +1,308 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /*
- * Tokens: mismos valores que theme.extend en tailwind.config.ts.
- * --font-display / --font-body los inyecta next/font/local (ver app/fonts.ts)
- * via la clase .variable aplicada en app/layout.tsx, no se declaran aqui.
+ * Sistema visual v2. Los valores salen de docs/mockup-v2.dc.html.
+ *
+ * Código de color: --accent (azul) es el mundo técnico, --coral el atlético y
+ * el resto es neutro. --font-display / --font-body / --font-mono los declara
+ * next/font (app/fonts.ts) con la clase que va en <html>.
  */
+
+/* ===== TOKENS ===== */
+
+/* Oscuro es el default: es lo que ve quien no eligió nada y tiene el sistema
+   en oscuro, o un navegador que no informa preferencia. */
 :root {
-  /* Base -- negro azulado, una sola escala */
-  --bg: #04060a;
-  --bg-rgb: 4, 6, 10;
-  --bg-alt: #090c13;
-  --surface: #10141f;
-  --surface-2: #161b2b;
-  --surface-3: #1c2d4d;
+  --bg: #0D0E10;
+  --bg2: #16181B;
+  --fg: #ECEBE6;
+  --muted: #9C9B95;
+  --line: rgba(236, 235, 230, 0.12);
+  --accent: #86A6FF;
+  --coral: #FF8061;
+  --pill: rgba(20, 22, 25, 0.62);
 
-  /* Acento -- un solo azul, todo lo demas deriva de aqui */
-  --accent: #5b8def;
-  --accent-rgb: 91, 141, 239;
-  --accent-dim: #2f4d80;
-  --accent-bright: #8ab2f8;
-  --accent-soft: rgba(var(--accent-rgb), 0.12);
-  /* --accent-dim aclarado para texto: mismo hue, cumple 4.5:1 sobre --bg/--bg-alt (--accent-dim no cumple) */
-  --accent-dim-text: #6b81a6;
-
-  /* Coral -- mundo atlético (Progresión, Logros, Metas, stats del Hero). Verificado: 7.26:1 sobre --bg, cumple AA sin necesitar una variante aclarada para texto como --accent-dim-text. */
-  --coral: #ff6b5e;
-  --coral-rgb: 255, 107, 94;
-  --coral-dim: #8c3b34;
-  --coral-soft: rgba(var(--coral-rgb), 0.18);
-
-  /* Blanco */
-  --white: #f7f9fd;
-  --silver: #aab4c4;
-  --silver-light: #dde3ec;
-  --text: #eef1f6;
-  --text-muted: #838da0;
-
-  /* Negro (texto sobre superficies claras) */
-  --ink: #0a0e16;
-
-  /* Emblema: los tres colores de la bandera de Colombia. NO son parte de la
-     paleta del sitio (gris / azul / coral) ni se usan para nada más — son un
-     hecho, no una decisión de diseño. Viven acá porque ningún color se escribe
-     suelto en una regla (regla #1).
-     Excepción aprobada a la regla de paleta, decidida a propósito: la bandera
-     se queda y se dibuja con sus colores reales. No es un hue suelto que se
-     coló ni algo que haya que "unificar" en una limpieza futura — si algún día
-     se saca, es una decisión mía, no de una pasada de estilos. */
-  --flag-co-amarillo: #fcd116;
-  --flag-co-azul: #003893;
-  --flag-co-rojo: #ce1126;
-
-  /* Gradientes de superficie reutilizados en varias tarjetas */
-  --gradient-surface: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
-  --gradient-surface-reverse: linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%);
-  --gradient-surface-deep: linear-gradient(135deg, var(--surface) 0%, var(--surface-3) 100%);
-
-  /* Sombras: color base compartido y niveles reutilizables */
-  --shadow-color-rgb: 0, 0, 0;
-  --shadow-sm: 0 5px 15px rgba(var(--shadow-color-rgb), 0.25);
-  --shadow-md: 0 5px 15px rgba(var(--shadow-color-rgb), 0.4);
-
-  /* Espaciado reutilizable */
-  --space-sm: 10px;
-  --space-lg: 30px;
-
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  color-scheme: dark;
 }
 
-.mt-sm { margin-top: var(--space-sm); }
-.mt-lg { margin-top: var(--space-lg); }
+/* Claro: por elección (data-theme, lo pone el toggle o el script del <head>)
+   o por el sistema cuando no se eligió nada. Son los mismos valores dos veces
+   porque CSS no deja compartir un bloque entre un selector y un @media. */
+:root[data-theme="light"] {
+  --bg: #F3F2EE;
+  --bg2: #FFFFFF;
+  --fg: #141414;
+  --muted: #5C5B55;
+  --line: rgba(20, 20, 20, 0.12);
+  --accent: #2A55C9;
+  --coral: #B9432A;
+  --pill: rgba(243, 242, 238, 0.72);
+  color-scheme: light;
+}
 
-/* Sin scroll-behavior:smooth acá a propósito: el scroll suave ahora lo
-   maneja Lenis (ver components/SmoothScroll.tsx) — dejar los dos activos
-   a la vez hace que compitan por el control del scroll. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: #F3F2EE;
+    --bg2: #FFFFFF;
+    --fg: #141414;
+    --muted: #5C5B55;
+    --line: rgba(20, 20, 20, 0.12);
+    --accent: #2A55C9;
+    --coral: #B9432A;
+    --pill: rgba(243, 242, 238, 0.72);
+    color-scheme: light;
+  }
+}
+
+/* ===== BASE ===== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Sin scroll-behavior: smooth mientras esté Lenis: los dos a la vez se pelean
+   el scroll (ver components/SmoothScroll.tsx). */
+html {
+  background: var(--bg);
+}
 
 body {
-  font-family: var(--font-body);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
   margin: 0;
-  overflow-x: hidden;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.35s ease, color 0.35s ease;
 }
 
-/* Cubre las transiciones CSS que quedan (hover states, nav, etc.) — las
-   animaciones de Motion se resuelven aparte vía MotionConfig reducedMotion="user"
-   en components/SmoothScroll.tsx, y Lenis se desactiva del todo en ese caso. */
-@media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
 }
 
-a { color: inherit; }
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ===== TIPOGRAFÍA Y LAYOUT COMPARTIDOS ===== */
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.eyebrow {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0 0 20px;
+}
+
+.h2 {
+  font-family: var(--font-display);
+  font-stretch: 80%;
+  font-weight: 800;
+  font-size: clamp(44px, 6vw, 88px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 28px;
+}
+
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section {
+  padding: 140px 0;
+}
 
 /* ===== SKIP LINK ===== */
+
 .skip-link {
   position: fixed;
   top: -100%;
   left: 16px;
-  z-index: 2000;
-  background: var(--accent);
-  color: var(--ink);
-  font-weight: 700;
+  z-index: 100;
   padding: 12px 20px;
-  border-radius: 0 0 8px 8px;
-  text-decoration: none;
-  transition: top 0.2s var(--ease);
+  border-radius: 0 0 10px 10px;
+  background: var(--fg);
+  color: var(--bg);
+  font-weight: 600;
+  transition: top 0.2s var(--ease-out);
 }
 .skip-link:focus {
   top: 0;
 }
+.skip-link:hover {
+  color: var(--bg);
+}
 
-/* ===== NAV (pill flotante, sin navbar tradicional) ===== */
-.nav-pill {
+/* ===== NAV (pill flotante arriba) ===== */
+
+.nav {
   position: fixed;
+  top: 18px;
   left: 50%;
-  bottom: 20px;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100vw - 24px);
+  padding: 6px 6px 6px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--pill);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.mark {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 75%;
+  font-size: 20px;
+  letter-spacing: 0.02em;
+  margin-right: 10px;
+}
+
+.navlinks {
   display: flex;
   gap: 2px;
-  max-width: calc(100vw - 24px);
-  padding: 8px;
-  background: rgba(var(--bg-rgb), 0.55);
-  border: 1px solid rgba(var(--accent-rgb), 0.18);
+}
+.navlinks a {
+  padding: 8px 12px;
   border-radius: 999px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 10px 30px rgba(var(--shadow-color-rgb), 0.35);
-  overflow-x: auto;
-  scrollbar-width: none;
+  font-size: 14px;
+  color: var(--muted);
+  transition: color 0.2s, background-color 0.2s;
 }
-.nav-pill::-webkit-scrollbar { display: none; }
-
-.nav-pill-link {
-  flex: 0 0 auto;
-  padding: 10px 18px;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.2px;
-  color: var(--text-muted);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color 0.25s ease, background 0.25s ease;
-}
-.nav-pill-link:hover,
-.nav-pill-link:focus-visible {
-  color: var(--text);
-  outline-offset: 2px;
-}
-.nav-pill-link.active {
-  color: var(--accent);
-  background: var(--accent-soft);
+.navlinks a:hover,
+.navlinks a.active {
+  color: var(--fg);
+  background: var(--line);
 }
 
-/* ===== HERO (scroll a través de imágenes) ===== */
-.hero-scroll {
-  position: relative;
-  height: 320vh; /* 3 capas de imagen + colchón para el crossfade */
-  background: var(--bg);
-}
-
-.hero-pin {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: hidden;
+/* Segmentado ES | EN */
+.seg {
   display: flex;
+  padding: 3px;
+  margin-left: 6px;
+  border-radius: 999px;
+  background: var(--line);
+}
+.seg-btn {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid rgba(var(--accent-rgb), 0.2);
+  min-height: 32px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  color: var(--muted);
+  transition: background-color 0.2s, color 0.2s;
+}
+.seg-btn:hover {
+  color: var(--fg);
+}
+.seg-btn.on,
+.seg-btn.on:hover {
+  background: var(--fg);
+  color: var(--bg);
 }
 
-.hero-images {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-/* .hero-img-layer: wrapper (Motion anima su opacity vía scroll, ver Hero.tsx);
-   el <img> real que mete next/image adentro toma object-fit/filter abajo. */
-.hero-img-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  will-change: opacity;
-}
-.hero-img-layer img {
-  object-fit: cover;
-  object-position: center 20%;
-  filter: grayscale(55%) contrast(1.08) brightness(0.6);
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 50% 28%, rgba(var(--accent-rgb), 0.16) 0%, transparent 55%),
-    linear-gradient(180deg, rgba(var(--bg-rgb), 0.45) 0%, rgba(var(--bg-rgb), 0.55) 45%, rgba(var(--bg-rgb), 0.95) 100%);
-}
-
-.hero {
-  max-width: 900px;
-  margin: auto;
-  padding: 0 20px;
-  position: relative;
-  z-index: 2;
-  text-align: center;
-}
-
-.hero-eyebrow {
-  color: var(--accent);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 18px;
-}
-/* La bandera es un SVG, no un emoji: sin esto se apoya en la línea base y
-   queda medio renglón más abajo que el texto. */
-.hero-eyebrow svg {
-  vertical-align: -0.1em;
-  border-radius: 1px;
-}
-
-h1 {
-  font-family: var(--font-display);
-  font-size: clamp(3.2rem, 11vw, 7.5rem);
-  margin: 0 0 14px;
-  color: var(--accent);
-  text-shadow: 2px 2px 4px rgba(var(--shadow-color-rgb), 0.7);
-  line-height: 1.02;
-  letter-spacing: 0.5px;
-}
-
-h2 {
-  font-size: 1.5rem;
-  margin: 0 0 30px;
-  color: var(--white);
-  font-weight: 300;
-  letter-spacing: 1px;
-}
-
-/* Sutiles a propósito: el nombre gigante es el protagonista del hero, las
-   stats son un dato al pie, no una tarjeta de vidrio compitiendo por atención. */
-.stats {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 36px;
-  margin-top: 44px;
-  opacity: 0.82;
-}
-
-.stat-item { text-align: center; }
-
-.stat-label {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-
-.stat-value {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  color: var(--coral);
-  font-weight: 400;
-}
-
-.quote {
-  margin-top: 26px;
-  font-style: italic;
-  font-size: 1.1rem;
-  color: var(--accent);
-}
-
-.scroll-cue {
-  display: inline-block;
-  margin-top: 50px;
-  width: 26px;
-  height: 42px;
-  border: 2px solid var(--accent-bright);
-  border-radius: 20px;
-  position: relative;
-}
-.scroll-cue span {
-  position: absolute;
-  top: 8px; left: 50%;
-  width: 4px; height: 8px;
-  margin-left: -2px;
-  background: var(--accent-bright);
-  border-radius: 2px;
-  animation: scroll-cue-move 1.6s ease infinite;
-}
-@keyframes scroll-cue-move {
-  0% { transform: translateY(0); opacity: 1; }
-  70% { transform: translateY(14px); opacity: 0; }
-  100% { opacity: 0; }
-}
-
-/* ===== SECTIONS ===== */
-.section {
-  padding: 90px 20px;
-  max-width: 1100px;
-  margin: auto;
-}
-.section-dark {
-  max-width: 100%;
-  background: var(--bg-alt);
-}
-.section-dark > * {
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.eyebrow {
-  color: var(--accent-dim-text);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin: 0 0 10px;
-}
-
-.section h2 {
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-  margin: 0 0 20px;
-  color: var(--accent);
-  padding-bottom: 14px;
-  border-bottom: 2px solid rgba(var(--accent-rgb), 0.25);
-  letter-spacing: 0.5px;
-}
-
-.section-intro {
-  color: var(--text-muted);
-  max-width: 640px;
-  margin: 0 0 40px;
-  font-size: 1.05rem;
-}
-
-.sub-heading {
-  font-size: 1.1rem;
-  color: var(--accent);
-  letter-spacing: 1px;
-  margin: 50px 0 20px;
-}
-
-/* ===== SOBRE MÍ (foto + card) ===== */
-.sobre-mi-grid {
+.icon-btn {
   display: grid;
-  grid-template-columns: minmax(220px, 300px) 1fr;
-  gap: 40px;
-  align-items: center;
-}
-.sobre-mi-photo {
-  position: relative;
-  /* La foto va con next/image fill: un <img> absoluto, sin ancho ni alto
-     propios. O sea que la caja tiene que traer SIEMPRE un ancho definido de
-     layout — el aspect-ratio saca el alto de ahí, nunca al revés. En desktop
-     el ancho lo da el stretch de la columna del grid; en móvil lo da el
-     width de la media query de abajo. La versión anterior ponía ahí un
-     margin:0 auto, que anula el stretch del grid item y dejaba el ancho en 0:
-     lo único que se veía era el alto del min-height convertido en ancho por
-     el aspect-ratio (195×260 en vez de 280×373). */
-  aspect-ratio: 3 / 4;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-}
-.sobre-mi-photo img {
-  object-fit: cover;
-  filter: grayscale(15%) contrast(1.05);
-}
-@media (max-width: 700px) {
-  .sobre-mi-grid { grid-template-columns: 1fr; }
-  /* Centrada con justify-self, no con margin:auto — el margin auto le quita
-     el ancho definido a la caja (ver el comentario de .sobre-mi-photo). El
-     width explícito es lo que hace que el aspect-ratio tenga de dónde sacar
-     el alto. Si cambia este 280px, cambia también el sizes de
-     components/SobreMi.tsx. */
-  .sobre-mi-photo { width: min(280px, 100%); justify-self: center; }
-}
-
-/* ===== CARD ===== */
-.card {
-  background: var(--gradient-surface);
-  padding: 25px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border-left: 4px solid var(--accent);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 5px 15px rgba(var(--shadow-color-rgb), 0.3);
-}
-.card:hover {
-  transform: translateX(5px);
-  box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.15);
-}
-.card p { line-height: 1.85; color: var(--silver); margin: 0; }
-.card-wide { margin-top: 20px; }
-
-/* ===== STACK (chips por bloque, sin barras de progreso genéricas) ===== */
-.stack-block { margin-top: 30px; }
-.stack-block:first-of-type { margin-top: 10px; }
-.stack-block-title {
-  font-size: 1.05rem;
-  color: var(--accent);
-  letter-spacing: 0.5px;
-  margin: 0 0 16px;
-}
-.stack-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.stack-chip {
-  display: inline-block;
-  padding: 8px 18px;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--line);
   border-radius: 999px;
-  font-size: 0.9rem;
-  transition: transform 0.3s var(--ease), border-color 0.3s ease, background 0.3s ease;
+  background: transparent;
+  transition: transform 0.25s var(--ease-out), background-color 0.2s;
 }
-.stack-chip-primary {
-  background: var(--accent-soft);
-  border: 1px solid rgba(var(--accent-rgb), 0.35);
-  color: var(--white);
-  font-weight: 600;
+.icon-btn:hover {
+  background: var(--line);
+  transform: rotate(-18deg);
 }
-.stack-chip-primary:hover { transform: translateY(-3px); border-color: var(--accent); }
-.stack-chip-secondary {
-  background: var(--surface);
-  border: 1px solid rgba(var(--accent-rgb), 0.15);
-  color: var(--text-muted);
-}
-.stack-chip-secondary:hover { transform: translateY(-3px); border-color: var(--accent-dim); color: var(--text); }
 
-/* ===== BAR CHART (signature) ===== */
-.bar-chart {
-  /* Las tres medidas de los marcadores viven acá arriba porque las comparten
-     el punto y la etiqueta (el clamp de .marker-label usa dos de ellas).
-     --marker-label-overhang es cuánto se le permite a una etiqueta sobresalir
-     de la pista. El ancho más ajustado no es el más angosto: es 769px, el
-     primero que ya NO tiene el `max-width: 92%` de la pista. Ahí la pista mide
-     viewport − 80 (20+20 de padding de .bar-chart y 20+20 de .section), así
-     que queda exactamente 40px de aire de cada lado y el overhang de 32 deja
-     8px de sobra — medido: a 769px la etiqueta de la izquierda arranca en
-     x=8. De 768 para abajo .section baja a 15px de padding, pero la pista pasa
-     a `max-width: 92%` y el aire crece en vez de achicarse (62.9px a 768,
-     medido). O sea: quien suba este valor tiene 8px de margen y ni uno más;
-     pasando 40 vuelve el overflow horizontal a 769px. */
-  --marker-label-w: 150px;
-  --marker-label-overhang: 32px;
-  --marker-dot-size: 16px;
-  --marker-label-gap: 10px;
-  /* Escalón vertical de la etiqueta. En 0 van todas en el mismo renglón; la
-     media query de ≤979px lo usa para bajar una de cada dos, que es donde
-     cuatro etiquetas ya no entran en un renglón sin encimarse. Quién baja lo
-     decide Progresion.tsx con la clase .marker-row-low, por índice del dato:
-     antes era un :nth-child(odd) sobre los hermanos de .bar-track, que salía
-     bien de casualidad porque .bar-fill es el primer hijo y corría la paridad
-     justo para el lado que servía. */
-  --marker-label-row: 0px;
-  margin-top: 60px;
-  padding: 20px 20px 100px;
+/* Toggle de tema: los dos íconos van en el HTML y se ve el del tema al que se
+   cambiaría (sol en oscuro, luna en claro). Así el ícono es el correcto desde
+   el primer pintado, antes de que React hidrate. */
+.theme-toggle .icon-moon {
+  display: none;
 }
-.bar-track {
-  position: relative;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  max-width: 900px;
-  margin: 0 auto;
+:root[data-theme="light"] .theme-toggle .icon-sun {
+  display: none;
 }
-.bar-fill {
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 0%;
-  background: linear-gradient(90deg, var(--coral-dim), var(--coral));
-  border-radius: 8px;
-  /* sin transition acá: la anima Motion (Progresion.tsx), no CSS */
-}
-/* El marcador ya no es una caja posicionada: solo le pasa su --pos al punto y
-   a la etiqueta, que se posicionan los dos contra .bar-track. Antes la
-   etiqueta se medía contra el marcador (16px de ancho, el punto) y por eso no
-   tenía forma de saber a qué distancia estaba del borde de la barra — se
-   centraba a ciegas y las de 0% y 100% se salían de la página por los dos
-   lados (a 360px, de left:-3 a right:403). */
-.bar-marker { --pos: 0%; }
-.marker-dot {
-  position: absolute;
-  top: 50%;
-  left: var(--pos);
-  transform: translate(-50%, -50%);
-  width: var(--marker-dot-size); height: var(--marker-dot-size);
-  background: var(--bg);
-  border: 3px solid var(--coral-dim);
-  border-radius: 50%;
-  transition: border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
-}
-.bar-chart.filled .marker-dot { border-color: var(--coral); background: var(--coral); box-shadow: 0 0 14px rgba(var(--coral-rgb), 0.6); }
-.marker-current .marker-dot { border-color: var(--coral); background: var(--coral); }
-
-.marker-label {
-  position: absolute;
-  /* Cuelga por debajo del punto, que está centrado en la pista. */
-  top: calc(
-    50% + var(--marker-dot-size) / 2 + var(--marker-label-gap) + var(--marker-label-row)
-  );
-  /* Centrada bajo su punto mientras haya lugar; cerca de los extremos se
-     desliza hacia adentro hasta el máximo que permite el overhang, en vez de
-     salirse de la página. Los que se salían son justo el primero y el último,
-     que son los que más importan (la marca de hoy y la meta). */
-  left: clamp(
-    calc(-1 * var(--marker-label-overhang)),
-    calc(var(--pos) - var(--marker-label-w) / 2),
-    calc(100% - var(--marker-label-w) + var(--marker-label-overhang))
-  );
-  width: var(--marker-label-w);
-  text-align: center;
-}
-.marker-label strong {
+:root[data-theme="light"] .theme-toggle .icon-moon {
   display: block;
-  font-family: var(--font-display);
-  color: var(--coral);
-  font-size: 1.05rem;
-  font-weight: 400;
 }
-.marker-label span {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 4px;
-  line-height: 1.3;
-}
-
-/* El escalonado arranca acá, no a 768: a 769px las etiquetas volvían al mismo
-   renglón y "Récord Nacional U20" se escribía encima de "Élite mundial".
-   De dónde sale el 979. Con W = ancho de la pista, la etiqueta del marcador de
-   78% termina en 0.78·W + 75 y la del de 100% arranca en W − 118 (su clamp la
-   topea contra el overhang), así que se encabalgan mientras
-   1.5·150 − 32 − 0.22·W > 0, o sea con W < 877px. La pista mide viewport − 80
-   hasta que toca su tope de max-width:900px, y eso recién pasa a 980px de
-   viewport: 979 es el último ancho en el que la pista viene comprimida. De 980
-   para arriba la pista mide siempre 900 y el renglón único deja 5px de aire
-   entre esas dos etiquetas (medido) — es el layout de siempre, no se toca.
-   El padding-bottom sube de 100 a 190 porque el renglón de abajo cuelga 80px
-   más y necesita lugar. */
-@media (max-width: 979px) {
-  .bar-chart { padding-bottom: 190px; }
-  .bar-marker.marker-row-low { --marker-label-row: 80px; }
-}
-
-@media (max-width: 768px) {
-  .bar-track { max-width: 92%; }
-  .marker-label { font-size: 0.7rem; }
-  .marker-label strong { font-size: 0.85rem; }
-  /* Con la barra a 267px (360 de viewport) ni escalonadas entran cuatro
-     etiquetas de 150px: acá además se angostan a 100px para que cada una se
-     lea entera, y eso las hace más altas (más renglones), de ahí el
-     padding-bottom más grande que el de la banda de arriba. */
-  .bar-chart {
-    --marker-label-w: 100px;
-    padding-bottom: 200px;
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .theme-toggle .icon-sun {
+    display: none;
+  }
+  :root:not([data-theme]) .theme-toggle .icon-moon {
+    display: block;
   }
 }
 
-/* ===== MOMENTO ÉPICO (triptico blanco y negro) ===== */
-.epico-strip {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-  margin-top: 30px;
-}
-.epico-item {
-  position: relative;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-}
-.epico-item img {
-  object-fit: cover;
-  filter: grayscale(100%) contrast(1.1);
-  transition: transform 0.6s var(--ease);
-}
-.epico-item:hover img { transform: scale(1.05); }
-@media (max-width: 700px) {
-  .epico-strip { grid-template-columns: 1fr; gap: 8px; }
-  .epico-item { aspect-ratio: 4 / 3; }
-}
-
-/* ===== GALLERY ===== */
-.galeria {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 25px;
-  margin-top: 20px;
-}
-.galeria-item {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  transition: transform 0.4s var(--ease);
-  background: var(--surface);
-  height: 280px;
-}
-.galeria-item:hover { transform: scale(1.04); }
-.galeria-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.5s ease;
-}
-.galeria-item:hover img { transform: scale(1.08); }
-.galeria-placeholder {
-  display: none;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background: var(--gradient-surface-reverse);
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 20px;
-}
-.ph-icon { font-size: 3.2rem; margin-bottom: 10px; }
-
-/* ===== ACHIEVEMENTS ===== */
-.achievements {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-.achievement-item {
-  background: linear-gradient(135deg, var(--silver-light) 0%, var(--white) 100%);
-  padding: 22px;
-  border-radius: 12px;
-  text-align: center;
-  color: var(--ink);
-  font-weight: 600;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.3s var(--ease);
-}
-.achievement-item:hover { transform: translateY(-6px); }
-.achievement-emoji { font-size: 2.4rem; margin-bottom: 10px; }
-.achievement-item p { margin: 0; }
-
-/* ===== TIMELINE (formación) ===== */
-.timeline {
-  border-left: 2px solid rgba(var(--accent-rgb), 0.25);
-  margin-top: 20px;
-  padding-left: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-.timeline-item { position: relative; }
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -37px;
-  top: 4px;
-  width: 12px; height: 12px;
-  background: var(--accent);
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px var(--bg);
-}
-.timeline-year {
-  color: var(--accent-dim-text);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-}
-.timeline-content h3 {
-  margin: 0 0 6px;
-  font-size: 1.05rem;
-  color: var(--text);
-}
-.timeline-content p { margin: 0; color: var(--text-muted); font-size: 0.9rem; }
-
-.cert-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
-  margin-top: 10px;
-}
-.cert-item {
-  background: var(--surface);
-  border: 1px solid rgba(var(--accent-rgb), 0.15);
-  border-radius: 12px;
-  padding: 20px;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  transition: border-color 0.3s ease;
-}
-.cert-item:hover { border-color: var(--accent-dim); }
-.cert-icon { font-size: 1.6rem; }
-.cert-item p { margin: 0; color: var(--silver); font-size: 0.9rem; line-height: 1.6; }
-
-/* ===== PROYECTOS ===== */
-.proyecto-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 22px;
-  margin-top: 20px;
-}
-.proyecto-card {
-  background: var(--surface);
-  border: 1px solid rgba(var(--accent-rgb), 0.15);
-  border-radius: 12px;
-  padding: 26px;
-  transition: transform 0.3s var(--ease), border-color 0.3s ease;
-}
-.proyecto-card:hover { transform: translateY(-6px); border-color: var(--accent-dim); }
-.proyecto-status {
-  display: inline-block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--accent);
-  background: var(--accent-soft);
-  padding: 4px 10px;
-  border-radius: 20px;
-  margin-bottom: 14px;
-}
-.proyecto-card h3 { margin: 0 0 14px; font-size: 1.15rem; color: var(--text); }
-.proyecto-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--accent-dim-text);
-  margin: 0 0 4px;
-}
-.proyecto-card p { margin: 0 0 16px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
-.proyecto-card p:last-of-type { margin-bottom: 0; }
-
-.proyecto-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 160px;
-  border: 2px dashed rgba(var(--accent-rgb), 0.2);
-  border-radius: 12px;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  text-align: center;
-  padding: 26px;
-}
-
-/* ===== TECH GRID (técnica y ciencia) ===== */
-.tech-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 22px;
-  margin-top: 10px;
-}
-.tech-card {
-  background: var(--surface);
-  border-radius: 12px;
-  padding: 26px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.3s var(--ease);
-}
-.tech-card:hover { transform: translateY(-6px); }
-.tech-num {
-  font-family: var(--font-display);
-  font-size: 2.2rem;
-  color: rgba(var(--accent-rgb), 0.18);
-  margin-bottom: 6px;
-}
-.tech-card h3 {
-  margin: 0 0 10px;
-  color: var(--accent);
-  font-size: 1.05rem;
-}
-.tech-card p {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  line-height: 1.7;
-}
-
-/* ===== GOALS (metas) ===== */
-.goal-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  margin-top: 10px;
-}
-.goal-card {
-  background: var(--surface);
-  border: 1px solid rgba(var(--coral-rgb), 0.15);
-  border-radius: 12px;
-  padding: 24px;
-  transition: transform 0.3s var(--ease), border-color 0.3s ease;
-}
-.goal-card:hover { transform: translateY(-6px); border-color: var(--coral-dim); }
-.goal-primary {
-  background: var(--gradient-surface-deep);
-  border-color: var(--coral-dim);
-}
-.goal-tag {
-  display: inline-block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--coral);
-  background: var(--coral-soft);
-  padding: 4px 10px;
-  border-radius: 20px;
-  margin-bottom: 14px;
-}
-.goal-card h4 { margin: 0 0 10px; font-size: 1.1rem; color: var(--text); }
-.goal-card p { margin: 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
-.goal-card p strong { color: var(--coral); }
-
-/* ===== ACENTO ATLÉTICO (coral) =====
-   Código de color del proyecto: gris = universal, azul = mundo técnico,
-   coral = mundo atlético (ver CLAUDE.md). Progresión, Logros y Metas son las
-   únicas secciones de este lado; todo lo demás se queda en azul/gris. Estas
-   reglas solo pisan el color de acento (eyebrow/h2/card) de esas tres
-   secciones puntuales — el resto de .eyebrow/.section h2/.card en el sitio
-   sigue en azul, sin tocar las reglas base de arriba. */
-#progresion .eyebrow,
-#logros .eyebrow,
-#metas .eyebrow {
-  color: var(--coral);
-}
-#progresion h2,
-#logros h2,
-#metas h2 {
-  color: var(--coral);
-  border-bottom-color: rgba(var(--coral-rgb), 0.25);
-}
-#metas .sub-heading {
-  color: var(--coral);
-}
-#logros .card {
-  border-left-color: var(--coral);
-}
-#logros .card:hover {
-  box-shadow: 0 8px 20px rgba(var(--coral-rgb), 0.15);
-}
-
-/* ===== CONTACT ===== */
-.contact-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-.contact-item {
-  background: var(--gradient-surface);
-  padding: 26px;
-  border-radius: 12px;
-  text-align: center;
-  border: 1px solid rgba(var(--accent-rgb), 0.2);
-  text-decoration: none;
-  display: block;
-  transition: transform 0.3s var(--ease), box-shadow 0.3s ease, border-color 0.3s ease;
-}
-.contact-item:hover,
-.contact-item:focus-visible {
-  transform: translateY(-6px);
-  border-color: var(--accent);
-  box-shadow: 0 10px 25px rgba(var(--accent-rgb), 0.15);
-}
-.contact-icon { font-size: 2.2rem; margin-bottom: 14px; }
-.contact-label {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-.contact-value { color: var(--accent); font-weight: 600; word-break: break-word; }
-
-/* ===== FOOTER ===== */
-footer {
-  text-align: center;
-  padding: 40px 20px 100px; /* colchón extra abajo para el nav-pill flotante */
-  background: var(--bg);
-  border-top: 3px solid var(--accent);
-  color: var(--text-muted);
-}
-footer p { margin: 0; font-size: 0.85rem; }
-
-/* ===== BACK TO TOP ===== */
-.back-to-top {
-  position: fixed;
-  right: 24px;
-  bottom: 88px; /* arriba del nav-pill flotante para que no se encimen */
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--ink);
-  border: none;
-  font-size: 1.2rem;
-  font-weight: 700;
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 900;
-  box-shadow: 0 6px 16px rgba(var(--shadow-color-rgb), 0.4);
-}
-.back-to-top.visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-.back-to-top:hover { filter: brightness(1.1); }
-
 /* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .hero-scroll { height: 260vh; }
-  .hero-img-layer img { object-position: center 15%; }
-  h1 { font-size: 3.4rem; }
-  h2 { font-size: 1.2rem; }
-  .stats { gap: 24px; margin-top: 32px; }
-  .section { padding: 60px 15px; }
-  .galeria { grid-template-columns: 1fr; }
-  .achievements { grid-template-columns: 1fr; }
+
+@media (max-width: 860px) {
+  .wrap {
+    padding: 0 20px;
+  }
+  .section {
+    padding: 96px 0;
+  }
+  .navlinks {
+    display: none;
+  }
+  .nav {
+    padding-left: 14px;
+  }
 }
 
-@media (max-width: 480px) {
-  h1 { font-size: 2.6rem; }
-  .stats { gap: 18px; }
-}
+/* ===== MOVIMIENTO REDUCIDO ===== */
 
-/* Viewports bajos (móvil en landscape): el contenido del hero no cabe en 100vh */
-@media (max-height: 500px) {
-  .hero-pin { overflow-y: auto; }
-  .hero-eyebrow { margin-bottom: 8px; }
-  h1 { font-size: 2.2rem; margin-bottom: 8px; }
-  h2 { font-size: 1rem; margin-bottom: 14px; }
-  .stats { margin-top: 14px; gap: 16px; }
-  .quote { margin-top: 12px; }
-  .scroll-cue { margin-top: 16px; }
+/* Apaga todas las animaciones y transiciones CSS. Las de Motion se cortan
+   aparte con MotionConfig reducedMotion="user", y Lenis no se monta. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

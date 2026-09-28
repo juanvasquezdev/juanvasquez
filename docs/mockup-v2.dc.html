@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Juan José Vásquez — Portafolio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;family=Geist:wght@300..700&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#0D0E10}
+*{box-sizing:border-box}
+.root{--bg:#0D0E10;--bg2:#16181B;--fg:#ECEBE6;--muted:#9C9B95;--line:rgba(236,235,230,.12);--accent:#86A6FF;--coral:#FF8061;--pill:rgba(20,22,25,.62);
+  background:var(--bg);color:var(--fg);font-family:'Geist',system-ui,sans-serif;font-size:17px;line-height:1.6;min-height:100vh;width:100%;
+  transition:background-color .35s ease,color .35s ease;-webkit-font-smoothing:antialiased}
+.root.light{--bg:#F3F2EE;--bg2:#FFFFFF;--fg:#141414;--muted:#5C5B55;--line:rgba(20,20,20,.12);--accent:#2A55C9;--coral:#B9432A;--pill:rgba(243,242,238,.72)}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--accent)}
+button{font:inherit;color:inherit;cursor:pointer}
+.mono{font-family:'Geist Mono',ui-monospace,monospace;font-size:13px;letter-spacing:.02em}
+.eyebrow{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin:0 0 20px}
+.h2{font-family:'Archivo',sans-serif;font-stretch:80%;font-weight:800;font-size:clamp(44px,6vw,88px);line-height:.95;letter-spacing:-.02em;margin:0 0 28px;text-transform:uppercase}
+.wrap{max-width:1240px;margin:0 auto;padding:0 48px}
+.section{padding:140px 0}
+
+/* progreso de scroll */
+.progress{position:fixed;top:0;left:0;right:0;height:2px;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);z-index:60}
+
+/* nav pill */
+.nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 18px;border-radius:999px;background:var(--pill);border:1px solid var(--line);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);color:var(--fg);white-space:nowrap}
+.mark{font-family:'Archivo',sans-serif;font-weight:900;font-stretch:75%;font-size:20px;letter-spacing:.02em;margin-right:10px}
+.navlinks{display:flex;gap:2px}
+.navlinks a{padding:8px 12px;border-radius:999px;font-size:14px;color:var(--muted);transition:color .2s,background-color .2s}
+.navlinks a:hover{color:var(--fg);background:var(--line)}
+.seg{display:flex;padding:3px;border-radius:999px;background:var(--line);margin-left:6px}
+.seg-btn{border:0;background:transparent;border-radius:999px;padding:7px 11px;font-family:'Geist Mono',monospace;font-size:12px;color:var(--muted);min-height:32px;transition:background-color .2s,color .2s}
+.seg-btn.on{background:var(--fg);color:var(--bg)}
+.icon-btn{border:1px solid var(--line);background:transparent;width:40px;height:40px;border-radius:999px;display:grid;place-items:center;transition:transform .25s cubic-bezier(.2,.7,.2,1),background-color .2s}
+.icon-btn:hover{background:var(--line);transform:rotate(-18deg)}
+
+/* hero + sobre mí (la foto queda fija y el contenido sube por encima) */
+.stage{position:relative}
+.hero{position:sticky;top:0;height:100vh;overflow:hidden;z-index:0;background:#0b0b0b}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 80%;transform-origin:50% 60%}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.42) 100%)}
+.hero-copy{position:absolute;left:48px;right:48px;bottom:56px;color:#F4F3EF}
+.hero-meta{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:22px}
+.hero-name{font-family:'Archivo',sans-serif;font-weight:900;font-stretch:72%;text-transform:uppercase;font-size:clamp(56px,10vw,160px);line-height:.84;letter-spacing:-.02em;margin:0}
+.hero-tag{margin:0;font-size:clamp(16px,1.6vw,21px);max-width:560px;line-height:1.4}
+.hero-tag .sep{opacity:.55;padding:0 8px}
+.cue{color:rgba(244,243,239,.75);display:flex;align-items:center;gap:10px}
+.cue-line{width:40px;height:1px;background:currentColor;animation:cue 2.2s ease-in-out infinite;transform-origin:left}
+@keyframes cue{0%,100%{transform:scaleX(.3)}50%{transform:scaleX(1)}}
+
+.over{position:relative;z-index:2;background:var(--bg);border-radius:28px 28px 0 0;margin-top:-28px;transition:background-color .35s ease}
+.about{display:grid;grid-template-columns:1.15fr .85fr;gap:72px;align-items:center}
+.about p.body{font-size:clamp(18px,1.5vw,21px);color:var(--fg);margin:0 0 36px;max-width:620px}
+.facts{margin:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.fact{display:grid;grid-template-columns:140px 1fr;gap:20px;padding:16px 0;border-bottom:1px solid var(--line)}
+.fact dt{color:var(--muted)}
+.fact dd{margin:0;white-space:pre-line}
+.fact-link{display:block;margin-top:4px;color:var(--accent);font-size:14px}
+.portrait{border-radius:20px;overflow:hidden;aspect-ratio:3/4;background:var(--bg2)}
+.portrait img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.portrait:hover img{transform:scale(1.04)}
+
+/* stack */
+.stack-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:56px}
+.group-title{display:flex;align-items:center;gap:10px;color:var(--muted);margin:0 0 8px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+.dot.soft{background:transparent;border:1.5px solid var(--accent)}
+.row{position:relative;display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.row::after{content:'';position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.row:hover::after{transform:scaleX(1)}
+.row-name{font-size:clamp(22px,2vw,28px);font-weight:500;letter-spacing:-.01em;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.row:hover .row-name{transform:translateX(8px)}
+.row-where{color:var(--muted);text-align:right}
+.practices{display:flex;flex-wrap:wrap;gap:10px;margin-top:48px;align-items:center}
+.chip{border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;color:var(--fg);transition:border-color .2s,background-color .2s}
+.chip:hover{border-color:var(--accent)}
+.chip.sm{padding:4px 10px;font-size:12px;font-family:'Geist Mono',monospace;color:var(--accent);border-color:transparent;background:color-mix(in srgb,var(--accent) 13%,transparent)}
+
+/* proyectos: columna fija a la izquierda, proyectos pasando a la derecha */
+.projects{display:grid;grid-template-columns:.8fr 1.2fr;gap:72px;align-items:start}
+.proj-side{position:sticky;top:120px}
+.proj-side p{color:var(--muted);max-width:380px;margin:0 0 36px}
+.index{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.index li{display:flex;align-items:center;gap:14px;color:var(--muted)}
+.index li .bar{height:1px;width:32px;background:currentColor;transition:width .3s}
+.index li:hover{color:var(--fg)}
+.index li:hover .bar{width:64px}
+.proj-list{display:grid;gap:14px}
+.card{display:block;padding:32px;border-radius:18px;border:1px solid transparent;transition:background-color .3s,border-color .3s,opacity .3s,transform .4s cubic-bezier(.2,.7,.2,1)}
+.proj-list:hover .card{opacity:.45}
+.proj-list .card:hover{opacity:1;background:var(--bg2);border-color:var(--line);transform:translateY(-3px)}
+.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:8px}
+.status .dot.b{background:var(--coral)}
+.card h3{font-family:'Archivo',sans-serif;font-stretch:85%;font-weight:700;font-size:clamp(28px,2.6vw,38px);letter-spacing:-.01em;margin:0 0 14px;display:flex;align-items:center;gap:10px}
+.card h3 svg{transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.card:hover h3{color:var(--accent)}
+.card:hover h3 svg{transform:translate(4px,-4px)}
+.card .p{margin:0 0 10px}
+.card .s{margin:0 0 20px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+
+/* atleta */
+.athlete-stage{position:relative}
+.ath-bg{position:sticky;top:0;height:100vh;overflow:hidden;z-index:0;background:#0b0b0b}
+.ath-bg img{width:100%;height:100%;object-fit:cover;object-position:center 40%}
+.ath-bg .hero-shade{background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(0,0,0,.55) 100%)}
+.ath-title{position:absolute;left:48px;bottom:56px;color:#F4F3EF}
+.ath-title .eyebrow{color:rgba(244,243,239,.8)}
+.ath-title .big{font-family:'Archivo',sans-serif;font-weight:900;font-stretch:72%;text-transform:uppercase;font-size:clamp(64px,12vw,200px);line-height:.82;margin:0;letter-spacing:-.02em}
+.ath-over{position:relative;z-index:2;background:var(--bg);border-radius:28px 28px 0 0;margin-top:-28px;transition:background-color .35s ease}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{padding:36px 28px 32px 0;border-right:1px solid var(--line)}
+.stat + .stat{padding-left:28px}
+.stat:last-child{border-right:0}
+.stat-v{font-family:'Archivo',sans-serif;font-stretch:75%;font-weight:800;font-size:clamp(48px,6vw,96px);line-height:1;letter-spacing:-.02em;color:var(--coral)}
+.stat-l{color:var(--muted);margin-top:10px}
+.ach{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:72px}
+.ach ul{list-style:none;margin:0;padding:0}
+.ach li{padding:16px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px}
+.ach li span.m{color:var(--muted)}
+.gallery{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 48px 24px;margin-top:72px;scrollbar-width:thin}
+.shot{flex:0 0 auto;width:clamp(240px,26vw,360px);scroll-snap-align:start;margin:0}
+.shot .ph{border-radius:16px;overflow:hidden;aspect-ratio:3/4;background:var(--bg2)}
+.shot img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.35);transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .5s}
+.shot:hover img{transform:scale(1.05);filter:grayscale(0)}
+.shot figcaption{margin-top:10px;color:var(--muted)}
+
+/* contacto */
+.contact-list{margin-top:48px;border-top:1px solid var(--line)}
+.c-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:24px 0;border-bottom:1px solid var(--line);font-size:clamp(22px,2.4vw,34px);font-weight:500;letter-spacing:-.01em}
+.c-row .v{font-size:15px;color:var(--muted);display:flex;align-items:center;gap:12px}
+.c-row svg{transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.c-row:hover{color:var(--accent)}
+.c-row:hover svg{transform:translate(4px,-4px)}
+.footer{display:flex;justify-content:space-between;gap:16px;padding:40px 0 56px;color:var(--muted)}
+
+.ph-text{color:var(--coral);font-family:'Geist Mono',monospace;font-size:.85em}
+
+/* habilidades */
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:48px}
+.skill{background:var(--bg);padding:28px;display:flex;flex-direction:column;gap:10px;transition:background-color .3s}
+.skill:hover{background:var(--bg2)}
+.skill .n{color:var(--accent)}
+.skill h3{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em}
+.skill p{margin:0;color:var(--muted);font-size:15px}
+.langs{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;align-items:center}
+.lvl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.lvl.up{color:var(--accent)}
+
+/* vista previa de instagram */
+.ig{border:1px solid var(--line);border-radius:18px;background:var(--bg);padding:18px;display:flex;flex-direction:column;gap:14px;transition:border-color .25s}
+.ig:hover{border-color:var(--accent);color:var(--fg)}
+.ig-head{display:flex;align-items:center;gap:12px}
+.ig-av{width:48px;height:48px;border-radius:50%;overflow:hidden;flex:0 0 auto;border:2px solid var(--coral)}
+.ig-av img{width:100%;height:100%;object-fit:cover;display:block}
+.ig-name{display:flex;flex-direction:column;line-height:1.3}
+.ig-name b{font-weight:600}
+.ig-name span{color:var(--muted);font-size:13px}
+.ig-follow{margin-left:auto;padding:8px 14px;border-radius:999px;background:var(--fg);color:var(--bg);font-size:13px;font-weight:500}
+.ig-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;border-radius:10px;overflow:hidden}
+.ig-grid img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;transition:opacity .25s}
+.ig:hover .ig-grid img{opacity:.85}
+.ig-link{display:inline-flex;align-items:center;gap:8px;margin-top:24px;color:var(--accent)}
+
+/* herramientas (proyectos pequeños) */
+.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:48px}
+.tool{display:flex;flex-direction:column;gap:12px;padding:24px;border:1px dashed var(--line);border-radius:16px;min-height:200px;transition:border-color .25s,transform .35s cubic-bezier(.2,.7,.2,1),background-color .25s}
+.tool:hover{border-style:solid;border-color:var(--accent);transform:translateY(-3px);background:var(--bg2)}
+.tool h3{margin:0;font-size:20px;font-weight:600}
+.tool p{margin:0;color:var(--muted);font-size:15px;flex-grow:1}
+.tool .gh{display:flex;align-items:center;gap:8px;color:var(--accent)}
+
+/* marcas oficiales */
+.wa-card{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:28px;padding:22px 26px;border:1px solid var(--line);border-radius:16px;transition:border-color .25s,background-color .25s}
+.wa-card:hover{border-color:var(--accent);background:var(--bg2);color:var(--fg)}
+.wa-card .l{display:flex;flex-direction:column;gap:4px}
+.wa-card .t{font-weight:600}
+.wa-card .u{color:var(--muted)}
+.wa-card svg{transition:transform .3s cubic-bezier(.2,.7,.2,1);color:var(--accent)}
+.wa-card:hover svg{transform:translate(4px,-4px)}
+.stat-tag{display:inline-block;margin-top:12px;padding:3px 9px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--line);color:var(--muted)}
+.stat-tag.ok{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+
+/* trayectoria */
+.traj-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin:96px 0 28px}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.fbtn{border:1px solid var(--line);background:transparent;border-radius:999px;padding:8px 14px;min-height:40px;font-family:'Geist Mono',monospace;font-size:12px;color:var(--muted);transition:all .2s}
+.fbtn:hover{color:var(--fg);border-color:var(--fg)}
+.fbtn.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.bars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;align-items:end;height:320px;padding-top:24px;border-bottom:1px solid var(--line)}
+.bar-col{display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:10px}
+.bar-v{font-family:'Archivo',sans-serif;font-stretch:80%;font-weight:800;font-size:clamp(24px,2.6vw,36px)}
+.sbar{border-radius:10px 10px 0 0;background:color-mix(in srgb,var(--coral) 22%,transparent);border-top:3px solid var(--coral);transition:height .6s cubic-bezier(.2,.7,.2,1)}
+.sbar.top{background:color-mix(in srgb,var(--coral) 45%,transparent)}
+.bar-meta{padding:12px 0 18px;color:var(--muted);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.bar-meta b{display:block;color:var(--fg);font-weight:500;font-family:'Geist',sans-serif;font-size:15px}
+.results{width:100%}
+.rrow{display:grid;grid-template-columns:130px 1fr 80px 100px;gap:16px;align-items:start;padding:16px 8px 16px 0;border-bottom:1px solid var(--line);transition:background-color .2s}
+.rrow:not(.rhead):hover{background:color-mix(in srgb,var(--fg) 4%,transparent)}
+.rhead{color:var(--muted);padding-top:10px;padding-bottom:10px}
+.rdate{color:var(--muted);white-space:nowrap;padding-top:4px}
+.ryear{padding:28px 0 8px;color:var(--muted);letter-spacing:.12em}
+.results .mk{font-family:'Archivo',sans-serif;font-stretch:85%;font-weight:700;font-size:22px;white-space:nowrap}
+.results .mk.pb{color:var(--coral)}
+.medal{display:inline-flex;min-width:34px;justify-content:center;padding:2px 8px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:12px;border:1px solid var(--line)}
+.medal.g{border-color:var(--coral);color:var(--coral)}
+.results .comp{display:block}
+.results .ven{display:block;color:var(--muted);font-size:14px}
+
+/* galería que se mueve sola */
+.marquee{overflow:hidden;margin-top:20px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.track{display:flex;gap:16px;width:max-content;animation:slide 60s linear infinite}
+.marquee:hover .track{animation-play-state:paused}
+@keyframes slide{to{transform:translateX(calc(-50% - 8px))}}
+
+/* patrocinio */
+.sponsor{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center;padding:56px;border-radius:24px;background:var(--bg2);border:1px solid var(--line)}
+.sponsor ul{list-style:none;margin:0 0 32px;padding:0}
+.sponsor li{padding:12px 0;border-bottom:1px solid var(--line);display:flex;gap:14px}
+.sponsor li .n{color:var(--coral);font-family:'Geist Mono',monospace;font-size:13px;padding-top:3px}
+.cta{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;background:var(--fg);color:var(--bg);font-weight:500;min-height:48px;transition:transform .3s cubic-bezier(.2,.7,.2,1),background-color .2s}
+.cta:hover{color:var(--bg);transform:translateY(-2px)}
+.sponsor .ph{border-radius:16px;overflow:hidden;aspect-ratio:4/5}
+.sponsor .ph img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* movimiento ligado al scroll: rápido, sin librerías */
+@supports (animation-timeline: view()){
+  .progress{animation:grow linear both;animation-timeline:scroll(root)}
+  .hero-img{animation:heroImg linear both;animation-timeline:scroll(root);animation-range:0 100vh}
+  .hero-copy{animation:heroCopy linear both;animation-timeline:scroll(root);animation-range:0 70vh}
+  .rv{animation:rv linear both;animation-timeline:view();animation-range:entry 0% entry 70%}
+  .rv-img img{animation:rvImg linear both;animation-timeline:view();animation-range:entry 0% cover 50%}
+  .ath-bg img{animation:athImg linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+}
+@keyframes grow{to{transform:scaleX(1)}}
+@keyframes heroImg{to{transform:scale(1.12);filter:brightness(.55)}}
+@keyframes heroCopy{to{transform:translateY(-90px);opacity:0}}
+@keyframes rv{from{opacity:0;transform:translateY(36px)}}
+@keyframes rvImg{from{transform:scale(1.18)}}
+@keyframes athImg{from{transform:scale(1.15) translateY(-3%)}to{transform:scale(1) translateY(3%)}}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition:none !important}
+}
+
+@media (max-width: 860px){
+  .wrap{padding:0 20px}
+  .section{padding:96px 0}
+  .navlinks{display:none}
+  .nav{padding-left:14px}
+  .hero-copy{left:20px;right:20px;bottom:36px}
+  .hero-meta{flex-direction:column;align-items:flex-start}
+  .about,.stack-grid,.projects,.ach{grid-template-columns:1fr;gap:40px}
+  .proj-side{position:static}
+  .index{display:none}
+  .card{padding:22px 4px}
+  .proj-list:hover .card{opacity:1}
+  .ath-title{left:20px}
+  .stats{grid-template-columns:1fr}
+  .stat,.stat + .stat{padding:24px 0;border-right:0;border-bottom:1px solid var(--line)}
+  .stat:last-child{border-bottom:0}
+  .gallery{padding:8px 20px 24px}
+  .footer{flex-direction:column}
+  .fact{grid-template-columns:110px 1fr}
+  .tools{grid-template-columns:1fr}
+  .skills{grid-template-columns:1fr}
+  .sponsor{grid-template-columns:1fr;padding:28px;gap:32px}
+  .bars{height:240px;gap:10px}
+  .bar-meta{gap:10px}
+  .results .ven{display:none}
+  .rrow{grid-template-columns:86px 1fr 44px 64px;gap:8px}
+  .rdate{white-space:normal}
+  .wa-card{flex-direction:column;align-items:flex-start}
+}
+</style>
+</helmet>
+
+<div class="root {{themeClass}}">
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="mark" href="#top" aria-label="Inicio">JV</a>
+    <nav class="navlinks" aria-label="Secciones">
+      <sc-for list="{{nav}}" as="n" hint-placeholder-count="5">
+        <a href="{{n.href}}">{{n.label}}</a>
+      </sc-for>
+    </nav>
+    <div class="seg" role="group" aria-label="Idioma">
+      <button class="{{esClass}}" onClick="{{setEs}}" aria-pressed="{{isEs}}">ES</button>
+      <button class="{{enClass}}" onClick="{{setEn}}" aria-pressed="{{isEn}}">EN</button>
+    </div>
+    <button class="icon-btn" onClick="{{toggleTheme}}" aria-label="{{t.themeLabel}}">
+      <sc-if value="{{isDark}}" hint-placeholder-val="{{ true }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+      </sc-if>
+      <sc-if value="{{isLight}}" hint-placeholder-val="{{ false }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+      </sc-if>
+    </button>
+  </header>
+
+  <main>
+    <!-- HERO + SOBRE MÍ -->
+    <div class="stage" id="top">
+      <section class="hero" aria-label="Inicio">
+        <img class="hero-img" src="/_blob/1ed53303c924a35546a6a14e6510e30e" alt="Juan José Vásquez de espaldas, mirando al horizonte">
+        <div class="hero-shade"></div>
+        <div class="hero-copy">
+          <p class="mono eyebrow" style="color: rgba(244,243,239,.8)">Cali, Colombia · 2026</p>
+          <h1 class="hero-name">Juan José<br>Vásquez</h1>
+          <div class="hero-meta">
+            <p class="hero-tag">{{t.tag1}}<span class="sep">/</span>{{t.tag2}}</p>
+            <span class="cue mono"><span class="cue-line"></span>{{t.scroll}}</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="over">
+        <section class="section" id="sobre-mi">
+          <div class="wrap about">
+            <div class="rv">
+              <p class="mono eyebrow">{{t.aboutEyebrow}}</p>
+              <h2 class="h2">{{t.aboutTitle}}</h2>
+              <p class="body">{{t.aboutBody}}</p>
+              <dl class="facts">
+                <sc-for list="{{t.facts}}" as="f" hint-placeholder-count="3">
+                  <div class="fact"><dt class="mono">{{f.k}}</dt><dd>{{f.v}}<sc-if value="{{f.hasLink}}" hint-placeholder-val="{{ false }}"><a class="fact-link" href="{{f.href}}" target="_blank" rel="noreferrer">{{f.link}} ↗</a></sc-if></dd></div>
+                </sc-for>
+              </dl>
+            </div>
+            <div class="portrait rv rv-img">
+              <img src="/_blob/6f4d64e07bee99e3b4ca6585d1e7b900" alt="{{t.portraitAlt}}">
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- HABILIDADES -->
+    <section class="section" id="habilidades" style="position: relative; z-index: 2; background: var(--bg); padding-top: 40px; padding-bottom: 60px; transition: background-color .35s ease">
+      <div class="wrap">
+        <div class="rv">
+          <p class="mono eyebrow">{{t.skEyebrow}}</p>
+          <h2 class="h2" style="font-size: clamp(36px,4.4vw,64px); margin: 0">{{t.skTitle}}</h2>
+        </div>
+        <div class="skills rv">
+          <sc-for list="{{t.skills}}" as="k" hint-placeholder-count="6">
+            <div class="skill"><span class="n mono">{{k.n}}</span><h3>{{k.t}}</h3><p>{{k.d}}</p></div>
+          </sc-for>
+        </div>
+        <div class="langs rv">
+          <span class="mono" style="color: var(--muted); margin-right: 8px">{{t.langTitle}}</span>
+          <sc-for list="{{t.langs}}" as="l" hint-placeholder-count="2">
+            <span class="chip">{{l.n}} <span class="{{l.cls}}" style="margin-left: 6px">{{l.v}}</span></span>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section class="section" id="stack" style="position: relative; z-index: 2; background: var(--bg); transition: background-color .35s ease">
+      <div class="wrap">
+        <div class="rv">
+          <p class="mono eyebrow">{{t.stackEyebrow}}</p>
+          <h2 class="h2">{{t.stackTitle}}</h2>
+          <p style="color: var(--muted); max-width: 560px; margin: 0">{{t.stackIntro}}</p>
+        </div>
+        <div class="stack-grid">
+          <div class="rv">
+            <p class="group-title mono"><span class="dot"></span>{{t.useTitle}}</p>
+            <sc-for list="{{t.stackUse}}" as="s" hint-placeholder-count="6">
+              <div class="row"><span class="row-name">{{s.n}}</span><span class="{{s.cls}}">{{s.w}}</span></div>
+            </sc-for>
+          </div>
+          <div class="rv">
+            <p class="group-title mono"><span class="dot soft"></span>{{t.learnTitle}}</p>
+            <sc-for list="{{t.stackLearn}}" as="s" hint-placeholder-count="6">
+              <div class="row"><span class="row-name">{{s.n}}</span><span class="{{s.cls}}">{{s.w}}</span></div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="practices rv">
+          <span class="mono" style="color: var(--muted); margin-right: 8px">{{t.practicesTitle}}</span>
+          <sc-for list="{{t.practices}}" as="p" hint-placeholder-count="5">
+            <span class="chip">{{p}}</span>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROYECTOS -->
+    <section class="section" id="proyectos" style="position: relative; z-index: 2; background: var(--bg); transition: background-color .35s ease">
+      <div class="wrap projects">
+        <aside class="proj-side">
+          <p class="mono eyebrow">{{t.projEyebrow}}</p>
+          <h2 class="h2">{{t.projTitle}}</h2>
+          <p>{{t.projIntro}}</p>
+          <ol class="index mono">
+            <sc-for list="{{t.projects}}" as="p" hint-placeholder-count="3">
+              <li><span>{{p.num}}</span><span class="bar"></span><span>{{p.title}}</span></li>
+            </sc-for>
+          </ol>
+        </aside>
+        <div class="proj-list">
+          <sc-for list="{{t.projects}}" as="p" hint-placeholder-count="3">
+            <a class="card rv" href="#proyectos">
+              <div class="card-top mono">
+                <span class="status"><span class="{{p.dotClass}}"></span>{{p.status}}</span>
+                <span>{{p.repo}}</span>
+              </div>
+              <h3>{{p.title}}
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"></path></svg>
+              </h3>
+              <p class="p">{{p.problem}}</p>
+              <p class="s">{{p.solution}}</p>
+              <div class="chips">
+                <sc-for list="{{p.stack}}" as="c" hint-placeholder-count="4">
+                  <span class="chip sm">{{c}}</span>
+                </sc-for>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- HERRAMIENTAS -->
+    <section class="section" id="herramientas" style="position: relative; z-index: 2; background: var(--bg); padding-top: 40px; transition: background-color .35s ease">
+      <div class="wrap">
+        <div class="rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap">
+          <div>
+            <p class="mono eyebrow">{{t.toolsEyebrow}}</p>
+            <h2 class="h2" style="font-size: clamp(36px,4.4vw,64px); margin: 0">{{t.toolsTitle}}</h2>
+          </div>
+          <p style="color: var(--muted); max-width: 440px; margin: 0">{{t.toolsIntro}}</p>
+        </div>
+        <div class="tools">
+          <sc-for list="{{t.tools}}" as="x" hint-placeholder-count="3">
+            <a class="tool rv" href="{{ghUrl}}" target="_blank" rel="noreferrer">
+              <span class="mono" style="color: var(--muted)">{{x.kind}}</span>
+              <h3><span class="ph-text">{{x.name}}</span></h3>
+              <p>{{x.desc}}</p>
+              <span class="gh mono">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3.1-.4 6.4-1.5 6.4-7A5.4 5.4 0 0 0 20 4.8 5 5 0 0 0 19.9 1S18.7.6 16 2.5a13.4 13.4 0 0 0-7 0C6.3.6 5.1 1 5.1 1A5 5 0 0 0 5 4.8a5.4 5.4 0 0 0-1.5 3.7c0 5.5 3.3 6.6 6.4 7a3.4 3.4 0 0 0-.9 2.6V22"></path></svg>
+                {{t.toolsCta}}
+              </span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ATLETA -->
+    <div class="athlete-stage" id="atleta">
+      <section class="ath-bg" aria-label="{{t.athTitle}}">
+        <img src="/_blob/ed71e2809d46ddc89202fe676e2a598e" alt="{{t.athImgAlt}}">
+        <div class="hero-shade"></div>
+        <div class="ath-title">
+          <p class="mono eyebrow">{{t.athEyebrow}}</p>
+          <h2 class="big">{{t.athTitle}}</h2>
+        </div>
+      </section>
+      <div class="ath-over">
+        <section class="section" style="padding-bottom: 80px">
+          <div class="wrap">
+            <p class="rv" style="max-width: 640px; font-size: clamp(18px,1.5vw,21px); margin: 0 0 56px">{{t.athIntro}}</p>
+            <div class="stats rv">
+              <sc-for list="{{t.stats}}" as="s" hint-placeholder-count="3">
+                <div class="stat"><div class="stat-v">{{s.v}}</div><div class="stat-l mono">{{s.l}}</div><span class="{{s.tagClass}}">{{s.tag}}</span></div>
+              </sc-for>
+            </div>
+            <a class="wa-card rv" href="https://worldathletics.org/athletes/colombia/juan-jose-basquez-15111188" target="_blank" rel="noreferrer">
+              <span class="l"><span class="t">{{t.waTitle}}</span><span class="u mono">worldathletics.org · ID 15111188</span></span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"></path></svg>
+            </a>
+
+            <div class="traj-head rv">
+              <div>
+                <p class="mono eyebrow" style="margin-bottom: 10px">{{t.trajEyebrow}}</p>
+                <h3 class="h2" style="font-size: clamp(34px,4vw,56px); margin: 0">{{t.trajTitle}}</h3>
+              </div>
+              <div class="filters" role="group" aria-label="{{t.trajTitle}}">
+                <sc-for list="{{filters}}" as="f" hint-placeholder-count="6">
+                  <button class="{{f.cls}}" onClick="{{f.pick}}" aria-pressed="{{f.on}}">{{f.label}}</button>
+                </sc-for>
+              </div>
+            </div>
+
+            <sc-if value="{{showBars}}" hint-placeholder-val="{{ false }}">
+              <div class="rv">
+                <div class="bars">
+                  <sc-for list="{{seasons}}" as="s" hint-placeholder-count="4">
+                    <div class="bar-col"><span class="bar-v">{{s.mark}}</span><div class="{{s.cls}}" style="{{s.style}}"></div></div>
+                  </sc-for>
+                </div>
+                <div class="bar-meta mono">
+                  <sc-for list="{{seasons}}" as="s" hint-placeholder-count="4">
+                    <span><b>{{s.year}}</b>{{s.comp}}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{showTable}}" hint-placeholder-val="{{ true }}">
+              <div class="results rv" role="table" aria-label="{{t.trajTitle}}">
+                <div class="rrow rhead" role="row"><span class="mono" role="columnheader">{{t.colDate}}</span><span class="mono" role="columnheader">{{t.colComp}}</span><span class="mono" role="columnheader">{{t.colPlace}}</span><span class="mono" role="columnheader">{{t.colMark}}</span></div>
+                <sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+                  <sc-if value="{{r.isYear}}" hint-placeholder-val="{{ false }}">
+                    <div class="ryear mono" role="row"><span role="cell">{{r.year}}</span></div>
+                  </sc-if>
+                  <sc-if value="{{r.isRow}}" hint-placeholder-val="{{ true }}">
+                    <div class="rrow" role="row">
+                      <span class="mono rdate" role="cell">{{r.date}}</span>
+                      <span role="cell"><span class="comp">{{r.comp}}</span><span class="ven">{{r.venue}}</span></span>
+                      <span role="cell"><span class="{{r.medalCls}}">{{r.place}}</span></span>
+                      <span role="cell"><span class="{{r.markCls}}">{{r.mark}}</span></span>
+                    </div>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </sc-if>
+            <p class="mono" style="color: var(--muted); margin: 16px 0 0">{{t.trajSource}}</p>
+
+            <div class="ach">
+              <div class="rv">
+                <p class="group-title mono">{{t.achTitle}}</p>
+                <ul>
+                  <sc-for list="{{t.achievements}}" as="a" hint-placeholder-count="5">
+                    <li><span>{{a.t}}</span><span class="m mono">{{a.m}}</span></li>
+                  </sc-for>
+                </ul>
+              </div>
+              <div class="rv">
+                <p class="group-title mono">{{t.clubsTitle}}</p>
+                <ul>
+                  <sc-for list="{{t.clubs}}" as="c" hint-placeholder-count="4">
+                    <li><span>{{c.t}}</span><span class="m mono">{{c.m}}</span></li>
+                  </sc-for>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="wrap" style="margin-top: 96px">
+            <p class="mono eyebrow rv" style="margin: 0">{{t.galleryTitle}}</p>
+          </div>
+          <div class="marquee" aria-label="{{t.galleryTitle}}">
+            <div class="track">
+              <sc-for list="{{galleryLoop}}" as="g" hint-placeholder-count="8">
+                <figure class="shot">
+                  <div class="ph"><img src="{{g.src}}" alt="{{g.alt}}" loading="lazy"></div>
+                  <figcaption class="mono">{{g.cap}}</figcaption>
+                </figure>
+              </sc-for>
+            </div>
+          </div>
+          <div class="wrap">
+            <a class="ig-link mono" href="https://instagram.com/juanvasquezhj" target="_blank" rel="noreferrer">{{t.igMore}}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"></path></svg>
+            </a>
+          </div>
+        </section>
+
+        <!-- PATROCINIO -->
+        <section class="section" id="patrocinio" style="padding-top: 40px; padding-bottom: 60px">
+          <div class="wrap">
+            <div class="sponsor rv">
+              <div>
+                <p class="mono eyebrow">{{t.spEyebrow}}</p>
+                <h2 class="h2" style="font-size: clamp(36px,4.4vw,64px)">{{t.spTitle}}</h2>
+                <p style="color: var(--muted); margin: 0 0 28px; max-width: 520px">{{t.spIntro}}</p>
+                <ul>
+                  <sc-for list="{{t.spPoints}}" as="p" hint-placeholder-count="3">
+                    <li><span class="n">{{p.n}}</span><span>{{p.t}}</span></li>
+                  </sc-for>
+                </ul>
+                <a class="cta" href="mailto:juanjosevasquez1313@gmail.com?subject=Patrocinio%20deportivo">{{t.spCta}}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"></path></svg>
+                </a>
+              </div>
+              <a class="ig rv" href="https://instagram.com/juanvasquezhj" target="_blank" rel="noreferrer" aria-label="{{t.igAria}}">
+                <span class="ig-head">
+                  <span class="ig-av"><img src="/_blob/6f4d64e07bee99e3b4ca6585d1e7b900" alt=""></span>
+                  <span class="ig-name"><b>@juanvasquezhj</b><span>{{t.igBio}}</span></span>
+                  <span class="ig-follow">{{t.igFollow}}</span>
+                </span>
+                <span class="ig-grid">
+                  <sc-for list="{{igGrid}}" as="g" hint-placeholder-count="9">
+                    <img src="{{g}}" alt="" loading="lazy">
+                  </sc-for>
+                </span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTACTO -->
+        <section class="section" id="contacto" style="padding-top: 80px; padding-bottom: 0">
+          <div class="wrap">
+            <div class="rv">
+              <p class="mono eyebrow">{{t.contactEyebrow}}</p>
+              <h2 class="h2" style="font-size: clamp(64px,11vw,180px)">{{t.contactTitle}}</h2>
+              <p style="color: var(--muted); margin: 0">{{t.contactIntro}}</p>
+            </div>
+            <div class="contact-list rv">
+              <sc-for list="{{contacts}}" as="c" hint-placeholder-count="4">
+                <a class="c-row" href="{{c.href}}" target="{{c.target}}" rel="noreferrer">
+                  <span>{{c.label}}</span>
+                  <span class="v mono">{{c.value}}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"></path></svg>
+                  </span>
+                </a>
+              </sc-for>
+            </div>
+            <footer class="footer mono">
+              <span>© 2026 Juan José Vásquez Giraldo</span>
+              <span>{{t.footer}}</span>
+            </footer>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: 'es', theme: 'dark', view: 'all' };
+    this.WA = [
+      { y: 2026, d: '05 JUL 2026', m: 2.05, p: 1, es: 'Campeonato Nacional U20', en: 'Colombian U20 Championships', v: 'Pedro Grajales, Cali' },
+      { y: 2026, d: '21 JUN 2026', m: 2.04, p: 3, es: 'Campeonato Iberoamericano U20', en: 'Ibero-American U20 Championships', v: 'VIDENA, Lima (PER)' },
+      { y: 2026, d: '09 MAY 2026', m: 1.98, p: 1, es: 'Campeonato Nacional U23', en: 'Colombian U23 Championships', v: 'U. D. Centenario, Armenia' },
+      { y: 2026, d: '26 APR 2026', m: 2.04, p: 4, es: 'Nacional Interclubes y Municipios', en: 'National Interclub & Municipal Championships', v: 'El Salitre, Bogotá' },
+      { y: 2025, d: '28 SEP 2025', m: 1.90, p: 5, es: 'Campeonato Nacional U20', en: 'Colombian U20 Championships', v: 'Rey Pelé, Villavicencio' },
+      { y: 2025, d: '03 AUG 2025', m: 2.04, p: 3, es: 'Campeonato Nacional de Mayores', en: 'Colombian Senior Championships', v: 'U. D. Centenario, Armenia' },
+      { y: 2025, d: '05 APR 2025', m: 1.93, p: 2, es: 'Nacional de Velocidad y Saltos', en: 'National Sprints & Jumps Championships', v: 'El Salitre, Bogotá' },
+      { y: 2025, d: '15 MAR 2025', m: 2.01, p: 5, es: 'Nacional de Clubes y Municipios Mayores', en: 'National Senior Club & Municipal Championships', v: 'El Salitre, Bogotá' },
+      { y: 2025, d: '08 MAR 2025', m: 1.92, p: 2, es: 'Nacional de Pruebas Combinadas y Saltos (U20)', en: 'National Combined Events & Jumps (U20)', v: 'Parque Deportivo, Ibagué' },
+      { y: 2024, d: '15 NOV 2024', m: 2.00, p: 2, es: 'Juegos Nacionales Juveniles', en: 'National Youth Games', v: 'U. D. Centenario, Armenia' },
+      { y: 2024, d: '21 SEP 2024', m: 1.89, p: 6, es: 'Campeonato Nacional U23', en: 'Colombian U23 Championships', v: 'La Flora, Bucaramanga' },
+      { y: 2024, d: '29 JUN 2024', m: 1.93, p: 4, es: 'Campeonato Nacional de Mayores', en: 'Colombian Senior Championships', v: 'Pedro Grajales, Cali' },
+      { y: 2024, d: '02 JUN 2024', m: 1.90, p: 4, es: 'Campeonato Nacional U20', en: 'Colombian U20 Championships', v: 'U. D. Centenario, Armenia' },
+      { y: 2024, d: '10 MAR 2024', m: 1.96, p: 1, es: 'Nacional de Pruebas Combinadas y Saltos (U18)', en: 'National Combined Events & Jumps (U18)', v: 'Parque Deportivo, Ibagué' },
+      { y: 2024, d: '24 FEB 2024', m: 1.89, p: 2, es: 'Nacional de Municipios y Clubes U20/U18', en: 'National Municipal & Club Championships U20/U18', v: 'El Salitre, Bogotá' },
+      { y: 2023, d: '07 OCT 2023', m: 1.89, p: 3, es: 'Nacional de Clubes', en: 'Colombian Club Championships', v: 'Francisco Rivera Escobar, Palmira' },
+      { y: 2023, d: '15 SEP 2023', m: 1.93, p: 5, es: 'Campeonato Iberoamericano U18', en: 'Ibero-American U18 Championships', v: 'VIDENA, Lima (PER)' },
+      { y: 2023, d: '16 JUL 2023', m: 1.93, p: 1, es: 'Campeonato Nacional U18', en: 'Colombian U18 Championships', v: 'Bogotá' }
+    ];
+    this.MONTHS_ES = { JAN: 'ENE', APR: 'ABR', AUG: 'AGO', DEC: 'DIC' };
+  }
+  renderVals() {
+    var lang = this.state.lang;
+    var theme = this.state.theme;
+    var view = this.state.view;
+    var self = this;
+    var WA_RESULTS = this.WA;
+    var MONTHS_ES = this.MONTHS_ES;
+    var es = lang === 'es';
+    var GH = 'https://github.com/juanvasquezdev';
+    var fmt = function (m) { var s = m.toFixed(2) + ' m'; return es ? s.replace('.', ',') : s; };
+    var fdate = function (d) { if (!es) return d; var p = d.split(' '); return p[0] + ' ' + (MONTHS_ES[p[1]] || p[1]) + ' ' + p[2]; };
+
+    var ES = {
+      themeLabel: theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro',
+      tag1: 'Desarrollador Full Stack en formación',
+      tag2: 'Atleta de alto rendimiento',
+      scroll: 'Desliza',
+      aboutEyebrow: '01 — Sobre mí',
+      aboutTitle: 'Sobre mí',
+      aboutBody: 'Desarrollador full stack en formación y atleta de salto alto de la Selección Colombia. Diseño y construyo sistemas para problemas reales, como la gestión deportiva y la de negocios, cuidando el rendimiento, la seguridad y que el código se pueda mantener. Al software le llevo la misma disciplina del entrenamiento: medir, ajustar y repetir.',
+      portraitAlt: 'Retrato de Juan José con la camiseta de Colombia',
+      facts: [
+        { k: 'Base', v: 'Cali, Colombia' },
+        { k: 'Perfil', v: 'Full Stack Developer en formación', hasLink: true, link: 'Formación y certificados en LinkedIn', href: 'https://www.linkedin.com/in/juan-jos%C3%A9-vasquez-giraldo-93b25b304/' },
+        { k: 'Hoy', v: 'Abierto a oportunidades laborales' }
+      ],
+      skEyebrow: '02 — Habilidades',
+      skTitle: 'Cómo trabajo',
+      skills: [
+        { n: '01', t: 'Pensamiento de sistemas', d: 'Veo el producto completo antes del código: módulos, datos y cómo va a crecer, sin construir de más antes de tiempo.' },
+        { n: '02', t: 'Resolver problemas reales', d: 'Parto de una necesidad concreta, como una liga deportiva o una tienda que lleva todo en papel, y la convierto en un sistema usable.' },
+        { n: '03', t: 'Desarrollo con IA, con criterio', d: 'Uso la IA para ir más rápido, pero reviso, entiendo y decido cada cambio antes de integrarlo.' },
+        { n: '04', t: 'Disciplina y constancia', d: 'El alto rendimiento me enseñó a entrenar a diario, medir el progreso y competir bajo presión.' },
+        { n: '05', t: 'Aprendizaje autodirigido', d: 'Aprendo construyendo: investigo, pruebo, me equivoco, corrijo y lo documento.' },
+        { n: '06', t: 'Orden y documentación', d: 'Git con ramas y commits claros, READMEs útiles y decisiones técnicas escritas.' }
+      ],
+      langTitle: 'Idiomas',
+      langs: [
+        { n: 'Español', v: 'Nativo', cls: 'lvl' },
+        { n: 'Inglés', v: 'B1-B2 · en mejora', cls: 'lvl up' }
+      ],
+      stackEyebrow: '03 — Stack',
+      stackTitle: 'Con qué construyo',
+      stackIntro: 'Priorizo velocidad, fluidez, rendimiento y seguridad. Uso lo moderno cuando suma y lo probado cuando es lo correcto: la herramienta la decide el problema, no la moda.',
+      useTitle: 'Con esto construyo hoy',
+      learnTitle: 'Lo siguiente en mi ruta',
+      lvDeep: 'Profundizando', lvLearn: 'Aprendiendo',
+      practicesTitle: 'Prácticas',
+      practices: ['Testing (unitario, integración, E2E)', 'CI con GitHub Actions', 'Autenticación y hashing', 'Accesibilidad', 'Git: ramas, PRs y commits convencionales'],
+      projEyebrow: '04 — Proyectos',
+      projTitle: 'Proyectos',
+      projIntro: 'Sistemas reales en distintas etapas: qué resuelven, cómo están hechos y en qué van.',
+      toolsEyebrow: '05 — Herramientas',
+      toolsTitle: 'Herramientas',
+      toolsIntro: 'Proyectos pequeños y de código abierto. Úsalos, revísalos o mejóralos desde GitHub.',
+      toolsCta: 'Ver en GitHub',
+      tools: [
+        { kind: 'Automatización · Python', name: '[Nombre de la herramienta]', desc: '[Qué hace en una línea y para quién sirve.]' },
+        { kind: 'API REST · Node.js', name: '[Nombre de la herramienta]', desc: '[Qué hace en una línea y para quién sirve.]' },
+        { kind: 'Script · TypeScript', name: '[Nombre de la herramienta]', desc: '[Qué hace en una línea y para quién sirve.]' }
+      ],
+      athEyebrow: '06 — Atleta',
+      athTitle: 'Salto alto',
+      athImgAlt: 'Juan José pasando la barra en un salto de competencia',
+      athIntro: 'Represento a la Selección Valle y a la Selección Colombia. Campeón nacional U20 y U23, y bronce en el Iberoamericano U20 de Lima 2026.',
+      stats: [
+        { v: '2,05 m', l: 'Marca personal', tag: 'Oficial · World Athletics', tagClass: 'stat-tag ok' },
+        { v: '2,06 m', l: 'Mejor salto', tag: 'Extraoficial', tagClass: 'stat-tag' },
+        { v: '2,10 m', l: 'Próxima meta', tag: 'Temporada 2027', tagClass: 'stat-tag' }
+      ],
+      waTitle: 'Ver mi perfil oficial en World Athletics',
+      trajEyebrow: 'Resultados oficiales',
+      trajTitle: 'Trayectoria',
+      trajSource: 'Fuente: World Athletics. Actualizado a septiembre de 2026.',
+      fAll: 'Todos', fBest: 'Mejor por temporada',
+      colDate: 'Fecha', colComp: 'Competencia', colPlace: 'Puesto', colMark: 'Marca',
+      achTitle: 'Logros',
+      achievements: [
+        { t: 'Campeón Nacional U20', m: '2026 · 2,05 m' },
+        { t: 'Campeón Nacional U23', m: '2026' },
+        { t: 'Bronce Iberoamericano U20, Lima', m: '2026 · 2,04 m' },
+        { t: 'Bronce Campeonato Nacional de Mayores', m: '2025 · 2,04 m' },
+        { t: 'Subcampeón Juegos Nacionales Juveniles', m: '2024' },
+        { t: 'Campeón Nacional U18', m: '2023' }
+      ],
+      clubsTitle: 'Selecciones y clubes',
+      clubs: [
+        { t: 'Selección Colombia', m: 'Iberoamericanos U18 y U20' },
+        { t: 'Selección Valle del Cauca', m: 'Liga Vallecaucana' },
+        { t: 'Todomed', m: 'Club' },
+        { t: 'The Jumpers Club', m: 'Club' }
+      ],
+      galleryTitle: 'Momentos',
+      spEyebrow: 'Patrocinio',
+      spTitle: 'Mi camino hacia las grandes ligas',
+      spIntro: 'Busco marcas que quieran acompañarme temporada a temporada: más competencias internacionales, mejor preparación y la meta de llegar a la élite mundial.',
+      spPoints: [
+        { n: '01', t: 'Atleta de Selección Colombia con resultados oficiales verificables en World Athletics.' },
+        { n: '02', t: 'Contenido propio de entrenamiento y competencia en Instagram (@juanvasquezhj).' },
+        { n: '03', t: 'Perfil doble, deporte y tecnología: una historia distinta para contar con tu marca.' }
+      ],
+      spCta: 'Súmate a mi camino',
+      igMore: 'Más momentos en Instagram · @juanvasquezhj', igBio: 'Salto alto · Selección Colombia', igFollow: 'Seguir', igAria: 'Ver mi perfil de Instagram',
+      spImgAlt: 'Juan José junto al tablero de marca en competencia',
+      contactEyebrow: '07 — Contacto',
+      contactTitle: 'Hablemos.',
+      contactIntro: 'Escríbeme por el canal que prefieras.',
+      footer: 'Cali, Colombia · Hecho con Next.js',
+      nav: ['Sobre mí', 'Stack', 'Proyectos', 'Herramientas', 'Atleta', 'Contacto'],
+      where: { port: 'Portafolio', hub: 'Athletics Hub', nudo: 'Nudo', nyx: 'Nyx' },
+      projects: [
+        { num: '01', title: 'Athletics Hub', status: 'En construcción', building: true, repo: 'Repo privado',
+          problem: 'La Liga Vallecaucana de Atletismo no tiene un sistema digital para atletas, competencias, resultados y rankings.',
+          solution: 'Plataforma propia en un monorepo: API en NestJS con Prisma y PostgreSQL, autenticación con hashing argon2id, y CI con tests de unidad, integración y E2E.',
+          stack: ['NestJS', 'Bun', 'Prisma', 'PostgreSQL', 'Docker', 'React 19'] },
+        { num: '02', title: 'Nudo', status: 'En consolidación', building: true, repo: 'Repo privado',
+          problem: 'Empresas y familias que manejan inventario, ventas, deudas y caja en papel, sin datos para decidir.',
+          solution: 'Primer eslabón de una plataforma de gestión más grande: un ERP modular al que se le suman capas de IA que analizan, controlan y automatizan, y agentes que ejecutan acciones. Cada módulo funciona solo o conectado a los demás.',
+          stack: ['Node.js', 'NestJS', 'PostgreSQL', 'Prisma', '[confirmar stack]'] },
+        { num: '03', title: 'Nyx', status: 'En desarrollo', building: true, repo: 'Repo privado',
+          problem: 'Tiendas pequeñas y rurales que necesitan algo más simple que un ERP, que funcione en local.',
+          solution: 'Gestión local de productos, stock, ventas, fiados con abonos y caja diaria. Funciona sin internet, en escritorio o como app en el celular.',
+          stack: ['React', 'Vite', 'TypeScript', 'Express', 'SQLite', 'PWA'] },
+        { num: '04', title: 'Portafolio personal', status: 'Vivo', building: false, repo: 'Repo privado',
+          problem: 'Mostrar en un solo lugar coherente el lado técnico y el atlético.',
+          solution: 'Este mismo sitio: migrado de un builder no-code a Next.js y TypeScript, auditado y construido por fases.',
+          stack: ['Next.js', 'TypeScript', 'Tailwind', 'Playwright'] }
+      ]
+    };
+    var EN = {
+      themeLabel: theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode',
+      tag1: 'Full Stack Developer in training',
+      tag2: 'High-performance athlete',
+      scroll: 'Scroll',
+      aboutEyebrow: '01 — About',
+      aboutTitle: 'About me',
+      aboutBody: 'Full stack developer in training and high jumper for the Colombian national team. I design and build systems for real problems, such as sports and business management, with a focus on performance, security and maintainable code. I bring the same discipline from training into software: measure, adjust, repeat.',
+      portraitAlt: 'Portrait of Juan José wearing the Colombia jersey',
+      facts: [
+        { k: 'Based in', v: 'Cali, Colombia' },
+        { k: 'Profile', v: 'Full Stack Developer in training', hasLink: true, link: 'Education and certificates on LinkedIn', href: 'https://www.linkedin.com/in/juan-jos%C3%A9-vasquez-giraldo-93b25b304/' },
+        { k: 'Now', v: 'Open to job opportunities' }
+      ],
+      skEyebrow: '02 — Skills',
+      skTitle: 'How I work',
+      skills: [
+        { n: '01', t: 'Systems thinking', d: 'I see the whole product before the code: modules, data and how it will grow, without overbuilding ahead of time.' },
+        { n: '02', t: 'Solving real problems', d: 'I start from a concrete need, like a sports league or a shop that runs on paper, and turn it into a usable system.' },
+        { n: '03', t: 'AI-assisted development, with judgment', d: 'I use AI to move faster, but I review, understand and decide on every change before it goes in.' },
+        { n: '04', t: 'Discipline and consistency', d: 'High-performance sport taught me to train daily, measure progress and compete under pressure.' },
+        { n: '05', t: 'Self-directed learning', d: 'I learn by building: research, try, fail, fix and document.' },
+        { n: '06', t: 'Order and documentation', d: 'Git with branches and clear commits, useful READMEs and written technical decisions.' }
+      ],
+      langTitle: 'Languages',
+      langs: [
+        { n: 'Spanish', v: 'Native', cls: 'lvl' },
+        { n: 'English', v: 'B1-B2 · improving', cls: 'lvl up' }
+      ],
+      stackEyebrow: '03 — Stack',
+      stackTitle: 'What I build with',
+      stackIntro: 'I prioritize speed, smoothness, performance and security. I use modern tools when they add value and proven ones when that is the right call: the problem picks the tool, not the trend.',
+      useTitle: 'What I build with today',
+      learnTitle: 'Next on my path',
+      lvDeep: 'Going deeper', lvLearn: 'Learning',
+      practicesTitle: 'Practices',
+      practices: ['Testing (unit, integration, E2E)', 'CI with GitHub Actions', 'Authentication and hashing', 'Accessibility', 'Git: branches, PRs and conventional commits'],
+      projEyebrow: '04 — Projects',
+      projTitle: 'Projects',
+      projIntro: 'Real systems at different stages: what they solve, how they are built and where they stand.',
+      toolsEyebrow: '05 — Tools',
+      toolsTitle: 'Tools',
+      toolsIntro: 'Small, open-source projects. Use them, review them or improve them on GitHub.',
+      toolsCta: 'View on GitHub',
+      tools: [
+        { kind: 'Automation · Python', name: '[Tool name]', desc: '[What it does in one line and who it is for.]' },
+        { kind: 'REST API · Node.js', name: '[Tool name]', desc: '[What it does in one line and who it is for.]' },
+        { kind: 'Script · TypeScript', name: '[Tool name]', desc: '[What it does in one line and who it is for.]' }
+      ],
+      athEyebrow: '06 — Athlete',
+      athTitle: 'High jump',
+      athImgAlt: 'Juan José clearing the bar during a competition jump',
+      athIntro: 'I represent the Valle del Cauca and Colombian national teams. National U20 and U23 champion, and bronze at the 2026 Ibero-American U20 Championships in Lima.',
+      stats: [
+        { v: '2.05 m', l: 'Personal best', tag: 'Official · World Athletics', tagClass: 'stat-tag ok' },
+        { v: '2.06 m', l: 'Best jump', tag: 'Unofficial', tagClass: 'stat-tag' },
+        { v: '2.10 m', l: 'Next goal', tag: '2027 season', tagClass: 'stat-tag' }
+      ],
+      waTitle: 'See my official World Athletics profile',
+      trajEyebrow: 'Official results',
+      trajTitle: 'Track record',
+      trajSource: 'Source: World Athletics. Updated September 2026.',
+      fAll: 'All', fBest: 'Season bests',
+      colDate: 'Date', colComp: 'Competition', colPlace: 'Place', colMark: 'Mark',
+      achTitle: 'Achievements',
+      achievements: [
+        { t: 'Colombian U20 Champion', m: '2026 · 2.05 m' },
+        { t: 'Colombian U23 Champion', m: '2026' },
+        { t: 'Bronze, Ibero-American U20, Lima', m: '2026 · 2.04 m' },
+        { t: 'Bronze, Colombian Senior Championships', m: '2025 · 2.04 m' },
+        { t: 'Runner-up, National Youth Games', m: '2024' },
+        { t: 'Colombian U18 Champion', m: '2023' }
+      ],
+      clubsTitle: 'Teams and clubs',
+      clubs: [
+        { t: 'Colombian national team', m: 'Ibero-American U18 & U20' },
+        { t: 'Valle del Cauca team', m: 'Liga Vallecaucana' },
+        { t: 'Todomed', m: 'Club' },
+        { t: 'The Jumpers Club', m: 'Club' }
+      ],
+      galleryTitle: 'Moments',
+      spEyebrow: 'Sponsorship',
+      spTitle: 'My road to the big leagues',
+      spIntro: 'I am looking for brands that want to back me season after season: more international competitions, better preparation and the goal of reaching the world elite.',
+      spPoints: [
+        { n: '01', t: 'Colombian national team athlete with official results verifiable on World Athletics.' },
+        { n: '02', t: 'Original training and competition content on Instagram (@juanvasquezhj).' },
+        { n: '03', t: 'A dual profile, sport and tech: a different story to tell with your brand.' }
+      ],
+      spCta: 'Join my journey',
+      igMore: 'More moments on Instagram · @juanvasquezhj', igBio: 'High jump · Colombia national team', igFollow: 'Follow', igAria: 'View my Instagram profile',
+      spImgAlt: 'Juan José next to the results board at a competition',
+      contactEyebrow: '07 — Contact',
+      contactTitle: 'Let’s talk.',
+      contactIntro: 'Reach out on whichever channel you prefer.',
+      footer: 'Cali, Colombia · Built with Next.js',
+      nav: ['About', 'Stack', 'Projects', 'Tools', 'Athlete', 'Contact'],
+      where: { port: 'Portfolio', hub: 'Athletics Hub', nudo: 'Nudo', nyx: 'Nyx' },
+      projects: [
+        { num: '01', title: 'Athletics Hub', status: 'In progress', building: true, repo: 'Private repo',
+          problem: 'The Liga Vallecaucana de Atletismo has no digital system for athletes, competitions, results and rankings.',
+          solution: 'A platform of my own in a monorepo: NestJS API with Prisma and PostgreSQL, argon2id password hashing, and CI with unit, integration and E2E tests.',
+          stack: ['NestJS', 'Bun', 'Prisma', 'PostgreSQL', 'Docker', 'React 19'] },
+        { num: '02', title: 'Nudo', status: 'Consolidating', building: true, repo: 'Private repo',
+          problem: 'Businesses and families running inventory, sales, debts and cash on paper, with no data to make decisions.',
+          solution: 'The first link of a larger management platform: a modular ERP with AI layers that analyze, control and automate, and agents that take action. Each module works on its own or connected to the rest.',
+          stack: ['Node.js', 'NestJS', 'PostgreSQL', 'Prisma', '[confirm stack]'] },
+        { num: '03', title: 'Nyx', status: 'In development', building: true, repo: 'Private repo',
+          problem: 'Small and rural shops that need something simpler than an ERP, running locally.',
+          solution: 'Local management of products, stock, sales, store credit with partial payments and a daily cash register. Works offline, on desktop or as a phone app.',
+          stack: ['React', 'Vite', 'TypeScript', 'Express', 'SQLite', 'PWA'] },
+        { num: '04', title: 'Personal portfolio', status: 'Live', building: false, repo: 'Private repo',
+          problem: 'Showing the technical side and the athletic one in a single coherent place.',
+          solution: 'This very site: moved off a no-code builder to Next.js and TypeScript, audited and built in phases.',
+          stack: ['Next.js', 'TypeScript', 'Tailwind', 'Playwright'] }
+      ]
+    };
+    var base = es ? ES : EN;
+    var W = base.where;
+    var deep = function (n) { return { n: n, w: base.lvDeep, cls: 'lvl up mono' }; };
+    var learn = function (n) { return { n: n, w: base.lvLearn, cls: 'lvl mono' }; };
+    base.stackUse = ['TypeScript', 'JavaScript', 'React · Next.js', 'Node.js', 'NestJS', 'PostgreSQL · Prisma', 'Python', 'Docker', 'HTML · CSS · Tailwind', 'Git & GitHub'].map(deep);
+    base.stackLearn = (es
+      ? ['Testing y CI/CD', 'Cloud y despliegue', 'WebSockets', 'Integración con IA', 'Java']
+      : ['Testing & CI/CD', 'Cloud & deployment', 'WebSockets', 'AI integration', 'Java']).map(learn);
+    base.projects = base.projects.map(function (p) {
+      return Object.assign({}, p, { dotClass: p.building ? 'dot b' : 'dot' });
+    });
+
+    var ids = ['#sobre-mi', '#stack', '#proyectos', '#herramientas', '#atleta', '#contacto'];
+    var nav = base.nav.map(function (label, i) { return { label: label, href: ids[i] }; });
+
+    // Trayectoria: filtros, tabla por año y barras por temporada
+    var years = [2026, 2025, 2024, 2023];
+    var opts = [{ id: 'all', label: base.fAll }, { id: 'best', label: base.fBest }].concat(years.map(function (y) { return { id: String(y), label: String(y) }; }));
+    var filters = opts.map(function (o) {
+      var on = view === o.id;
+      return { label: o.label, on: on, cls: on ? 'fbtn on' : 'fbtn', pick: function () { self.setState({ view: o.id }); } };
+    });
+    var pbMark = 2.05;
+    var list = view === 'all' ? WA_RESULTS : WA_RESULTS.filter(function (r) { return String(r.y) === view; });
+    var rows = [];
+    var lastY = null;
+    list.forEach(function (r) {
+      if (r.y !== lastY) { rows.push({ isYear: true, isRow: false, year: String(r.y) }); lastY = r.y; }
+      rows.push({
+        isYear: false, isRow: true, year: '',
+        date: fdate(r.d), comp: es ? r.es : r.en, venue: r.v,
+        place: r.p + '°', medalCls: r.p <= 3 ? 'medal g' : 'medal',
+        mark: fmt(r.m), markCls: r.m === pbMark ? 'mk pb' : 'mk'
+      });
+    });
+    var seasons = years.slice().reverse().map(function (y) {
+      var best = WA_RESULTS.filter(function (r) { return r.y === y; }).sort(function (a, b) { return b.m - a.m; })[0];
+      var h = Math.round(((best.m - 1.80) / (2.10 - 1.80)) * 100);
+      return { year: String(y), mark: fmt(best.m), comp: es ? best.es : best.en, cls: best.m === pbMark ? 'sbar top' : 'sbar', style: 'height: ' + h + '%' };
+    });
+
+    var gallery = [
+      { src: '/_blob/a3acd90752c71395517e88a88cb00e0c', alt: es ? 'Secuencia de un salto completo, de la carrera a la barra' : 'Sequence of a full jump, from run-up to bar', cap: es ? 'Un salto, cuadro por cuadro' : 'One jump, frame by frame' },
+      { src: '/_blob/90fd4f8b4561e7d97ccd97e69be77b3d', alt: es ? 'Junto al tablero que marca 2,04 m' : 'Next to the board showing 2.04 m', cap: es ? '2,04 m en el tablero' : '2.04 m on the board' },
+      { src: '/_blob/a7173f35f05d6a328d42266c6f9b3974', alt: es ? 'Podio en categoría U23' : 'Podium in the U23 category', cap: es ? 'En el podio, categoría U23' : 'On the podium, U23' },
+      { src: '/_blob/f1f1a01ae90ac8569fb4949d00485db8', alt: es ? 'Podio en categoría Mayores' : 'Podium in the Senior category', cap: es ? 'Podio con los mayores' : 'Podium among seniors' },
+      { src: '/_blob/1551bcea554c26850e4b24ad88cd684b', alt: es ? 'Salto en competencia bajo techo' : 'Indoor competition jump', cap: es ? 'Pasando la barra' : 'Clearing the bar' },
+      { src: '/_blob/0c9e9b0401f8962b7f2269f1bbd85d69', alt: es ? 'Aproximación al salto, vista desde la barra' : 'Approach to the jump, seen from the bar', cap: es ? 'Concentración antes de la carrera' : 'Focus before the run-up' },
+      { src: '/_blob/ee1fbbf70f449497fc2eef882e3f771f', alt: es ? 'Carrera en competencia U18' : 'Running in a U18 competition', cap: es ? 'La carrera de aproximación' : 'The run-up' },
+      { src: '/_blob/459a949d23fa8af1d74f3e0cf683f45c', alt: es ? 'Entrenamiento nocturno de vallas en blanco y negro' : 'Night hurdle training in black and white', cap: es ? 'Vallas, entrenamiento nocturno' : 'Hurdles, night training' },
+      { src: '/_blob/e0ccb3443138b66f9ad80fa46ca3779e', alt: es ? 'Celebración de espaldas con los brazos arriba' : 'Celebrating with arms raised, back to the camera', cap: es ? 'Después del salto' : 'After the jump' }
+    ];
+    var galleryLoop = gallery.concat(gallery.map(function (g) { return Object.assign({}, g, { alt: '' }); }));
+
+    var igGrid = ['/_blob/ed71e2809d46ddc89202fe676e2a598e', '/_blob/a3acd90752c71395517e88a88cb00e0c', '/_blob/e0ccb3443138b66f9ad80fa46ca3779e', '/_blob/a7173f35f05d6a328d42266c6f9b3974', '/_blob/1551bcea554c26850e4b24ad88cd684b', '/_blob/459a949d23fa8af1d74f3e0cf683f45c', '/_blob/0c9e9b0401f8962b7f2269f1bbd85d69', '/_blob/f1f1a01ae90ac8569fb4949d00485db8', '/_blob/ee1fbbf70f449497fc2eef882e3f771f'];
+    var contacts = [
+      { label: 'Email', value: 'juanjosevasquez1313@gmail.com', href: 'mailto:juanjosevasquez1313@gmail.com', target: '_self' },
+      { label: 'GitHub', value: 'juanvasquezdev', href: GH, target: '_blank' },
+      { label: 'LinkedIn', value: 'Juan José Vásquez Giraldo', href: 'https://www.linkedin.com/in/juan-jos%C3%A9-vasquez-giraldo-93b25b304/', target: '_blank' },
+      { label: 'Instagram', value: '@juanvasquezhj', href: 'https://instagram.com/juanvasquezhj', target: '_blank' }
+    ];
+    return {
+      t: base,
+      nav: nav,
+      ghUrl: GH,
+      filters: filters,
+      rows: rows,
+      seasons: seasons,
+      showBars: view === 'best',
+      showTable: view !== 'best',
+      galleryLoop: galleryLoop,
+      igGrid: igGrid,
+      contacts: contacts,
+      themeClass: theme === 'dark' ? 'dark' : 'light',
+      isDark: theme === 'dark',
+      isLight: theme !== 'dark',
+      isEs: es,
+      isEn: !es,
+      esClass: es ? 'seg-btn on' : 'seg-btn',
+      enClass: es ? 'seg-btn' : 'seg-btn on',
+      setEs: function () { self.setState({ lang: 'es' }); },
+      setEn: function () { self.setState({ lang: 'en' }); },
+      toggleTheme: function () { self.setState({ theme: self.state.theme === 'dark' ? 'light' : 'dark' }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -27,25 +27,21 @@ export const UI_LABELS: UI = {
 
   navLabel: { es: "Navegación principal", en: "Main navigation" },
 
-  /**
-   * Seis links para once secciones: "Deportivo" agrupa las siete que forman el
-   * bloque del salto y hace scroll a la primera. Esa agrupación ya está
-   * decidida y explicada en `Nav.tsx`; acá solo se mudan las etiquetas y los
-   * ids. El `id` de cada link es el primero de sus `sectionIds`, que es el
-   * ancla a la que navega.
-   */
+  // Los mismos seis links del mockup v2, en el orden de la página. El id es el
+  // de la sección de destino.
   nav: [
-    { id: "inicio", label: { es: "Inicio", en: "Home" }, sectionIds: ["inicio"] },
-    { id: "sobre-mi", label: { es: "Sobre mí", en: "About" }, sectionIds: ["sobre-mi"] },
-    { id: "stack", label: { es: "Stack", en: "Stack" }, sectionIds: ["stack"] },
-    { id: "proyectos", label: { es: "Proyectos", en: "Projects" }, sectionIds: ["proyectos"] },
-    {
-      id: "progresion",
-      label: { es: "Deportivo", en: "Athletics" },
-      sectionIds: ["progresion", "epico", "galeria", "logros", "formacion", "tecnica", "metas"],
-    },
-    { id: "contacto", label: { es: "Contacto", en: "Contact" }, sectionIds: ["contacto"] },
+    { id: "sobre-mi", label: { es: "Sobre mí", en: "About" } },
+    { id: "stack", label: { es: "Stack", en: "Stack" } },
+    { id: "proyectos", label: { es: "Proyectos", en: "Projects" } },
+    { id: "herramientas", label: { es: "Herramientas", en: "Tools" } },
+    { id: "atleta", label: { es: "Atleta", en: "Athlete" } },
+    { id: "contacto", label: { es: "Contacto", en: "Contact" } },
   ],
+
+  homeLabel: { es: "Ir al inicio", en: "Back to top" },
+  langLabel: { es: "Idioma", en: "Language" },
+  themeToLight: { es: "Cambiar a modo claro", en: "Switch to light mode" },
+  themeToDark: { es: "Cambiar a modo oscuro", en: "Switch to dark mode" },
 
   projects: {
     problemLabel: { es: "Problema", en: "Problem" },

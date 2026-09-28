@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { archivoBlack, inter } from "../fonts";
+import { fontVariables } from "../fonts";
 import SmoothScroll from "@/components/SmoothScroll";
 import { LOCALES, DEFAULT_LOCALE } from "@/content/types";
 import { toLocale } from "@/lib/i18n";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "../globals.css";
+import "../legacy.css";
 
 // El título y la descripción son los mismos en la metadata base, en Open Graph
 // y en Twitter, así que viven en una constante cada uno en vez de repetirse tres
@@ -48,8 +50,13 @@ export const metadata: Metadata = {
   },
 };
 
+// El color de la barra del navegador en el celular sigue al tema del sistema
+// (mismos valores que --bg en globals.css).
 export const viewport: Viewport = {
-  themeColor: "#04060a",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0D0E10" },
+    { media: "(prefers-color-scheme: light)", color: "#F3F2EE" },
+  ],
 };
 
 // /es y /en se generan una vez en el build y se sirven estáticas. Con
@@ -67,8 +74,14 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode; params: Promise<{ lang: string }> }>) {
   const lang = toLocale((await params).lang);
 
+  // suppressHydrationWarning: el script del <head> puede poner data-theme en
+  // <html> antes de que React hidrate, y ese atributo no está en el HTML del
+  // servidor. Solo aplica a los atributos de <html>, no a sus hijos.
   return (
-    <html lang={lang} className={`${archivoBlack.variable} ${inter.variable}`}>
+    <html lang={lang} className={fontVariables} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body>
         <SmoothScroll>{children}</SmoothScroll>
       </body>

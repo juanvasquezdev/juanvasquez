@@ -307,9 +307,8 @@ export type Stack = SectionHeader & {
 // `athletics.ts` — centralizarlas acá sería la indirección sin el beneficio.
 
 export type NavLink = {
-  id: string; // clave estable, no se traduce — hoy es el primer id de sectionIds
+  id: string; // id de la sección a la que lleva; no se traduce
   label: L;
-  sectionIds: string[]; // ids del DOM que agrupa este link
 };
 
 export type UI = {
@@ -317,6 +316,10 @@ export type UI = {
   backToTopLabel: L; // aria-label del botón volver arriba
   navLabel: L; // aria-label del <nav> ("Navegación principal")
   nav: NavLink[];
+  homeLabel: L; // aria-label de la marca "JV", que lleva arriba
+  langLabel: L; // aria-label del segmentado ES | EN
+  themeToLight: L; // aria-label del toggle cuando se ve oscuro
+  themeToDark: L; // ídem cuando se ve claro
   projects: {
     problemLabel: L; // "Problema" — se repite por cada tarjeta de proyecto
     solutionLabel: L; // "Solución" — ídem

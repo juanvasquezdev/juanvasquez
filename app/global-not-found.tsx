@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { archivoBlack, inter } from "./fonts";
+import { fontVariables } from "./fonts";
 import { DEFAULT_LOCALE } from "@/content/types";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 /**
@@ -18,9 +19,12 @@ export const metadata: Metadata = {
 
 export default function GlobalNotFound() {
   return (
-    <html lang={DEFAULT_LOCALE} className={`${archivoBlack.variable} ${inter.variable}`}>
+    <html lang={DEFAULT_LOCALE} className={fontVariables} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body>
-        <main className="section">
+        <main className="section wrap">
           <h1>404</h1>
           <p>This page could not be found.</p>
         </main>

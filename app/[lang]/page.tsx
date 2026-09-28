@@ -33,11 +33,23 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
   return (
     <>
-      <a href="#inicio" className="skip-link">
+      <a href="#contenido" className="skip-link">
         {ui.skipLink}
       </a>
 
-      <main>
+      <Nav
+        lang={lang}
+        labels={{
+          navLabel: ui.navLabel,
+          nav: ui.nav,
+          homeLabel: ui.homeLabel,
+          langLabel: ui.langLabel,
+          themeToLight: ui.themeToLight,
+          themeToDark: ui.themeToDark,
+        }}
+      />
+
+      <main id="contenido">
         <Hero
           content={{
             name: profile.name,
@@ -71,10 +83,6 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
       <Footer lang={lang} />
       <BackToTop label={ui.backToTopLabel} />
-      {/* Al final del DOM a propósito: es un nav fijo abajo, no uno tradicional
-          arriba — así el tab order llega primero al contenido, y el skip-link
-          sigue funcionando igual para saltar directo a #inicio. */}
-      <Nav label={ui.navLabel} links={ui.nav} />
     </>
   );
 }
