@@ -8,9 +8,6 @@ import type { UI } from "./types";
 export const UI_LABELS: UI = {
   skipLink: { es: "Saltar al contenido", en: "Skip to content" },
 
-  // El aria-label del botón; la flecha visible es decorativa y no se traduce.
-  backToTopLabel: { es: "Volver arriba", en: "Back to top" },
-
   navLabel: { es: "Navegación principal", en: "Main navigation" },
 
   // Los mismos seis links del mockup v2, en el orden de la página. El id es el

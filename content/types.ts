@@ -134,7 +134,8 @@ export type Projects = SectionHeader & {
   items: Project[];
 };
 
-/** Proyecto chico de código abierto. Solo se muestra si tiene `repoUrl`. */
+/** Proyecto chico de código abierto. Solo se muestra si tiene `repoUrl`, y la
+ * sección entera no sale mientras no haya ninguno. */
 export type Tool = {
   name: L;
   kind: L; // "Automatización · Python"
@@ -144,7 +145,6 @@ export type Tool = {
 
 export type Tools = SectionHeader & {
   cta: L; // "Ver en GitHub"
-  empty: L; // lo que se lee mientras no haya ninguna publicada
   items: Tool[];
 };
 
@@ -222,7 +222,6 @@ export type NavLink = {
 
 export type UI = {
   skipLink: L;
-  backToTopLabel: L; // aria-label del botón volver arriba
   navLabel: L; // aria-label del <nav> ("Navegación principal")
   nav: NavLink[];
   homeLabel: L; // aria-label de la marca "JV", que lleva arriba

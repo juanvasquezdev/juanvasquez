@@ -18,19 +18,11 @@ const GITHUB_ICON = (
 );
 
 /**
- * Proyectos chicos de código abierto. Solo salen los que ya tienen repo
- * publicado; mientras no haya ninguno, queda una tarjeta que lo dice y lleva a
- * mi GitHub.
+ * Proyectos chicos de código abierto. Recibe solo los que ya tienen repo
+ * publicado; si no hay ninguno, app/[lang]/page.tsx no la monta (ni su link
+ * en el nav).
  */
-export default function Herramientas({
-  content,
-  githubUrl,
-}: {
-  content: Localized<Tools>;
-  githubUrl: string;
-}) {
-  const published = content.items.filter((tool) => tool.repoUrl);
-
+export default function Herramientas({ content }: { content: Localized<Tools> }) {
   return (
     <section className="section tools-section" id="herramientas">
       <div className="wrap">
@@ -42,31 +34,21 @@ export default function Herramientas({
           <p className="intro">{content.intro}</p>
         </div>
 
-        {published.length > 0 ? (
-          <ul className="tools">
-            {published.map((tool) => (
-              <li key={tool.repoUrl}>
-                <a className="tool" href={tool.repoUrl} target="_blank" rel="noopener noreferrer">
-                  <span className="mono tool-kind">{tool.kind}</span>
-                  <h3>{tool.name}</h3>
-                  <p>{tool.description}</p>
-                  <span className="gh mono">
-                    {GITHUB_ICON}
-                    {content.cta}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <a className="tool tools-empty" href={githubUrl} target="_blank" rel="noopener noreferrer">
-            <p>{content.empty}</p>
-            <span className="gh mono">
-              {GITHUB_ICON}
-              {content.cta}
-            </span>
-          </a>
-        )}
+        <ul className="tools">
+          {content.items.map((tool) => (
+            <li key={tool.repoUrl}>
+              <a className="tool" href={tool.repoUrl} target="_blank" rel="noopener noreferrer">
+                <span className="mono tool-kind">{tool.kind}</span>
+                <h3>{tool.name}</h3>
+                <p>{tool.description}</p>
+                <span className="gh mono">
+                  {GITHUB_ICON}
+                  {content.cta}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

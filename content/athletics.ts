@@ -368,16 +368,18 @@ export const ATHLETICS: Athletics = {
       bio: { es: "Salto alto · Selección Colombia", en: "High jump · Colombia national team" },
       follow: { es: "Seguir", en: "Follow" },
       ariaLabel: { es: "Ver mi perfil de Instagram", en: "View my Instagram profile" },
+      // Mezcla fotos que no están en la galería (entrenamiento, grupo) para que
+      // la vista previa no repita lo de arriba.
       grid: [
         "/images/salto2.jpeg",
-        "/images/foto_secuencial.jpeg",
+        "/images/foto_nike.jpeg",
         "/images/epica_trasera.jpeg",
         "/images/podio_u23.jpeg",
-        "/images/foto_saltoperu1.jpeg",
+        "/images/posando1.jpeg",
         "/images/foto_blanconegro.jpeg",
         "/images/vista_epica.jpeg",
-        "/images/podio-mayores.jpeg",
-        "/images/u18.jpeg",
+        "/images/fotogrupal1.jpeg",
+        "/images/foto_saltoperu1.jpeg",
       ],
     },
   },

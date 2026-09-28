@@ -839,16 +839,604 @@ button {
   color: var(--accent);
 }
 
-/* Sin herramientas publicadas: una sola tarjeta a lo ancho, más baja. */
-.tools-empty {
-  justify-content: space-between;
-  min-height: 0;
-  margin-top: 48px;
+/* ===== ATLETA ===== */
+
+/* Mismo mecanismo que el hero: la foto queda fija mientras .ath-over sube. */
+.ath-bg {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--photo-bg);
 }
-.tools-empty p {
-  max-width: 560px;
-  font-size: 17px;
+.ath-bg img {
+  object-fit: cover;
+  object-position: center 40%;
+}
+.ath-bg .hero-shade {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 30%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.ath-title {
+  position: absolute;
+  left: 48px;
+  bottom: 56px;
+  color: var(--on-photo);
+}
+.ath-title .eyebrow {
+  color: color-mix(in srgb, var(--on-photo) 80%, transparent);
+}
+.big {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 72%;
+  font-size: clamp(64px, 12vw, 200px);
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.ath-over {
+  position: relative;
+  z-index: 2;
+  margin-top: -28px;
+  border-radius: 28px 28px 0 0;
+  background: var(--bg);
+  transition: background-color 0.35s ease;
+}
+.section.ath-body {
+  padding-bottom: 80px;
+}
+
+.ath-intro {
+  max-width: 640px;
+  margin: 0 0 56px;
+  font-size: clamp(18px, 1.5vw, 21px);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.stat {
+  padding: 36px 28px 32px 0;
+  border-right: 1px solid var(--line);
+}
+.stat + .stat {
+  padding-left: 28px;
+}
+.stat:last-child {
+  border-right: 0;
+}
+.stat-v {
+  font-family: var(--font-display);
+  font-stretch: 75%;
+  font-weight: 800;
+  font-size: clamp(48px, 6vw, 96px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--coral);
+}
+.stat-l {
+  margin-top: 10px;
+  color: var(--muted);
+}
+.stat-tag {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+/* Solo la marca oficial lleva la etiqueta en azul: es la verificable. */
+.stat-tag.ok {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--accent);
+}
+
+.wa-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-top: 28px;
+  padding: 22px 26px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+.wa-card:hover {
+  border-color: var(--accent);
+  background: var(--bg2);
   color: var(--fg);
+}
+.wa-card .l {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wa-card .t {
+  font-weight: 600;
+}
+.wa-card .u {
+  color: var(--muted);
+}
+.wa-card svg {
+  flex: none;
+  color: var(--accent);
+  transition: transform 0.3s var(--ease-out);
+}
+.wa-card:hover svg {
+  transform: translate(4px, -4px);
+}
+
+/* ----- Trayectoria ----- */
+
+.traj-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin: 96px 0 28px;
+}
+.traj-head .eyebrow {
+  margin-bottom: 10px;
+}
+.h2.traj-title {
+  margin: 0;
+  font-size: clamp(34px, 4vw, 56px);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fbtn {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+.fbtn:hover {
+  border-color: var(--fg);
+  color: var(--fg);
+}
+.fbtn.on {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* --cols: cuántos años hay (lo pone Trayectoria.tsx). */
+.bars,
+.bar-meta {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  gap: 20px;
+}
+.bars {
+  align-items: end;
+  height: 320px;
+  padding-top: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.bar-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  height: 100%;
+}
+.bar-v {
+  font-family: var(--font-display);
+  font-stretch: 80%;
+  font-weight: 800;
+  font-size: clamp(24px, 2.6vw, 36px);
+}
+/* El % de cada barra se mide contra el lugar que queda debajo del número, no
+   contra la columna entera: si no, las más altas chocaban con el número y se
+   aplastaban a la misma altura (2,04 y 2,05 se veían iguales). */
+.bar-area {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 0;
+}
+.sbar {
+  flex: none;
+  border-top: 3px solid var(--coral);
+  border-radius: 10px 10px 0 0;
+  background: color-mix(in srgb, var(--coral) 22%, transparent);
+}
+.sbar.top {
+  background: color-mix(in srgb, var(--coral) 45%, transparent);
+}
+.bar-meta {
+  padding: 12px 0 18px;
+  color: var(--muted);
+}
+.bar-meta b {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+/* Cada fila es su propia grilla: con minmax(0, 1fr) una palabra larga no
+   ensancha la columna solo en esa fila y las columnas quedan alineadas. */
+.rrow {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr) 80px 100px;
+  gap: 16px;
+  align-items: start;
+  padding: 16px 8px 16px 0;
+  border-bottom: 1px solid var(--line);
+  transition: background-color 0.2s;
+}
+.rrow:not(.rhead):hover {
+  background: color-mix(in srgb, var(--fg) 4%, transparent);
+}
+.rhead {
+  padding-block: 10px;
+  color: var(--muted);
+}
+.rdate {
+  padding-top: 4px;
+  white-space: nowrap;
+  color: var(--muted);
+}
+.ryear {
+  padding: 28px 0 8px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+.results .comp,
+.results .ven {
+  display: block;
+}
+.results .ven {
+  font-size: 14px;
+  color: var(--muted);
+}
+.results .mk {
+  font-family: var(--font-display);
+  font-stretch: 85%;
+  font-weight: 700;
+  font-size: 22px;
+  white-space: nowrap;
+}
+.results .mk.pb {
+  color: var(--coral);
+}
+/* El puesto en una etiqueta; el podio (1-3) en coral. */
+.medal {
+  display: inline-flex;
+  justify-content: center;
+  min-width: 34px;
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.medal.g {
+  border-color: var(--coral);
+  color: var(--coral);
+}
+
+.traj-source {
+  margin: 16px 0 0;
+  color: var(--muted);
+}
+
+/* ----- Logros y selecciones ----- */
+
+.ach {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-top: 72px;
+}
+.ach ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ach li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.ach .m {
+  flex: none;
+  color: var(--muted);
+}
+
+/* ----- Galería en marquee ----- */
+
+.gallery {
+  margin-top: 96px;
+}
+.gallery-label {
+  margin: 0;
+}
+
+/* Los bordes se desvanecen con una máscara en vez de cortar la foto en seco. */
+.marquee {
+  margin-top: 20px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: slide 60s linear infinite;
+}
+.marquee:hover .track,
+.marquee:focus-visible .track {
+  animation-play-state: paused;
+}
+/* La pista son dos listas iguales con 16px entre ellas: correrla una lista
+   más ese espacio deja la copia justo donde empezó la original. */
+@keyframes slide {
+  to {
+    transform: translateX(calc(-50% - 8px));
+  }
+}
+.shots {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.shot {
+  width: clamp(240px, 26vw, 360px);
+  margin: 0;
+}
+.shot .ph {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg2);
+}
+.shot img {
+  object-fit: cover;
+  filter: grayscale(0.35);
+  transition: transform 0.7s var(--ease-out), filter 0.5s;
+}
+.shot:hover img {
+  filter: grayscale(0);
+  transform: scale(1.05);
+}
+.shot figcaption {
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+.ig-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  color: var(--accent);
+}
+
+/* ===== PATROCINIO ===== */
+
+.section.sponsor-section {
+  padding: 40px 0 60px;
+}
+
+/* minmax(0, …) y no fr pelado: con fr la columna no baja del ancho mínimo de
+   la tarjeta de Instagram (~311px) y en 360-375 px se salía de la tarjeta. */
+.sponsor {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 64px;
+  align-items: center;
+  padding: 56px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--bg2);
+}
+/* Piso de 30px y no 36: adentro de la tarjeta, en 360-375 px, "LAS GRANDES
+   LIGAS" no entraba. */
+.sponsor .h2 {
+  font-size: clamp(30px, 4.4vw, 64px);
+}
+.sponsor .intro {
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+.sponsor ul {
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+}
+.sponsor li {
+  display: flex;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.sponsor li .n {
+  padding-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--coral);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  font-weight: 500;
+  transition: transform 0.3s var(--ease-out);
+}
+.cta:hover {
+  color: var(--bg);
+  transform: translateY(-2px);
+}
+
+/* Vista previa de Instagram: estática, con mis fotos, y toda es un enlace. */
+.ig {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--bg);
+  transition: border-color 0.25s;
+}
+.ig:hover {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+/* Si no entra en un renglón (celulares angostos), "Seguir" baja al siguiente. */
+.ig-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.ig-av {
+  position: relative;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--coral);
+  border-radius: 50%;
+  overflow: hidden;
+}
+.ig-av img,
+.ig-cell img {
+  object-fit: cover;
+}
+/* Base de 140px: el nombre siempre entra al lado del avatar, y si no queda
+   lugar para "Seguir", es el botón el que baja. */
+.ig-name {
+  display: flex;
+  flex: 1 1 140px;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+}
+.ig-name b {
+  font-weight: 600;
+}
+.ig-name span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.ig-follow {
+  margin-left: auto;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 13px;
+  font-weight: 500;
+}
+.ig-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.ig-cell {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+.ig-cell img {
+  transition: opacity 0.25s;
+}
+.ig:hover .ig-cell img {
+  opacity: 0.85;
+}
+
+/* ===== CONTACTO ===== */
+
+.section.contact-section {
+  padding: 80px 0 0;
+}
+/* El piso es 64px, pero por debajo de ~375 px "HABLEMOS." no entra y baja
+   con el ancho (17vw). */
+.h2.contact-title {
+  font-size: clamp(min(64px, 17vw), 11vw, 180px);
+}
+
+.contact-list {
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.c-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: clamp(22px, 2.4vw, 34px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.c-row .v {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  font-size: 15px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.c-row svg {
+  flex: none;
+  transition: transform 0.3s var(--ease-out);
+}
+.c-row:hover svg {
+  transform: translate(4px, -4px);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 40px 56px;
+  color: var(--muted);
 }
 
 /* ===== RESPONSIVE ===== */
@@ -910,6 +1498,65 @@ button {
   .tools {
     grid-template-columns: 1fr;
   }
+  .ath-title {
+    left: 20px;
+    bottom: 36px;
+  }
+  .stats {
+    grid-template-columns: 1fr;
+  }
+  .stat,
+  .stat + .stat {
+    padding: 24px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .stat:last-child {
+    border-bottom: 0;
+  }
+  .wa-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bars {
+    height: 240px;
+  }
+  .bars,
+  .bar-meta {
+    gap: 10px;
+  }
+  /* En el celular la sede se esconde y las columnas se angostan para que la
+     competencia tenga lugar (la fecha parte en dos renglones: "05 JUL" y el
+     año). */
+  .rrow {
+    grid-template-columns: 64px minmax(0, 1fr) 44px 64px;
+    gap: 8px;
+  }
+  /* Columnas angostas: las palabras largas ("Iberoamericano") se parten con
+     guion según el idioma de <html lang>; overflow-wrap es el respaldo. */
+  .results .comp,
+  .bar-meta span {
+    hyphens: auto;
+    overflow-wrap: anywhere;
+  }
+  .rdate {
+    white-space: normal;
+  }
+  .results .ven {
+    display: none;
+  }
+  .ach {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .sponsor {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    padding: 28px;
+  }
+  .footer {
+    flex-direction: column;
+  }
 }
 
 /* En tablet el retrato a todo el ancho quedaba más alto que la pantalla. Con
@@ -931,5 +1578,15 @@ button {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  /* La galería no se mueve sola: queda quieta y se recorre con scroll
+     horizontal (o con el teclado, por eso .marquee es enfocable). Sin la
+     copia, que solo existía para el bucle. */
+  .marquee {
+    overflow-x: auto;
+  }
+  .shots[aria-hidden="true"] {
+    display: none;
   }
 }

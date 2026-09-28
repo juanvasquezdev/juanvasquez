@@ -9,8 +9,9 @@ import { PROFILE } from "@/content/profile";
 export default function Footer({ lang }: { lang: Locale }) {
   const { copyright, tagline } = PROFILE.footer;
   return (
-    <footer>
-      <p>{`${copyright} · ${tagline[lang]}`}</p>
+    <footer className="wrap footer mono">
+      <span>{copyright}</span>
+      <span>{tagline[lang]}</span>
     </footer>
   );
 }

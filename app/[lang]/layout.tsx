@@ -5,7 +5,6 @@ import { LOCALES, DEFAULT_LOCALE } from "@/content/types";
 import { toLocale } from "@/lib/i18n";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "../globals.css";
-import "../legacy.css";
 
 // El título y la descripción son los mismos en la metadata base, en Open Graph
 // y en Twitter, así que viven en una constante cada uno en vez de repetirse tres

@@ -2,8 +2,8 @@
  * Proyectos (sistemas grandes, con su problema y su solución) y Herramientas
  * (proyectos chicos de código abierto). Textos del mockup v2.
  *
- * Todos los repos de proyectos son privados: sin `repoUrl`, la tarjeta dice
- * "Repo privado" y no enlaza a un 404.
+ * Sin `repoUrl` la tarjeta dice "Repo privado" y no enlaza a un 404; con
+ * `repoUrl` pasa sola a ser un enlace al repo.
  */
 
 import type { Projects, Tools } from "./types";
@@ -80,6 +80,8 @@ export const PROJECTS: Projects = {
       },
       // El mockup dice Tailwind, pero lo saqué en la Fase 1: el CSS es propio.
       stack: ["Next.js", "TypeScript", "CSS", "Playwright"],
+      // Cuando el repo sea público: descomentar e importar GITHUB_URL de ./profile.
+      // repoUrl: `${GITHUB_URL}/juanvasquez`,
     },
   ],
 };
@@ -92,12 +94,9 @@ export const TOOLS: Tools = {
     en: "Small, open-source projects. Use them, review them or improve them on GitHub.",
   },
   cta: { es: "Ver en GitHub", en: "View on GitHub" },
-  empty: {
-    es: "Las primeras están en camino. Mientras tanto, lo que publico queda en mi GitHub.",
-    en: "The first ones are on their way. In the meantime, everything I publish lives on my GitHub.",
-  },
 
-  // Placeholders del mockup: no salen en pantalla hasta tener `repoUrl`.
+  // Placeholders del mockup: no salen en pantalla hasta tener `repoUrl`, y
+  // mientras ninguno lo tenga la sección no se renderiza.
   items: [
     {
       name: { es: "[Nombre de la herramienta]", en: "[Tool name]" },

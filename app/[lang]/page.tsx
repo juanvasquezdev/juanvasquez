@@ -5,11 +5,11 @@ import Habilidades from "@/components/Habilidades";
 import Stack from "@/components/Stack";
 import Proyectos from "@/components/Proyectos";
 import Herramientas from "@/components/Herramientas";
-import Galeria from "@/components/Galeria";
+import Atleta from "@/components/Atleta";
+import Patrocinio from "@/components/Patrocinio";
 import Contacto from "@/components/Contacto";
 import Footer from "@/components/Footer";
-import BackToTop from "@/components/BackToTop";
-import { GITHUB_URL, PROFILE } from "@/content/profile";
+import { PROFILE } from "@/content/profile";
 import { PROJECTS, TOOLS } from "@/content/projects";
 import { ATHLETICS } from "@/content/athletics";
 import { STACK } from "@/content/stack";
@@ -25,7 +25,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const athletics = localize(ATHLETICS, lang);
   const ui = localize(UI_LABELS, lang);
 
-  // Atleta y Patrocinio entran en la 3c; su contenido ya está en content/.
+  // Herramientas solo existe si hay alguna con repo publicado; si no, se va
+  // también su link del nav para que no apunte a nada.
+  const tools = localize(TOOLS, lang);
+  const publishedTools = tools.items.filter((tool) => tool.repoUrl);
+  const nav = publishedTools.length
+    ? ui.nav
+    : ui.nav.filter((link) => link.id !== "herramientas");
+
   return (
     <>
       <a href="#contenido" className="skip-link">
@@ -36,7 +43,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         lang={lang}
         labels={{
           navLabel: ui.navLabel,
-          nav: ui.nav,
+          nav,
           homeLabel: ui.homeLabel,
           langLabel: ui.langLabel,
           themeToLight: ui.themeToLight,
@@ -51,19 +58,15 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <Habilidades content={profile.skills} />
         <Stack content={localize(STACK, lang)} />
         <Proyectos content={localize(PROJECTS, lang)} />
-        <Herramientas content={localize(TOOLS, lang)} githubUrl={GITHUB_URL} />
-
-        {/* TEMPORAL: las secciones que todavía usan app/legacy.css. El
-            envoltorio acota sus reglas genéricas (.section, .eyebrow) para que
-            no pisen a las nuevas; cada sección sale de acá al reescribirse. */}
-        <div className="legacy">
-          <Galeria label={athletics.galleryLabel} photos={athletics.gallery} />
-          <Contacto content={profile.contact} />
-        </div>
+        {publishedTools.length > 0 && (
+          <Herramientas content={{ ...tools, items: publishedTools }} />
+        )}
+        <Atleta content={athletics} lang={lang} />
+        <Patrocinio content={athletics.sponsorship} />
+        <Contacto content={profile.contact} />
       </main>
 
       <Footer lang={lang} />
-      <BackToTop label={ui.backToTopLabel} />
     </>
   );
 }

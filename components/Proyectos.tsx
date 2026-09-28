@@ -1,21 +1,6 @@
+import ArrowUpRight from "./ArrowUpRight";
 import type { Projects } from "@/content/types";
 import type { Localized } from "@/lib/i18n";
-
-const ARROW = (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M7 17L17 7M8 7h9v9" />
-  </svg>
-);
 
 /**
  * A la izquierda, fija, el título con un índice que lleva a cada tarjeta; a la
@@ -59,7 +44,7 @@ export default function Proyectos({ content }: { content: Localized<Projects> })
                 </div>
                 <h3>
                   {project.title}
-                  {project.repoUrl && ARROW}
+                  {project.repoUrl && <ArrowUpRight />}
                 </h3>
                 <p className="p">{project.problem}</p>
                 <p className="s">{project.solution}</p>
