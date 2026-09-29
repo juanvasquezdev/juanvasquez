@@ -212,6 +212,24 @@ export type Athletics = SectionHeader & {
 };
 
 // ---------------------------------------------------------------------------
+// seo.ts — lo que leen los buscadores y las redes, no el visitante
+// ---------------------------------------------------------------------------
+
+export type Seo = {
+  title: L;
+  description: L; // 140-160 caracteres: más largo, Google lo corta
+  ogLocale: L; // "es_CO", "en_US"
+  ogImage: { src: L; alt: L }; // 1200×630, en public/og/
+  person: {
+    name: string; // el nombre corto, como firmo
+    alternateNames: string[]; // el completo y como figuro en World Athletics
+    jobTitle: L;
+    nationality: string;
+    address: { locality: string; region: string; country: string }; // country: ISO, "CO"
+  };
+};
+
+// ---------------------------------------------------------------------------
 // ui.ts — navegación y etiquetas globales
 // ---------------------------------------------------------------------------
 

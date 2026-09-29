@@ -49,8 +49,8 @@ export const PROFILE: Profile = {
     image: {
       src: "/images/epica_trasera2.jpeg",
       alt: {
-        es: "Juan José Vásquez de espaldas, mirando al horizonte",
-        en: "Juan José Vásquez from behind, looking out at the horizon",
+        es: "Juan José Vásquez de espaldas y con la cabeza baja, en blanco y negro contra el cielo",
+        en: "Juan José Vásquez seen from behind, head lowered, in black and white against the sky",
       },
     },
   },

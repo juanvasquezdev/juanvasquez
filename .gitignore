@@ -23,6 +23,8 @@ yarn-error.log*
 
 # env files (secretos/config por entorno, nunca al repo)
 .env*
+# la plantilla sin valores sí va: dice qué variables existen
+!.env.example
 
 # editor (config local, no compartida en equipo todavia)
 .vscode/

@@ -36,7 +36,7 @@ npm start
 
 | Variable | Para qué | Obligatoria |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | URL base de las etiquetas Open Graph y Twitter | No — cae a `http://localhost:3000` mientras no haya dominio |
+| `NEXT_PUBLIC_SITE_URL` | URL pública: metadataBase, canonical, hreflang, sitemap, robots y JSON-LD (ver `.env.example`) | No — en Vercel cae al dominio de producción del proyecto; en local, a `http://localhost:3000` |
 
 ## Estructura
 

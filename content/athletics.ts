@@ -289,12 +289,18 @@ export const ATHLETICS: Athletics = {
     },
     {
       src: "/images/podio_u23.jpeg",
-      alt: { es: "Podio en categoría U23", en: "Podium in the U23 category" },
+      alt: {
+        es: "Juan José con la medalla de oro en lo más alto del podio U23, con el uniforme rojo del Valle",
+        en: "Juan José with the gold medal on top of the U23 podium, in the red Valle uniform",
+      },
       caption: { es: "En el podio, categoría U23", en: "On the podium, U23" },
     },
     {
       src: "/images/podio-mayores.jpeg",
-      alt: { es: "Podio en categoría Mayores", en: "Podium in the Senior category" },
+      alt: {
+        es: "Juan José con la medalla de bronce en el podio del Nacional de Mayores, con el uniforme rojo del Valle",
+        en: "Juan José with the bronze medal on the Colombian Senior Championships podium, in the red Valle uniform",
+      },
       caption: { es: "Podio con los mayores", en: "Podium among seniors" },
     },
     {
@@ -316,7 +322,10 @@ export const ATHLETICS: Athletics = {
     },
     {
       src: "/images/u18.jpeg",
-      alt: { es: "Carrera en competencia U18", en: "Running in a U18 competition" },
+      alt: {
+        es: "Juan José en la carrera de aproximación del Campeonato Nacional U18",
+        en: "Juan José on the run-up at the Colombian U18 Championships",
+      },
       caption: { es: "La carrera de aproximación", en: "The run-up" },
     },
     {

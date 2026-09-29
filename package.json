@@ -7,7 +7,8 @@
     "build": "next build",
     "lint": "eslint .",
     "start": "next start",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "og": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/og-image.mjs"
   },
   "dependencies": {
     "next": "^16.3.4",

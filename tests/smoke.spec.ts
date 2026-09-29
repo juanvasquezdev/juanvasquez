@@ -14,6 +14,34 @@ test("las dos versiones del sitio cargan, con su título y en su idioma", async 
   }
 });
 
+test("cada idioma trae canonical, los tres hreflang, imagen para redes y JSON-LD válido", async ({
+  page,
+  request,
+}) => {
+  for (const lang of ["es", "en"]) {
+    await page.goto(`/${lang}`);
+    const head = page.locator("head");
+
+    const canonical = await head.locator('link[rel="canonical"]').getAttribute("href");
+    expect(new URL(canonical!).pathname).toBe(`/${lang}`);
+
+    for (const hreflang of ["es", "en", "x-default"]) {
+      await expect(head.locator(`link[rel="alternate"][hreflang="${hreflang}"]`)).toHaveCount(1);
+    }
+
+    // Que la etiqueta exista no alcanza: la imagen tiene que estar servida.
+    const ogImage = await head.locator('meta[property="og:image"]').getAttribute("content");
+    const image = await request.get(new URL(ogImage!).pathname);
+    expect(image.status()).toBe(200);
+    expect(image.headers()["content-type"]).toBe("image/jpeg");
+
+    const jsonLd = await head.locator('script[type="application/ld+json"]').textContent();
+    const person = JSON.parse(jsonLd!);
+    expect(person["@type"]).toBe("Person");
+    expect(person.name).toBeTruthy();
+  }
+});
+
 test("quien entra por la raíz llega a la versión en español", async ({ request }) => {
   // maxRedirects: 0 para ver la redirección en sí y no la página a la que lleva.
   const response = await request.get("/", { maxRedirects: 0 });
