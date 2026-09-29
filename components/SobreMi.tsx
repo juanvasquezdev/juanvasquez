@@ -8,7 +8,7 @@ export default function SobreMi({ content }: { content: Localized<Profile["about
     <section className="section" id="sobre-mi">
       <div className="wrap about">
         <div>
-          <p className="mono eyebrow">{content.eyebrow}</p>
+          <p className="mono eyebrow sec-num">{content.eyebrow}</p>
           <h2 className="h2">{content.heading}</h2>
           <p className="body">{content.body}</p>
           <dl className="facts">

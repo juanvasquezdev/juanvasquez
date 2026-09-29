@@ -22,7 +22,7 @@ export type L<T = string> = Record<Locale, T>;
 // Compartido
 // ---------------------------------------------------------------------------
 
-/** El "01 — Sobre mí" de arriba, el título y a veces un párrafo de intro. */
+/** El "Sobre mí" de arriba (el número lo pone el CSS), el título y a veces un párrafo de intro. */
 export type SectionHeader = {
   eyebrow: L;
   heading: L;

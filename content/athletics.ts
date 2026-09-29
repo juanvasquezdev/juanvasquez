@@ -167,7 +167,7 @@ const RESULTS: Result[] = [
 export const OFFICIAL_PB = Math.max(...RESULTS.map((r) => r.mark));
 
 export const ATHLETICS: Athletics = {
-  eyebrow: { es: "06 — Atleta", en: "06 — Athlete" },
+  eyebrow: { es: "Atleta", en: "Athlete" },
   heading: { es: "Salto alto", en: "High jump" },
   intro: {
     es: "Represento a la Selección Valle y a la Selección Colombia. Campeón nacional U20 y U23, y bronce en el Iberoamericano U20 de Lima 2026.",

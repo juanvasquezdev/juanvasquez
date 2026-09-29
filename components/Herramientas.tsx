@@ -28,7 +28,7 @@ export default function Herramientas({ content }: { content: Localized<Tools> })
       <div className="wrap">
         <div className="tools-head">
           <div>
-            <p className="mono eyebrow">{content.eyebrow}</p>
+            <p className="mono eyebrow sec-num">{content.eyebrow}</p>
             <h2 className="h2 h2-sm">{content.heading}</h2>
           </div>
           <p className="intro">{content.intro}</p>

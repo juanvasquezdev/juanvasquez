@@ -56,7 +56,7 @@ export const PROFILE: Profile = {
   },
 
   about: {
-    eyebrow: { es: "01 — Sobre mí", en: "01 — About" },
+    eyebrow: { es: "Sobre mí", en: "About" },
     heading: { es: "Sobre mí", en: "About me" },
     body: {
       es: "Desarrollador full stack en formación y atleta de salto alto de la Selección Colombia. Diseño y construyo sistemas para problemas reales, como la gestión deportiva y la de negocios, cuidando el rendimiento, la seguridad y que el código se pueda mantener. Al software le llevo la misma disciplina del entrenamiento: medir, ajustar y repetir.",
@@ -96,7 +96,7 @@ export const PROFILE: Profile = {
   },
 
   skills: {
-    eyebrow: { es: "02 — Habilidades", en: "02 — Skills" },
+    eyebrow: { es: "Habilidades", en: "Skills" },
     heading: { es: "Cómo trabajo", en: "How I work" },
     items: [
       {
@@ -158,7 +158,7 @@ export const PROFILE: Profile = {
   },
 
   contact: {
-    eyebrow: { es: "07 — Contacto", en: "07 — Contact" },
+    eyebrow: { es: "Contacto", en: "Contact" },
     heading: { es: "Hablemos.", en: "Let’s talk." },
     intro: {
       es: "Escríbeme por el canal que prefieras.",

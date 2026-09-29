@@ -7,7 +7,7 @@ export default function Contacto({ content }: { content: Localized<Profile["cont
   return (
     <section className="section contact-section" id="contacto">
       <div className="wrap">
-        <p className="mono eyebrow">{content.eyebrow}</p>
+        <p className="mono eyebrow sec-num">{content.eyebrow}</p>
         <h2 className="h2 contact-title">{content.heading}</h2>
         <p className="intro">{content.intro}</p>
 

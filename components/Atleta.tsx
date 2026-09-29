@@ -63,7 +63,7 @@ export default function Atleta({
         </div>
         <div className="hero-shade" />
         <div className="ath-title">
-          <p className="mono eyebrow">{content.eyebrow}</p>
+          <p className="mono eyebrow sec-num">{content.eyebrow}</p>
           <h2 className="big" id="atleta-title">
             {content.heading}
           </h2>

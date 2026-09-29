@@ -6,7 +6,7 @@ export default function Habilidades({ content }: { content: Localized<Profile["s
   return (
     <section className="section skills-section" id="habilidades">
       <div className="wrap">
-        <p className="mono eyebrow">{content.eyebrow}</p>
+        <p className="mono eyebrow sec-num">{content.eyebrow}</p>
         <h2 className="h2 h2-sm">{content.heading}</h2>
 
         <ul className="skills">

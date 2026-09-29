@@ -8,7 +8,7 @@
 import type { Stack } from "./types";
 
 export const STACK: Stack = {
-  eyebrow: { es: "03 — Stack", en: "03 — Stack" },
+  eyebrow: { es: "Stack", en: "Stack" },
   heading: { es: "Con qué construyo", en: "What I build with" },
   intro: {
     es: "Priorizo velocidad, fluidez, rendimiento y seguridad. Uso lo moderno cuando suma y lo probado cuando es lo correcto: la herramienta la decide el problema, no la moda.",

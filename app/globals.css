@@ -132,6 +132,19 @@ button {
   margin: 0 0 20px;
 }
 
+/* El "01 — " de cada sección sale del orden en la página, no de content/: si
+   Herramientas no se muestra, la numeración no salta. Es decoración, así que
+   el "/ ''" lo deja sin texto para los lectores de pantalla; la primera línea
+   queda para los navegadores que no entienden esa sintaxis. */
+main {
+  counter-reset: seccion;
+}
+.sec-num::before {
+  counter-increment: seccion;
+  content: counter(seccion, decimal-leading-zero) " — ";
+  content: counter(seccion, decimal-leading-zero) " — " / "";
+}
+
 .h2 {
   font-family: var(--font-display);
   font-stretch: 80%;

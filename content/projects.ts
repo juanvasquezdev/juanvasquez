@@ -9,7 +9,7 @@
 import type { Projects, Tools } from "./types";
 
 export const PROJECTS: Projects = {
-  eyebrow: { es: "04 — Proyectos", en: "04 — Projects" },
+  eyebrow: { es: "Proyectos", en: "Projects" },
   heading: { es: "Proyectos", en: "Projects" },
   intro: {
     es: "Sistemas reales en distintas etapas: qué resuelven, cómo están hechos y en qué van.",
@@ -87,7 +87,7 @@ export const PROJECTS: Projects = {
 };
 
 export const TOOLS: Tools = {
-  eyebrow: { es: "05 — Herramientas", en: "05 — Tools" },
+  eyebrow: { es: "Herramientas", en: "Tools" },
   heading: { es: "Herramientas", en: "Tools" },
   intro: {
     es: "Proyectos pequeños y de código abierto. Úsalos, revísalos o mejóralos desde GitHub.",

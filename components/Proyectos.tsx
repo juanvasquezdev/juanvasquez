@@ -15,7 +15,7 @@ export default function Proyectos({ content }: { content: Localized<Projects> })
     <section className="section" id="proyectos">
       <div className="wrap projects">
         <div className="proj-side">
-          <p className="mono eyebrow">{content.eyebrow}</p>
+          <p className="mono eyebrow sec-num">{content.eyebrow}</p>
           <h2 className="h2">{content.heading}</h2>
           <p className="intro">{content.intro}</p>
           <ol className="index mono">
