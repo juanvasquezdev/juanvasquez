@@ -6,6 +6,7 @@
  * `repoUrl` pasa sola a ser un enlace al repo.
  */
 
+import { GITHUB_URL } from "./profile";
 import type { Projects, Tools } from "./types";
 
 export const PROJECTS: Projects = {
@@ -80,8 +81,7 @@ export const PROJECTS: Projects = {
       },
       // El mockup dice Tailwind, pero lo saqué en la Fase 1: el CSS es propio.
       stack: ["Next.js", "TypeScript", "CSS", "Playwright"],
-      // Cuando el repo sea público: descomentar e importar GITHUB_URL de ./profile.
-      // repoUrl: `${GITHUB_URL}/juanvasquez`,
+      repoUrl: `${GITHUB_URL}/portafolio-personal`,
     },
   ],
 };
