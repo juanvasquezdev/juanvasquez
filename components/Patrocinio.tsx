@@ -20,7 +20,7 @@ export default function Patrocinio({
   return (
     <section className="section sponsor-section" id="patrocinio">
       <div className="wrap">
-        <div className="sponsor">
+        <div className="sponsor" data-reveal>
           <div>
             <p className="mono eyebrow">{content.eyebrow}</p>
             <h2 className="h2">{content.heading}</h2>

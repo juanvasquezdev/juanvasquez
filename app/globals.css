@@ -1621,17 +1621,13 @@ main {
 
    No va nada que esté adentro de un sticky (hero, título de Atleta, índice de
    Proyectos): mientras está pegado no se mueve y la animación no avanzaría.
-   Tampoco hay delays: el escalonado sale de dónde está cada cosa. */
+   Tampoco hay delays: el escalonado sale de dónde está cada cosa.
+
+   Qué aparece lo marca el componente con data-reveal, no una lista de clases
+   acá: así se ve en el marcado y la prueba de movimiento reducido lee lo mismo. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .section .sec-num,
-    .section .sec-num + .h2,
-    .skill,
-    .stack-grid > div,
-    .card,
-    .stat,
-    .sponsor,
-    .contact-list > li {
+    [data-reveal] {
       animation: aparece var(--ease-out) both;
       animation-timeline: view();
       animation-range: entry 0% entry 160px;

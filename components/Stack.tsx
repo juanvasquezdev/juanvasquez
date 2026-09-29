@@ -9,13 +9,15 @@ export default function Stack({ content }: { content: Localized<StackData> }) {
   return (
     <section className="section" id="stack">
       <div className="wrap">
-        <p className="mono eyebrow sec-num">{content.eyebrow}</p>
-        <h2 className="h2">{content.heading}</h2>
+        <p className="mono eyebrow sec-num" data-reveal>{content.eyebrow}</p>
+        <h2 className="h2" data-reveal>
+          {content.heading}
+        </h2>
         <p className="intro stack-intro">{content.intro}</p>
 
         <div className="stack-grid">
           {content.groups.map((group) => (
-            <div key={group.title}>
+            <div key={group.title} data-reveal>
               <h3 className="group-title mono">
                 <span
                   className={group.level === "deep" ? "dot" : "dot soft"}

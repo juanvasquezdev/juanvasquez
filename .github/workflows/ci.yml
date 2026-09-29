@@ -29,3 +29,37 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # El navegador se guarda por versión de Playwright: si no cambió, no se
+      # vuelve a bajar. Las librerías del sistema que necesita Chromium no
+      # entran en la cache, así que con cache se instalan solo esas.
+      - name: Versión de Playwright
+        id: playwright
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache del navegador
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+      - name: Instalar Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Dependencias de sistema de Chromium
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      # Con CI=true, playwright.config.ts sirve el build de arriba sin rehacerlo.
+      - name: Pruebas de humo
+        run: npm run test:e2e
+
+      - name: Reporte de Playwright
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

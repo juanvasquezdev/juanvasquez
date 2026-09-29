@@ -77,7 +77,7 @@ export default function Atleta({
 
             <div className="stats">
               {content.stats.map((stat) => (
-                <div className="stat" key={stat.label}>
+                <div className="stat" key={stat.label} data-reveal>
                   <div className="stat-v">{formatMark(stat.mark, lang)}</div>
                   <div className="stat-l mono">{stat.label}</div>
                   <span className={stat.official ? "stat-tag ok" : "stat-tag"}>{stat.tag}</span>

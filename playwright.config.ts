@@ -20,10 +20,14 @@ import { defineConfig, devices } from "@playwright/test";
  * Playwright chequea para saber que ya está instalado). Si en otra máquina
  * `playwright install` también se cuelga, es el mismo camino.
  */
+// Puerto propio: el 3000 queda libre para `next dev` mientras corren las pruebas.
+const PORT = 3100;
+const BASE_URL = `http://localhost:${PORT}`;
+
 export default defineConfig({
   testDir: "./tests",
   testMatch: "smoke.spec.ts",
-  // Aborta la corrida entera si :3000 resulta ser `next dev` reusado en vez
+  // Aborta la corrida entera si el puerto resulta ser `next dev` reusado en vez
   // de `next start` (ver tests/support/globalSetup.ts) — cierra el agujero
   // de reuseExistingServer de más abajo.
   globalSetup: "./tests/support/globalSetup.ts",
@@ -33,7 +37,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [["html", { open: "never" }], ["list"]],
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: BASE_URL,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
@@ -44,8 +48,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run build && npm start",
-    url: "http://localhost:3000",
+    // En CI el build ya lo hizo el paso anterior del workflow; acá solo se sirve.
+    command: process.env.CI ? `npm start -- -p ${PORT}` : `npm run build && npm start -- -p ${PORT}`,
+    url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 5 * 60 * 1000,
   },

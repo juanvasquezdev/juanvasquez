@@ -6,12 +6,14 @@ export default function Habilidades({ content }: { content: Localized<Profile["s
   return (
     <section className="section skills-section" id="habilidades">
       <div className="wrap">
-        <p className="mono eyebrow sec-num">{content.eyebrow}</p>
-        <h2 className="h2 h2-sm">{content.heading}</h2>
+        <p className="mono eyebrow sec-num" data-reveal>{content.eyebrow}</p>
+        <h2 className="h2 h2-sm" data-reveal>
+          {content.heading}
+        </h2>
 
         <ul className="skills">
           {content.items.map((skill, i) => (
-            <li className="skill" key={skill.title}>
+            <li className="skill" key={skill.title} data-reveal>
               <span className="n mono" aria-hidden="true">
                 {String(i + 1).padStart(2, "0")}
               </span>

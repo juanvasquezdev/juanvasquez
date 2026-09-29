@@ -15,8 +15,10 @@ export default function Proyectos({ content }: { content: Localized<Projects> })
     <section className="section" id="proyectos">
       <div className="wrap projects">
         <div className="proj-side">
-          <p className="mono eyebrow sec-num">{content.eyebrow}</p>
-          <h2 className="h2">{content.heading}</h2>
+          <p className="mono eyebrow sec-num" data-reveal>{content.eyebrow}</p>
+          <h2 className="h2" data-reveal>
+            {content.heading}
+          </h2>
           <p className="intro">{content.intro}</p>
           <ol className="index mono">
             {content.items.map((project, i) => (
@@ -62,6 +64,7 @@ export default function Proyectos({ content }: { content: Localized<Projects> })
             return project.repoUrl ? (
               <a
                 className="card"
+                data-reveal
                 id={id}
                 key={project.slug}
                 href={project.repoUrl}
@@ -71,7 +74,7 @@ export default function Proyectos({ content }: { content: Localized<Projects> })
                 {body}
               </a>
             ) : (
-              <article className="card" id={id} key={project.slug}>
+              <article className="card" id={id} key={project.slug} data-reveal>
                 {body}
               </article>
             );
