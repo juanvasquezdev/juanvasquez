@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "next start",
     "test:e2e": "playwright test",
-    "og": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/og-image.mjs"
+    "og": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/og-image.mjs",
+    "screenshots": "npm run build && node scripts/screenshots.mjs"
   },
   "dependencies": {
     "next": "^16.3.4",
