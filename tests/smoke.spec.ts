@@ -86,3 +86,48 @@ test("con movimiento reducido, el nombre y el comienzo de cada sección se leen 
   expect(secciones).toBeGreaterThan(0);
   expect(invisibles).toEqual([]);
 });
+
+test("con movimiento reducido, nada de lo que aparece al scroll queda transparente", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/es");
+  await page.waitForLoadState("networkidle");
+
+  const { selectores, elementos, transparentes } = await page.evaluate(() => {
+    // Los elementos animados salen del CSS mismo: las reglas que atan una
+    // animación al scroll. Las reglas están en el CSSOM aunque su @media no
+    // aplique, así que con reduce se encuentran igual. Hay que buscar view( o
+    // scroll( y no cualquier valor: el shorthand `animation` deja
+    // animation-timeline en "auto", y el `* { animation: none }` de reduce
+    // entraría con todo el DOM.
+    const encontrados: string[] = [];
+    const recorrer = (reglas: CSSRuleList) => {
+      for (const regla of Array.from(reglas)) {
+        if (
+          regla instanceof CSSStyleRule &&
+          /\b(view|scroll)\(/.test(regla.style.getPropertyValue("animation-timeline"))
+        ) {
+          encontrados.push(regla.selectorText);
+        } else if ("cssRules" in regla) {
+          recorrer((regla as CSSGroupingRule).cssRules);
+        }
+      }
+    };
+    for (const hoja of Array.from(document.styleSheets)) recorrer(hoja.cssRules);
+
+    const animados = encontrados.flatMap((s) => Array.from(document.querySelectorAll<HTMLElement>(s)));
+    // Arriba de todo: lo animado está debajo del pliegue, que es justo donde
+    // quedaría en el `from` (opacity 0) si la animación no se apagara.
+    const ocultos = animados.filter((el) => Number(getComputedStyle(el).opacity) < 1);
+
+    return {
+      selectores: encontrados.length,
+      elementos: animados.length,
+      transparentes: ocultos.map((el) => `${el.className}: ${el.textContent!.trim().slice(0, 40)}`),
+    };
+  });
+
+  // Si el CSS cambia y no encuentra nada, que falle en vez de pasar vacía.
+  expect(selectores).toBeGreaterThan(0);
+  expect(elementos).toBeGreaterThan(0);
+  expect(transparentes).toEqual([]);
+});

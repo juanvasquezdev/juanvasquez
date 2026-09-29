@@ -1599,6 +1599,49 @@ main {
   }
 }
 
+/* ===== APARICIÓN AL SCROLL ===== */
+
+/* Solo CSS y solo si el navegador sabe atar una animación al scroll: sin
+   soporte, o pidiendo menos movimiento, esto no existe y todo se ve quieto.
+   No hay ninguna regla base con opacity 0; lo oculto vive solo en el `from`.
+
+   El rango arranca cuando el borde de arriba asoma por abajo de la pantalla y
+   termina 160px después. Lo que ya está más adentro al cargar (o arriba, si se
+   entra por un #ancla) ya pasó el rango y se pinta en su estado final. Es una
+   longitud y no `entry 100%` porque en algo más alto que la pantalla eso
+   llegaría tarde.
+
+   Sin `to`: el final es el valor que diga el CSS de siempre, así el hover que
+   atenúa las tarjetas de proyecto sigue andando. Y `translate`, no `transform`,
+   para no pisar el translateY del hover de .card.
+
+   No va nada que esté adentro de un sticky (hero, título de Atleta, índice de
+   Proyectos): mientras está pegado no se mueve y la animación no avanzaría.
+   Tampoco hay delays: el escalonado sale de dónde está cada cosa. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .section .sec-num,
+    .section .sec-num + .h2,
+    .skill,
+    .stack-grid > div,
+    .card,
+    .stat,
+    .sponsor,
+    .contact-list > li {
+      animation: aparece var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 160px;
+    }
+  }
+
+  @keyframes aparece {
+    from {
+      opacity: 0;
+      translate: 0 20px;
+    }
+  }
+}
+
 /* ===== MOVIMIENTO REDUCIDO ===== */
 
 /* Apaga todas las animaciones y transiciones CSS. */
