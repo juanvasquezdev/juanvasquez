@@ -14,7 +14,7 @@ export const OG_IMAGE_SIZE = { width: 1200, height: 630 } as const;
 export const SEO: Seo = {
   title: {
     es: "Juan José Vásquez · Desarrollador Full Stack y atleta de salto alto",
-    en: "Juan José Vásquez · Full Stack Developer and high jump athlete",
+    en: "Juan José Vásquez · Full Stack Developer & High Jump Athlete",
   },
   description: {
     es: "Portafolio de Juan José Vásquez, desarrollador full stack en formación y atleta de salto alto de la Selección Colombia. Proyectos, stack y resultados oficiales.",

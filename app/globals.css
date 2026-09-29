@@ -417,7 +417,11 @@ main {
   font-weight: 900;
   font-stretch: 72%;
   font-size: clamp(56px, 10vw, 160px);
-  line-height: 0.84;
+  /* Con 0.84 la tilde de la Á se metía en la U de JUAN y la de la É se salía
+     por arriba del h1. 0.95 y el padding son lo mínimo que las deja libres de
+     375 a 1440; en em para que escalen con el clamp. */
+  line-height: 0.95;
+  padding-top: 0.12em;
   letter-spacing: -0.02em;
   text-transform: uppercase;
 }

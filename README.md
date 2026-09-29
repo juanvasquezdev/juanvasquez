@@ -32,6 +32,14 @@ npm run build
 npm start
 ```
 
+Las imágenes para redes (Open Graph y Twitter), una por idioma:
+
+```bash
+npm run og           # genera public/og/es.jpg y public/og/en.jpg
+```
+
+Si cambias el nombre o los tags del hero en content/, corre `npm run og` y commitea las imágenes de public/og/. No se regeneran solas.
+
 ### Variables de entorno
 
 | Variable | Para qué | Obligatoria |
