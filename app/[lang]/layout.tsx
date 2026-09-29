@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { fontVariables } from "../fonts";
-import SmoothScroll from "@/components/SmoothScroll";
 import { LOCALES, DEFAULT_LOCALE } from "@/content/types";
 import { toLocale } from "@/lib/i18n";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
@@ -81,9 +80,7 @@ export default async function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
-      <body>
-        <SmoothScroll>{children}</SmoothScroll>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

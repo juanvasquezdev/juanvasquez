@@ -3,13 +3,10 @@
 import { useEffect, useState } from "react";
 
 /**
- * Scrollspy: qué sección está visible ahora mismo. Sigue usando
- * IntersectionObserver por su cuenta (no hay reemplazo de Motion para esto:
- * useInView de Motion observa un elemento a la vez, y esto necesita comparar
- * varias secciones a la vez para decidir cuál está "activa") — lo que cambió
- * es que ya no manipula el DOM directamente (querySelectorAll + classList),
- * ahora devuelve el id activo como estado de React para que quien lo consuma
- * (Nav) lo use en su render.
+ * Scrollspy: qué sección está visible ahora mismo. Un solo
+ * IntersectionObserver para todas, porque hay que compararlas entre sí para
+ * decidir cuál está "activa". No toca el DOM: devuelve el id activo como
+ * estado de React y Nav lo usa en su render.
  *
  * El criterio es una banda fina en la mitad de la pantalla, no "¿se ve el 40%
  * de la sección?". Con el umbral por fracción el hero nunca se encendía: mide

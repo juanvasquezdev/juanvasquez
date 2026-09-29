@@ -66,10 +66,16 @@
   box-sizing: border-box;
 }
 
-/* Sin scroll-behavior: smooth mientras esté Lenis: los dos a la vez se pelean
-   el scroll (ver components/SmoothScroll.tsx). */
 html {
   background: var(--bg);
+}
+
+/* Los links del nav son anclas normales; el suave lo pone el navegador. Solo si
+   no se pidió menos movimiento: ahí el salto es instantáneo. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -145,6 +151,18 @@ button {
 
 .section {
   padding: 140px 0;
+}
+
+/* Al llegar por ancla, el nav fijo tapa hasta los 72px de arriba. Con 96px o
+   más de padding la sección ya queda libre; las que tienen menos compensan
+   hasta 96 para que el título no quede debajo del nav. */
+.section.skills-section,
+.section.tools-section,
+.section.sponsor-section {
+  scroll-margin-top: 56px;
+}
+.section.contact-section {
+  scroll-margin-top: 16px;
 }
 
 /* El título de las secciones que van pegadas a otra (Habilidades,
@@ -1570,8 +1588,7 @@ button {
 
 /* ===== MOVIMIENTO REDUCIDO ===== */
 
-/* Apaga todas las animaciones y transiciones CSS. Las de Motion se cortan
-   aparte con MotionConfig reducedMotion="user", y Lenis no se monta. */
+/* Apaga todas las animaciones y transiciones CSS. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

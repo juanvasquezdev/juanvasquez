@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useLenis } from "lenis/react";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import LangToggle from "./LangToggle";
 import ThemeToggle from "./ThemeToggle";
@@ -23,20 +22,10 @@ export default function Nav({ lang, labels }: { lang: Locale; labels: Labels }) 
   // cada vez que cambia la identidad del array.
   const ids = useMemo(() => labels.nav.map((link) => link.id), [labels.nav]);
   const activeId = useActiveSection(ids);
-  const lenis = useLenis();
-
-  // Sin Lenis (prefers-reduced-motion) queda el <a href="#id"> nativo: salto
-  // instantáneo, que es lo correcto en ese caso.
-  const goTo = (target: string | number) => (e: React.MouseEvent) => {
-    if (lenis) {
-      e.preventDefault();
-      lenis.scrollTo(target);
-    }
-  };
 
   return (
     <header className="nav">
-      <a className="mark" href="#top" aria-label={labels.homeLabel} onClick={goTo(0)}>
+      <a className="mark" href="#top" aria-label={labels.homeLabel}>
         JV
       </a>
       <nav className="navlinks" aria-label={labels.navLabel}>
@@ -48,7 +37,6 @@ export default function Nav({ lang, labels }: { lang: Locale; labels: Labels }) 
               href={`#${link.id}`}
               className={active ? "active" : undefined}
               aria-current={active ? "true" : undefined}
-              onClick={goTo(`#${link.id}`)}
             >
               {link.label}
             </a>
