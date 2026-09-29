@@ -18,12 +18,17 @@
   --line: rgba(236, 235, 230, 0.12);
   --accent: #86A6FF;
   --coral: #FF8061;
-  --pill: rgba(20, 22, 25, 0.62);
+  /* Casi opaca: el texto del nav (--muted) tiene que llegar a 4.5:1 pase lo
+     que pase por detrás, foto clara incluida. Con 0.62 bajaba a 1.6:1. */
+  --pill: rgba(20, 22, 25, 0.9);
 
   /* Lo que va encima de una foto (hero, atleta) no cambia con el tema: la
      foto es la misma en claro y en oscuro. */
   --on-photo: #F4F3EF;
   --photo-bg: #0B0B0B;
+  /* Halo para el texto chico sobre foto: oscurece solo alrededor de las
+     letras, así llega a 4.5:1 aunque abajo haya cielo o una carpa blanca. */
+  --photo-halo: 0 0 4px rgba(0, 0, 0, 0.75), 0 0 14px rgba(0, 0, 0, 0.5);
 
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   color-scheme: dark;
@@ -40,7 +45,7 @@
   --line: rgba(20, 20, 20, 0.12);
   --accent: #2A55C9;
   --coral: #B9432A;
-  --pill: rgba(243, 242, 238, 0.72);
+  --pill: rgba(243, 242, 238, 0.9);
   color-scheme: light;
 }
 
@@ -53,7 +58,7 @@
     --line: rgba(20, 20, 20, 0.12);
     --accent: #2A55C9;
     --coral: #B9432A;
-    --pill: rgba(243, 242, 238, 0.72);
+    --pill: rgba(243, 242, 238, 0.9);
     color-scheme: light;
   }
 }
@@ -312,7 +317,9 @@ main {
   font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1;
-  color: var(--muted);
+  /* --fg y no --muted: va sobre dos capas translúcidas (píldora y .seg) y en
+     gris no llegaba a 4.5:1. El activo se distingue por el relleno. */
+  color: var(--fg);
   transition: background-color 0.2s, color 0.2s;
 }
 .seg-btn:hover {
@@ -408,7 +415,8 @@ main {
   color: var(--on-photo);
 }
 .hero-copy .eyebrow {
-  color: color-mix(in srgb, var(--on-photo) 80%, transparent);
+  color: var(--on-photo);
+  text-shadow: var(--photo-halo);
 }
 
 .hero-name {
@@ -424,6 +432,8 @@ main {
   padding-top: 0.12em;
   letter-spacing: -0.02em;
   text-transform: uppercase;
+  /* A 1440 parte de JOSÉ cae sobre el brillo del hombro; esto la separa. */
+  text-shadow: 0 0 28px rgba(0, 0, 0, 0.45);
 }
 
 .hero-meta {
@@ -891,7 +901,7 @@ main {
   object-position: center 40%;
 }
 .ath-bg .hero-shade {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 30%, rgba(0, 0, 0, 0.55) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 30%, rgba(0, 0, 0, 0.65) 100%);
 }
 
 .ath-title {
@@ -901,7 +911,8 @@ main {
   color: var(--on-photo);
 }
 .ath-title .eyebrow {
-  color: color-mix(in srgb, var(--on-photo) 80%, transparent);
+  color: var(--on-photo);
+  text-shadow: var(--photo-halo);
 }
 .big {
   margin: 0;

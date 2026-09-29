@@ -21,7 +21,9 @@ export const UI_LABELS: UI = {
     { id: "contacto", label: { es: "Contacto", en: "Contact" } },
   ],
 
-  homeLabel: { es: "Ir al inicio", en: "Back to top" },
+  // Empieza con "JV", que es lo que se ve: quien maneja la página por voz dice
+  // lo que lee en pantalla, y el nombre accesible tiene que contenerlo.
+  homeLabel: { es: "JV, ir al inicio", en: "JV, back to top" },
   langLabel: { es: "Idioma", en: "Language" },
   themeToLight: { es: "Cambiar a modo claro", en: "Switch to light mode" },
   themeToDark: { es: "Cambiar a modo oscuro", en: "Switch to dark mode" },
