@@ -22,7 +22,7 @@ export const SEO: Seo = {
   },
   ogLocale: { es: "es_CO", en: "en_US" },
   ogImage: {
-    src: { es: "/og/es.jpg", en: "/og/en.jpg" },
+    src: { es: "/og/es.jpg?v=2", en: "/og/en.jpg?v=2" },
     alt: {
       es: "Juan José Vásquez, desarrollador full stack en formación y atleta de alto rendimiento",
       en: "Juan José Vásquez, full stack developer in training and high-performance athlete",
